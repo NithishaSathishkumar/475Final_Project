@@ -1,0 +1,129 @@
+I\c postgres
+DROP DATABASE hotel;
+SELECT current_database();
+create DATABASE Hotel;
+\c hotel
+SELECT current_database();
+
+CREATE TABLE State(
+	ID VARCHAR(2) NOT NULL,
+	Name VARCHAR(20) NOT NULL,
+
+	Primary Key(ID)
+);
+
+CREATE TABLE Guest(
+	ID INTEGER NOT NULL, 
+	FirstName VARCHAR(30),
+	LastName VARCHAR(30) NOT NULL, 
+	GuestNum VARCHAR(8) NOT NULL UNIQUE,
+	Email VARCHAR(30) NOT NULL UNIQUE,
+	Address1 VARCHAR(30) NOT NULL, 
+	Address2 VARCHAR(30),
+	City VARCHAR(20) NOT NULL,
+	Zipcode CHAR(2),
+	StateID char(2), 
+
+	Primary Key (ID),
+	Foreign Key (StateID) references State(ID) Deferrable Initially Deferred
+);
+
+CREATE TABLE PhoneType(
+	ID CHAR(2) NOT NULL,
+	Name VARCHAR(15) NOT NULL,
+
+	Primary Key(ID)
+);
+
+CREATE TABLE Phone(
+	ID INTEGER NOT NULL, 
+	GuestID INTEGER NOT NULL,
+	PhoneTypeID CHAR(2) NOT NULL,
+	PhoneNumber VARCHAR(10) NOT NULL,
+	Extension VARCHAR(5),
+
+	Primary Key (ID),
+	Foreign Key (GuestID) references Guest(ID) Deferrable Initially Deferred,
+	Foreign Key (PhoneTypeID) references PhoneType(ID) Deferrable Initially Deferred
+);
+
+CREATE TABLE Position(
+	ID INTEGER NOT NULL,
+	Name VARCHAR(20) NOT NULL,
+
+	Primary Key(ID)
+);
+
+CREATE TABLE Staff(
+	ID INTEGER NOT NULL, 
+	FirstName VARCHAR(20) NOT NULL,
+	LastName VARCHAR(20) NOT NULL, 
+	StaffNum VARCHAR(5) NOT NULL UNIQUE,
+	Email VARCHAR(30) NOT NULL UNIQUE,
+	PhoneNumber VARCHAR(30) NOT NULL UNIQUE,
+	PositionID INTEGER NOT NULL,
+
+	Primary Key (ID),
+	Foreign Key (PositionID) references Position(ID) Deferrable Initially Deferred
+);
+
+CREATE TABLE PaymentType(
+	ID CHAR(2) NOT NULL,
+	MethodName VARCHAR(30) NOT NULL,
+
+	Primary Key(ID)
+);
+
+CREATE TABLE Payment(
+	ID INTEGER NOT NULL, 
+	PaymentTypeID CHAR(2) NOT NULL,
+	PaymentDate TIMESTAMP NOT NULL,
+
+	Primary Key(ID)
+	Foreign Key (PaymentTypeID) references PaymentType(ID) Deferrable Initially Deferred
+);
+
+CREATE TABLE Reservation(
+	ID INTEGER NOT NULL,
+	ReservationNum VARCHAR(5) NOT NULL UNIQUE, 
+	NumberOfGuest INTEGER NOT NULL,
+	PaymentID INTEGER, 
+	Amount Decimal NOT NULL, 
+	CreateTime TIMESTAMP NOT NULL,
+	GuestID INTEGER NOT NULL,
+	StaffID INTEGER,
+	
+	Primary Key(ID),
+	Foreign Key (StaffID) references Staff(ID) Deferrable Initially Deferred,
+	Foreign Key (GuestID) references Guest(ID) Deferrable Initially Deferred,
+	Foreign Key (PaymentID) references Payment(ID) Deferrable Initially Deferred
+);
+
+CREATE TABLE Room(
+	ID INTEGER NOT NULL,
+	RoomNumber VARCHAR(5) NOT NULL,
+	Capacity INTEGER NOT NULL,
+	PricePerDay Decimal NOT NULL,
+	
+	Primary Key(ID)
+);
+
+CREATE TABLE Booking(
+	ID INTEGER NOT NULL,
+	ReservationID INTEGER NOT NULL,
+	RoomID INTEGER NOT NULL,
+	CIDate TIMESTAMP NOT NULL,
+	COExpectDate TIMESTAMP NOT NULL,
+	CODate TIMESTAMP,
+	
+	Primary Key(ID),
+	Foreign Key (ReservationID) references Reservation(ID) Deferrable Initially Deferred,
+	Foreign Key (RoomID) references Room(ID) Deferrable Initially Deferred
+	
+);
+
+\c postgres
+SELECT current_database();
+\c hotel
+SELECT current_database();
+
