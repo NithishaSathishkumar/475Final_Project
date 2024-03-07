@@ -13,7 +13,7 @@ public class HotelAPI {
         String cmb = "";
 
         while(!cmb.equalsIgnoreCase("exit")){
-            System.out.println("HotelDB-# ");
+            System.out.print("HotelDB-# ");
             cmb = System.console().readLine();
 
             String[] mainCmdArr = cmb.split(" ", 2);
