@@ -1,6 +1,10 @@
 
 
 public class HotelAPI {
+    /*
+     * Main Method
+     * @author Nithisha Sathishkumar
+     */
     public static void main(String[] args){
         System.out.println("Welcome to the Hotel System!");
         System.out.println("Type '?' or 'help' to list all available APIs.");
