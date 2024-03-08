@@ -61,7 +61,9 @@ public class HotelAPI {
                 case Staff.UpdateStaffPhoneNumber:
                     Staff.updateStaffPhoneNumber(mainCmdArr);
                     break;
-                    
+                case Reservation.CreateReservation:
+                    Reservation.Create_Reservation(mainCmdArr);
+                    break;
                 case "clear":
                 case "Clear":
                     clearTerminal();
