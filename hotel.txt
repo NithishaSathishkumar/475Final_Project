@@ -1,4 +1,4 @@
-I\c postgres
+\c postgres
 DROP DATABASE hotel;
 SELECT current_database();
 create DATABASE Hotel;
@@ -79,7 +79,7 @@ CREATE TABLE Payment(
 	PaymentTypeID CHAR(2) NOT NULL,
 	PaymentDate TIMESTAMP NOT NULL,
 
-	Primary Key(ID)
+	Primary Key(ID),
 	Foreign Key (PaymentTypeID) references PaymentType(ID) Deferrable Initially Deferred
 );
 
@@ -126,4 +126,3 @@ CREATE TABLE Booking(
 SELECT current_database();
 \c hotel
 SELECT current_database();
-

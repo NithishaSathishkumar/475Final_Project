@@ -1,14 +1,18 @@
-
+/*
+* Main Method
+* @author Nithisha Sathishkumar
+*/
 
 public class HotelAPI {
-    /*
-     * Main Method
-     * @author Nithisha Sathishkumar
-     */
     public static void main(String[] args){
-        System.out.println("Welcome to the Hotel System!");
-        System.out.println("Type '?' or 'help' to list all available APIs.");
-        System.out.println("Type 'exit' to quit the program");
+        System.out.println();
+        HotelAsciiArt.printHotel();
+        System.out.println();
+        System.out.println("🌟🌈 Welcome to the UWB Hotel System! 🌟🌈");
+        System.out.println("Type '?' or 'help' to explore our adorable APIs. 🐾");
+        System.out.println("Type 'exit' to QUIT the program. 😢");
+        System.out.println("Type 'clear' to clear the Terminal. 🧹");
+        System.out.println();
 
         String cmb = "";
 
@@ -28,11 +32,27 @@ public class HotelAPI {
             switch(mainCmdArr[0]){
                 case "?":
                 case "help":
-                    System.out.println("help needed!!");
-                    // listOfAPI();
+                    Menu();
                     break;
                 case "exit":
                     break;
+
+                case Staff.ListOfStaff:
+                    Staff.getStaffList(mainCmdArr);
+                    break;
+
+                case "clear":
+                    clearTerminal();
+                    System.out.println();
+                    HotelAsciiArt.printHotel();
+                    System.out.println();
+                    System.out.println("🌟🌈 Welcome to the UWB Hotel System! 🌟🌈");
+                    System.out.println("Type 'help' to explore our adorable APIs. 🐾");
+                    System.out.println("Type 'exit' to QUIT the program. 😢");
+                    System.out.println("Type 'clear' to clear the Terminal. 🧹");
+                    System.out.println();
+                    break;
+
                 
                 default:
                     System.out.println("Command not recognized, please try again");
@@ -43,6 +63,21 @@ public class HotelAPI {
         HotelDB.disconnect();
        
 
+    }
+
+     /*
+     * Clears The Terminal Method
+     * @author Nithisha Sathishkumar
+     */
+    public static void clearTerminal() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+    
+
+    private static void Menu(){
+        System.out.println("\nMENU: ");
+        Staff.getStaffList(null);
     }
     
 }

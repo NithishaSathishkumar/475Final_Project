@@ -7,7 +7,7 @@ import java.sql.*;
 
 public class Create {
 
-    // Create Reservation
+    // Create Reservation GuestNum?? ReservationNum??
 public static Reservation createReservation(Integer numberOfGuest, String paymentType, double amount, Timestamp createdTime, String guestNum, String staffNum) {
     try (Connection connection = HotelDB.getConnection()) {
         String query = "INSERT INTO Reservation (numberOfGuest, paymentType, amount, createdTime, guestNum, staffNum) VALUES (?, ?, ?, ?, ?, ?) RETURNING reservationNum, numberOfGuest, paymentType, amount, createdTime, guestNum, staffNum";
@@ -107,33 +107,33 @@ public static Reservation createReservation(Integer numberOfGuest, String paymen
     }
 
     // Create Staff
-    public static Staff createStaff(String firstName, String lastName, Integer positionId, String phoneNumber, String email) {
-        try (Connection connection = HotelDB.getConnection()) {
-            String query = "INSERT INTO Staff (firstName, lastName, positionId, phoneNumber, email) VALUES (?, ?, ?, ?, ?) RETURNING *";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, firstName);
-                preparedStatement.setString(2, lastName);
-                preparedStatement.setInt(3, positionId);
-                preparedStatement.setString(4, phoneNumber);
-                preparedStatement.setString(5, email);
+    // public static Staff createStaff(String firstName, String lastName, Integer positionId, String phoneNumber, String email) {
+    //     try (Connection connection = HotelDB.getConnection()) {
+    //         String query = "INSERT INTO Staff (firstName, lastName, positionId, phoneNumber, email) VALUES (?, ?, ?, ?, ?) RETURNING *";
+    //         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+    //             preparedStatement.setString(1, firstName);
+    //             preparedStatement.setString(2, lastName);
+    //             preparedStatement.setInt(3, positionId);
+    //             preparedStatement.setString(4, phoneNumber);
+    //             preparedStatement.setString(5, email);
 
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    if (resultSet.next()) {
-                        return new Staff(
-                                resultSet.getString("staffNum"),
-                                resultSet.getString("firstName"),
-                                resultSet.getString("lastName"),
-                                resultSet.getInt("positionId"),
-                                resultSet.getString("phoneNumber"),
-                                resultSet.getString("email")
-                        );
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+    //             try (ResultSet resultSet = preparedStatement.executeQuery()) {
+    //                 if (resultSet.next()) {
+    //                     return new Staff(
+    //                             resultSet.getString("staffNum"),
+    //                             resultSet.getString("firstName"),
+    //                             resultSet.getString("lastName"),
+    //                             resultSet.getInt("positionId"),
+    //                             resultSet.getString("phoneNumber"),
+    //                             resultSet.getString("email")
+    //                     );
+    //                 }
+    //             }
+    //         }
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //     }
+    //     return null;
+    // }
 }
 

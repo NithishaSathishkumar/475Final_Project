@@ -4,6 +4,7 @@
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Properties;
 
 public class Guest {
     private String guestNum;
@@ -29,6 +30,8 @@ public class Guest {
         this.zipcode = zipcode;
         this.state = state;
     }
+
+
 
     // Getters and setters go here
 }

@@ -1,0 +1,33 @@
+DROP DATABASE
+ current_database 
+------------------
+ postgres
+(1 row)
+
+CREATE DATABASE
+ current_database 
+------------------
+ hotel
+(1 row)
+
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+ current_database 
+------------------
+ postgres
+(1 row)
+
+ current_database 
+------------------
+ hotel
+(1 row)
+

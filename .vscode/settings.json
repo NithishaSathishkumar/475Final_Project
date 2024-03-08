@@ -1,6 +1,7 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "RunThisFileFirst/postgresql-42.7.2.jar"
+        "RunThisFileFirst/postgresql-42.7.2.jar",
+        "Run This File First/postgresql-42.7.2.jar"
     ]
 }
