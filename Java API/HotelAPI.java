@@ -61,9 +61,11 @@ public class HotelAPI {
                 case Staff.UpdateStaffPhoneNumber:
                     Staff.updateStaffPhoneNumber(mainCmdArr);
                     break;
+
                 case Reservation.CreateReservation:
                     Reservation.Create_Reservation(mainCmdArr);
                     break;
+
                 case "clear":
                 case "Clear":
                     clearTerminal();
@@ -84,7 +86,6 @@ public class HotelAPI {
         }
 
         HotelDB.disconnect();
-       
 
     }
 
@@ -110,6 +111,8 @@ public class HotelAPI {
         Staff.getJobPositionList(null);
         Staff.getStaff_Staffnum(null);
         Staff.updateStaffPhoneNumber(null);
+        Reservation.Create_Reservation(null);
+
     }
     
 }

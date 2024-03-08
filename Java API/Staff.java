@@ -131,7 +131,7 @@ public class Staff {
         if(params == null || params.length == 0)
         {
             System.out.println("GetStaffStaffNum - Staff's StaffNum");
-            System.out.println("command: getStaff_Staffnum Command:FirstName Command:LastName Command:Email");
+            System.out.println("COMMAND: getStaff_Staffnum Command:FirstName Command:LastName Command:Email");
         }
         else
         {
@@ -156,7 +156,7 @@ public class Staff {
         System.out.println("");
 
         if(params == null || params.length == 0){
-            System.out.println("updateStaffContact - Update Staff Contact");
+            System.out.println("UpdateStaffContact - Update Staff Contact");
             System.out.println("COMMAND: updateStaffPhoneNumber COMMAND:StaffNum COMMAND:PhoneNumber");
 
         }else{
