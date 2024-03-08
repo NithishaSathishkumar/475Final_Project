@@ -30,18 +30,40 @@ public class HotelAPI {
             }
 
             switch(mainCmdArr[0]){
-                case "?":
+                case "Help":
                 case "help":
                     Menu();
                     break;
                 case "exit":
+                case "Exit":
                     break;
 
                 case Staff.ListOfStaff:
                     Staff.getStaffList(mainCmdArr);
                     break;
 
+                case Staff.ListOfStaffByPosition:
+                    Staff.getStaffListByPosition(mainCmdArr);
+                    break;
+                
+                case Staff.StaffInfoByStaffNum:
+                    Staff.getStaffInfoByStaffNum(mainCmdArr);
+                    break;
+                
+                case Staff.ListOfJobPosition:
+                    Staff.getJobPositionList(mainCmdArr);
+                    break;
+
+                case Staff.GetStaffStaffNum:
+                    Staff.getStaff_Staffnum(mainCmdArr);
+                    break;
+
+                case Staff.UpdateStaffPhoneNumber:
+                    Staff.updateStaffPhoneNumber(mainCmdArr);
+                    break;
+                    
                 case "clear":
+                case "Clear":
                     clearTerminal();
                     System.out.println();
                     HotelAsciiArt.printHotel();
@@ -53,7 +75,6 @@ public class HotelAPI {
                     System.out.println();
                     break;
 
-                
                 default:
                     System.out.println("Command not recognized, please try again");
             }
@@ -65,7 +86,7 @@ public class HotelAPI {
 
     }
 
-     /*
+    /*
      * Clears The Terminal Method
      * @author Nithisha Sathishkumar
      */
@@ -74,10 +95,19 @@ public class HotelAPI {
         System.out.flush();
     }
     
+    /*
+     * Menu Method
+     * @author Team
+     */
 
     private static void Menu(){
         System.out.println("\nMENU: ");
         Staff.getStaffList(null);
+        Staff.getStaffListByPosition(null);
+        Staff.getStaffInfoByStaffNum(null);
+        Staff.getJobPositionList(null);
+        Staff.getStaff_Staffnum(null);
+        Staff.updateStaffPhoneNumber(null);
     }
     
 }
