@@ -158,6 +158,18 @@ VALUES
     ('Nasheeta', 'Lott', 'bbqhdho@yahoo.com', '1234567890', (SELECT ID FROM Position WHERE Name = 'Receptionist'))
 ;
 
+insert into state values('WA','Washington'), ('FL','Florida');
+insert into phonetype values('M','mobile'), ('H','home');
+insert into guest(firstname, lastname, guestnum, email, address1,city,stateid) values('F1','L1','1111', '1@1.com','address11', 'seattle', 'WA'),('F2','L2','2222', '2@2.com','address12', 'orlando', 'FL');
+insert into phone(guestid,phonetypeid,phonenumber) values(1,'M','12345678'), (2,'H','12345672');
+
+insert into room(roomnumber,capacity,priceperday) values('1001',2, 123), ('1002',4, 150),('1003',2, 118);
+
+insert into paymenttype values('CC','credit card'), ('cs','cash');
+
+
+
+
 
 \c postgres
 SELECT current_database();
