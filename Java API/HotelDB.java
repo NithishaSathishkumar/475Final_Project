@@ -467,6 +467,64 @@ public class HotelDB{
         }
     }    
 
+    /*
+    * With explicitly listed date, rooms that are not occupied 
+    * during the date are listed and returned
+    * @author Andy Hoang
+    *
+    *    UNTESTED WIP
+    *    UNTESTED WIP
+    *    UNTESTED WIP
+    *
+    */
+    public static void getAvailableRooms(HashMap<String, String> apiParams) throws SQLException {
+        Statement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = getConnection();
+            String query = ""; 
+            //Thinking of Logic to handle all various NULL dates of Rooms and CoDate
+
+            preparedStatement = connection.prepareStatement(query);
+            //preparedStatement.setString(1, apiParams.get("Date"));
+            resultSet = preparedStatement.executeQuery(query);
+            
+            boolean gotRecords = false;
+
+            System.out.println("List of Rooms:");
+
+            System.out.format("%-20s%-15s%-25s%n", "Room Number", "Capacity", "Price Per Day");
+           
+            System.out.println("--------------------------------------------------------------------------------");
+
+            while (resultSet != null && resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-20s%-10s%-25s%n",
+                    resultSet.getString("RoomNumber"),
+                    resultSet.getInt("Capacity"),
+                    resultSet.getDouble("PricePerDay"));
+            }
+
+            if(!gotRecords) {
+                System.out.println("No Result Found!");
+                System.out.println("");
+            }
+    
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+
+            if(resultSet != null) {
+                resultSet.close();
+            }
+        }
+    }
+
 }
 
 
