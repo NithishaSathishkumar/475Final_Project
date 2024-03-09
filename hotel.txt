@@ -127,8 +127,7 @@ CREATE TABLE Booking(
 	ReservationID INTEGER NOT NULL,
 	RoomID INTEGER NOT NULL,
 	CIDate TIMESTAMP NOT NULL,
-	COExpectDate TIMESTAMP NOT NULL,
-	CODate TIMESTAMP,
+	CODate TIMESTAMP NOT NULL,
 	
 	Primary Key(ID),
 	Foreign Key (ReservationID) references Reservation(ID) Deferrable Initially Deferred,
