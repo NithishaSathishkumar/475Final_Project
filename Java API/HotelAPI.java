@@ -90,7 +90,6 @@ public class HotelAPI {
         }
 
         HotelDB.disconnect();
-       
 
     }
 
@@ -117,6 +116,8 @@ public class HotelAPI {
         Staff.getStaff_Staffnum(null);
         Staff.updateStaffPhoneNumber(null);
         Booking.getAvailableRooms(null);
+        Reservation.Create_Reservation(null);
+
     }
     
 }

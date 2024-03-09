@@ -9,6 +9,9 @@ import java.util.Properties;
 
 
 public class Reservation {
+
+    public static final String CreateReservation = "CreateReservation";
+
     private String reservationNum;
     private int numberOfGuest;
     private String paymentType;
@@ -48,41 +51,52 @@ public class Reservation {
         }
     }
 
-    public static final String CreateReservation="CreateReservation";
+   
 
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     public static boolean Create_Reservation(String[] params){
-        System.out.println("");
-        HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"number_of_guest","number_of_room", "payment_type", "guest_number",  "staff_number"});
+
+        if(params == null || params.length == 0){
+            System.out.println("");
+            System.out.println("CreateReservation: Create Reservation");
+            System.out.println("COMMAND: Create_Reservation NumberOfRoom:xx NumberOfGuest:xx GuestNum:xx staffNum:xx paymentType");
+
+        }else{
+            System.out.println("");
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"number_of_guest","number_of_room", "payment_type", "guest_number",  "staff_number"});
+            
+            if(apiParams == null){
+                System.out.println("Please Input Correct Data.");
+                return false;
+            }
+
+            int numberOfRoom=Integer.parseInt(apiParams.get("number_of_room"));
+            ArrayList<Booking> bookings = getBookings(numberOfRoom);
+            HashMap<String, Room> rooms = getRooms(bookings);
+
+            int numberOfGuest = Integer.parseInt(apiParams.get("number_of_guest"));
+            
+            int guestId = getGuestId(apiParams.get("guest_number"));
+
+            int staffId = getStaffId(apiParams.get("staff_number"));
+
+            String paymentTypeId = getPaymentTypeId(apiParams.get("payment_type"));
+            int paymentId = createPayment(paymentTypeId);
+
+            double amout=getTotalAmount(bookings, rooms);
+            String reservationNumber=getReservationNumber();
+
+            int reservationId = createReservation(reservationNumber, numberOfGuest, paymentId, amout, guestId, staffId);
+
+            for(int i=0;i<bookings.size();i++){
+                String no=bookings.get(i).roomNum;
+                createBooking(reservationId, rooms.get(no).roomId, bookings.get(i).checkInDate, bookings.get(i).checkOutDate);
+            }
         
-        if(apiParams == null){
-            System.out.println("Please input correct data.");
-            return false;
+            return true;
         }
-
-        int numberOfRoom=Integer.parseInt(apiParams.get("number_of_room"));
-        ArrayList<Booking> bookings = getBookings(numberOfRoom);
-        HashMap<String, Room> rooms = getRooms(bookings);
-
-        int numberOfGuest=Integer.parseInt(apiParams.get("number_of_guest"));
-        
-        int guestId=getGuestId(apiParams.get("guest_number"));
-        int staffId=getStaffId(apiParams.get("staff_number"));
-        String paymentTypeId=getPaymentTypeId(apiParams.get("payment_type"));
-        int paymentId=createPayment(paymentTypeId);
-
-        double amout=getTotalAmount(bookings, rooms);
-        String reservationNumber=getReservationNumber();
-
-        int reservationId = createReservation(reservationNumber, numberOfGuest, paymentId, amout, guestId, staffId);
-
-        for(int i=0;i<bookings.size();i++){
-            String no=bookings.get(i).roomNum;
-            createBooking(reservationId, rooms.get(no).roomId, bookings.get(i).checkInDate, bookings.get(i).checkOutDate);
-        }
-        
-        return true;
+        return false;
     
     }
 
@@ -101,6 +115,7 @@ public class Reservation {
         }
         return bookings;
     }
+
     private static HashMap<String, Room> getRooms(ArrayList<Booking> bookings){
         // get rooms detail from db 
         return new HashMap<>();
@@ -153,5 +168,5 @@ public class Reservation {
     private static int createBooking(int reservationId, int roomId, java.util.Date checkInDate, java.util.Date checkOutDate){
         return 0;
     }
-    // Getters and setters go here
+   
 }
