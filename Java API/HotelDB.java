@@ -1144,7 +1144,7 @@ public class HotelDB{
             while (resultSet != null && resultSet.next()) {
                 gotRecords = true;
 
-                System.out.format("%-20s%-10s%-25s%n",
+                System.out.format("%-20s%-10s%-10s%n",
                     resultSet.getString("RoomNumber"),
                     resultSet.getString("CiDate"),
                     resultSet.getString("CoDate"));
