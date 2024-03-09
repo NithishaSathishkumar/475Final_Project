@@ -4,8 +4,12 @@
 
 
 import java.sql.*;
+import java.util.HashMap;
 
 public class Booking {
+    public static final String getAvailableRooms = "getAvailableRooms";
+
+
     private String bookingNum;
     private String reservationNum;
     private String roomNum;
@@ -41,6 +45,27 @@ public class Booking {
         this.CIDate = CIDate;
         this.CoExpectDate = CoExpectDate;
         this.CoDate = null;
+    }
+
+    /*
+     * getAvailableRooms method
+     * @author Andy Hoang
+     */
+    public static void getAvailableRooms(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("getAvailableRooms - Return list of available rooms/bookings for listed time");
+            System.out.println("COMMAND: getAvailableRooms COMMAND: Date");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"Date"});
+            if(apiParams != null) {
+                try {
+                    HotelDB.getAvailableRooms(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     // Getters and setters go here
