@@ -85,7 +85,7 @@ CREATE TABLE Payment(
 
 CREATE TABLE Reservation(
 	ID SERIAL,
-	ReservationNum VARCHAR(5) NOT NULL UNIQUE, 
+	ReservationNum VARCHAR(14) NOT NULL UNIQUE, 
 	NumberOfGuest INTEGER NOT NULL,
 	PaymentID INTEGER, 
 	Amount Decimal NOT NULL, 

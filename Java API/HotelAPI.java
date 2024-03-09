@@ -62,8 +62,8 @@ public class HotelAPI {
                     Staff.updateStaffPhoneNumber(mainCmdArr);
                     break;
                     
-                case Reservation.CreateReservation:
-                    Reservation.Create_Reservation(mainCmdArr);
+                case ReservationAPI.CreateReservation:
+                    ReservationAPI.Create_Reservation(mainCmdArr);
                     break;
 
                 case Booking.getAvailableRooms: //UNFINISHED WIP
@@ -116,7 +116,7 @@ public class HotelAPI {
         Staff.getStaff_Staffnum(null);
         Staff.updateStaffPhoneNumber(null);
         Booking.getAvailableRooms(null);
-        Reservation.Create_Reservation(null);
+        ReservationAPI.Create_Reservation(null);
 
     }
     
