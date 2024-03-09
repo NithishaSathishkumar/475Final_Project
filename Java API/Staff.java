@@ -17,7 +17,8 @@ public class Staff {
     public static final String ListOfJobPosition = "getJobPositionList";
     public static final String GetStaffStaffNum = "getStaff_Staffnum";
     public static final String UpdateStaffPhoneNumber = "updateStaffPhoneNumber";
-    
+    public static final String CreateStaff = "createStaff";  
+      
     /*
     * GetStaffList Method
     * @author Nithisha Sathishkumar
@@ -171,9 +172,30 @@ public class Staff {
                 }
             }
         }
-
         return false;
     }
+
+    public static boolean createStaff(String[] params){
+        if(params == null || params.length == 0){
+            System.out.println("CreateStaff - Create Staff");
+            System.out.println("COMMAND: createStaff COMMAND:StaffNum COMMAND:PhoneNumber");
+
+        }else{
+
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] { "FirstName", "LastName", "Email", "PhoneNumber", "PositionName" });
+
+            if(apiParams != null){
+                try {
+                    return HotelDB.createStaff(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+
 }
     
 

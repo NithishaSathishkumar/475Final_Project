@@ -467,6 +467,105 @@ public class HotelDB{
         }
     }    
 
+   /*
+    * create Method
+    * @author Nithisha Sathishkumar
+    */
+
+    public static boolean createStaff(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            // Get DB connection
+            Connection connection = getConnection();
+
+            // SQL PreparedStatement
+            String insertSql = "INSERT INTO Staff (FirstName, LastName, Email, PhoneNumber, PositionID) " +
+                    "VALUES (?, ?, ?, ?, (SELECT ID FROM Position WHERE Name = ? ))";
+
+            String selectSql = "SELECT Staff.StaffNum, Staff.FirstName, Staff.LastName, Staff.PhoneNumber, Staff.Email, Position.Name " +
+                    "FROM Staff " +
+                    "JOIN Position ON Position.ID = Staff.PositionID " +
+                    "WHERE Staff.Email = ? " +
+                    "ORDER BY FirstName ASC";
+
+            preparedStatement = connection.prepareStatement(insertSql);
+            preparedStatement.setString(1, apiParams.get("FirstName"));
+            preparedStatement.setString(2, apiParams.get("LastName"));
+            preparedStatement.setString(3, apiParams.get("Email"));
+            preparedStatement.setString(4, apiParams.get("PhoneNumber"));
+            preparedStatement.setString(5, apiParams.get("PositionName"));
+
+            int rows = preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+
+            if (rows > 0) {
+                System.out.println("Staff created successfully!");
+                System.out.println("");
+
+                preparedStatement = connection.prepareStatement(selectSql);
+                preparedStatement.setString(1, apiParams.get("Email"));
+                resultSet = preparedStatement.executeQuery();
+    
+                boolean gotRecords = false;
+    
+                System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                        "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
+    
+                System.out.println("----------------------------------------------------------------------------------------------");
+    
+                while (resultSet.next()) {
+                    gotRecords = true;
+    
+                    System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                            resultSet.getString("StaffNum"),
+                            resultSet.getString("FirstName"),
+                            resultSet.getString("LastName"),
+                            resultSet.getString("PhoneNumber"),
+                            resultSet.getString("Email"),
+                            resultSet.getString("Name")
+                    );
+                }
+    
+                if (!gotRecords) {
+                    System.out.println("No results found for the updated StaffNum!");
+                    System.out.println("");
+                }
+
+                preparedStatement.close();
+                return true;
+
+            } else {
+                System.out.println("Failed to create staff!");
+                System.out.println("");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 }
 
 

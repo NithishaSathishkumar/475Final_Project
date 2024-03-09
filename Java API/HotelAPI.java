@@ -7,13 +7,8 @@ public class HotelAPI {
     public static void main(String[] args){
         System.out.println();
         HotelAsciiArt.printHotel();
-        System.out.println();
-        System.out.println("🌟🌈 Welcome to the UWB Hotel System! 🌟🌈");
-        System.out.println("Type '?' or 'help' to explore our adorable APIs. 🐾");
-        System.out.println("Type 'exit' to QUIT the program. 😢");
-        System.out.println("Type 'clear' to clear the Terminal. 🧹");
-        System.out.println();
-
+        HotelAsciiArt.intro();
+        
         String cmb = "";
 
         while(!cmb.equalsIgnoreCase("exit")){
@@ -32,6 +27,7 @@ public class HotelAPI {
             switch(mainCmdArr[0]){
                 case "Help":
                 case "help":
+                case "?":
                     Menu();
                     break;
                 case "exit":
@@ -62,6 +58,10 @@ public class HotelAPI {
                     Staff.updateStaffPhoneNumber(mainCmdArr);
                     break;
 
+                case Staff.CreateStaff:
+                    Staff.createStaff(mainCmdArr);
+                    break;
+
                 case Reservation.CreateReservation:
                     Reservation.Create_Reservation(mainCmdArr);
                     break;
@@ -71,12 +71,7 @@ public class HotelAPI {
                     clearTerminal();
                     System.out.println();
                     HotelAsciiArt.printHotel();
-                    System.out.println();
-                    System.out.println("🌟🌈 Welcome to the UWB Hotel System! 🌟🌈");
-                    System.out.println("Type 'help' to explore our adorable APIs. 🐾");
-                    System.out.println("Type 'exit' to QUIT the program. 😢");
-                    System.out.println("Type 'clear' to clear the Terminal. 🧹");
-                    System.out.println();
+                    HotelAsciiArt.intro();
                     break;
 
                 default:
@@ -111,6 +106,7 @@ public class HotelAPI {
         Staff.getJobPositionList(null);
         Staff.getStaff_Staffnum(null);
         Staff.updateStaffPhoneNumber(null);
+        Staff.createStaff(null);
         Reservation.Create_Reservation(null);
 
     }

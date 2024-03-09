@@ -7,17 +7,17 @@ VALUES
 ;
 
 INSERT INTO Staff (
-    FirstName, LastName, StaffNum, Email, phoneNumber, PositionID
+    FirstName, LastName, Email, phoneNumber, PositionID
 )
 VALUES 
-    ('Nithisha', 'Sathishkumar', '22954', 'nithis13@uw.edu', '4253640364', 1),
-    ('Sahong', 'Song', '21125', 'song25@uw.edu', '3465816381', 2),
-    ('Andy', 'Hoang', '21235', 'andyHoang@gmail.com', '7463856291', 2),
-    ('Shaun', 'Cushman', '27531', 'shaun_mc@gmail.com', '6356485261', 1),
-    ('Shyam', 'Ramesh', '56372', 'shyam.aws@gmail.com', '3745237452', 1),
-    ('Iliya', 'Belyak', '12345', 'iliyab@yahoo.com', '7836472749', 2),
-    ('Anna', 'Rivas', '87642', 'annayu683@yahoo.com', '8746372637', 2),
-    ('Nasheeta', 'Lott', '67845', 'bbqhdho@yahoo.com', '1234567890', 2)
+    ('Nithisha', 'Sathishkumar', 'nithis13@uw.edu', '4253640364', (SELECT ID FROM Position WHERE Name = 'Manager')),
+    ('Sahong', 'Song', 'song25@uw.edu', '3465816381', (SELECT ID FROM Position WHERE Name = 'Receptionist')),
+    ('Andy', 'Hoang', 'andyHoang@gmail.com', '7463856291', (SELECT ID FROM Position WHERE Name = 'Receptionist')),
+    ('Shaun', 'Cushman', 'shaun_mc@gmail.com', '6356485261', (SELECT ID FROM Position WHERE Name = 'Manager')),
+    ('Shyam', 'Ramesh', 'shyam.aws@gmail.com', '3745237452', (SELECT ID FROM Position WHERE Name = 'Manager')),
+    ('Iliya', 'Belyak', 'iliyab@yahoo.com', '7836472749', (SELECT ID FROM Position WHERE Name = 'Receptionist')),
+    ('Anna', 'Rivas', 'annayu683@yahoo.com', '8746372637', (SELECT ID FROM Position WHERE Name = 'Receptionist')),
+    ('Nasheeta', 'Lott', 'bbqhdho@yahoo.com', '1234567890', (SELECT ID FROM Position WHERE Name = 'Receptionist'))
 ;
 
 insert into state values('WA','Washington'), ('FL','Florida');

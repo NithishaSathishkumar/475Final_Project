@@ -1,5 +1,5 @@
 \c postgres
-DROP DATABASE hotel;
+DROP DATABASE Hotel;
 SELECT current_database();
 create DATABASE Hotel;
 \c hotel
@@ -54,11 +54,25 @@ CREATE TABLE Position(
 	Primary Key(ID)
 );
 
+CREATE SEQUENCE staffnum_seq;
+
+CREATE OR REPLACE FUNCTION set_staffnum()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW."StaffNum" := LPAD(nextval('staffnum_seq')::TEXT, 5, '0');
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_staffnum_trigger
+BEFORE INSERT ON Staff
+FOR EACH ROW EXECUTE FUNCTION set_staffnum();
+
 CREATE TABLE Staff(
 	ID SERIAL, 
 	FirstName VARCHAR(20) NOT NULL,
 	LastName VARCHAR(20) NOT NULL, 
-	StaffNum VARCHAR(5) NOT NULL UNIQUE,
+	StaffNum VARCHAR(5) NOT NULL UNIQUE DEFAULT LPAD(nextval('staffnum_seq'::regclass)::TEXT, 5, '0'),
 	Email VARCHAR(30) NOT NULL UNIQUE,
 	PhoneNumber VARCHAR(30) NOT NULL UNIQUE,
 	PositionID INTEGER NOT NULL,
@@ -121,6 +135,29 @@ CREATE TABLE Booking(
 	Foreign Key (RoomID) references Room(ID) Deferrable Initially Deferred
 	
 );
+
+INSERT INTO Position(
+    NAME
+)
+VALUES
+    ('Manager'),
+    ('Receptionist')
+;
+
+INSERT INTO Staff (
+    FirstName, LastName, Email, phoneNumber, PositionID
+)
+VALUES 
+    ('Nithisha', 'Sathishkumar', 'nithis13@uw.edu', '4253640364', (SELECT ID FROM Position WHERE Name = 'Manager')),
+    ('Sahong', 'Song', 'song25@uw.edu', '3465816381', (SELECT ID FROM Position WHERE Name = 'Receptionist')),
+    ('Andy', 'Hoang', 'andyHoang@gmail.com', '7463856291', (SELECT ID FROM Position WHERE Name = 'Receptionist')),
+    ('Shaun', 'Cushman', 'shaun_mc@gmail.com', '6356485261', (SELECT ID FROM Position WHERE Name = 'Manager')),
+    ('Shyam', 'Ramesh', 'shyam.aws@gmail.com', '3745237452', (SELECT ID FROM Position WHERE Name = 'Manager')),
+    ('Iliya', 'Belyak', 'iliyab@yahoo.com', '7836472749', (SELECT ID FROM Position WHERE Name = 'Receptionist')),
+    ('Anna', 'Rivas', 'annayu683@yahoo.com', '8746372637', (SELECT ID FROM Position WHERE Name = 'Receptionist')),
+    ('Nasheeta', 'Lott', 'bbqhdho@yahoo.com', '1234567890', (SELECT ID FROM Position WHERE Name = 'Receptionist'))
+;
+
 
 \c postgres
 SELECT current_database();

@@ -10,6 +10,16 @@ public class HotelAsciiArt {
         printHotel();
     }
 
+    public static void intro(){
+        System.out.println();
+        System.out.println("🌟🌈 Welcome to the UWB Hotel System! 🌟🌈");
+        System.out.println("Type 'help' or '?' to explore our adorable APIs. 🐾");
+        System.out.println("Type 'exit' to QUIT the program. 😢");
+        System.out.println("Type 'clear' to clear the Terminal. 🧹");
+        System.out.println();
+
+    }
+
     public static void printHotel() {
         String hotel = 
             "      .          .            .        . \n"+
