@@ -57,6 +57,22 @@ public class HotelAPI {
                 case Staff.UpdateStaffPhoneNumber:
                     Staff.updateStaffPhoneNumber(mainCmdArr);
                     break;
+
+                case Staff.UpdateStaffEmail:
+                    Staff.updateStaffEmail(mainCmdArr);
+                    break;
+
+                case Staff.UpdateStaffFirstName:
+                    Staff.updateStaffFirstName(mainCmdArr);
+                    break;
+
+                case Staff.UpdateStaffLastName:
+                    Staff.updateStaffLastName(mainCmdArr);
+                    break;
+
+                case Staff.UpdateStaffPosition:
+                    Staff.updateStaffPosition(mainCmdArr);
+                    break;
                     
                 case ReservationAPI.CreateReservation:
                     ReservationAPI.Create_Reservation(mainCmdArr);
@@ -66,8 +82,6 @@ public class HotelAPI {
                     Staff.createStaff(mainCmdArr);
                     break;
 
-                //case Reservation.CreateReservation:
-                //    Reservation.Create_Reservation(mainCmdArr);
                 case Booking.getAvailableRooms: //UNFINISHED WIP
                     Booking.getAvailableRooms(mainCmdArr);
                     break;
@@ -112,8 +126,11 @@ public class HotelAPI {
         Staff.getJobPositionList(null);
         Staff.getStaff_Staffnum(null);
         Staff.updateStaffPhoneNumber(null);
+        Staff.updateStaffEmail(null);
+        Staff.updateStaffFirstName(null);
+        Staff.updateStaffLastName(null);
+        Staff.updateStaffPosition(null);
         Staff.createStaff(null);
-        //Reservation.Create_Reservation(null);
         Booking.getAvailableRooms(null);
         ReservationAPI.Create_Reservation(null);
 

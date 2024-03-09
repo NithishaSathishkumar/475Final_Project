@@ -17,8 +17,12 @@ public class Staff {
     public static final String ListOfJobPosition = "getJobPositionList";
     public static final String GetStaffStaffNum = "getStaff_Staffnum";
     public static final String UpdateStaffPhoneNumber = "updateStaffPhoneNumber";
+    public static final String UpdateStaffEmail = "updateStaffEmail";
+    public static final String UpdateStaffFirstName = "updateStaffFirstName";
+    public static final String UpdateStaffLastName = "updateStaffLastName";
+    public static final String UpdateStaffPosition = "updateStaffPosition";
     public static final String CreateStaff = "createStaff";  
-      
+
     /*
     * GetStaffList Method
     * @author Nithisha Sathishkumar
@@ -174,6 +178,121 @@ public class Staff {
         }
         return false;
     }
+
+
+    /*
+    * UpdateStaffEmail Method
+    * @author Nithisha Sathishkumar
+    */
+
+    public static boolean updateStaffEmail(String[] params) {
+        System.out.println("");
+
+        if(params == null || params.length == 0){
+            System.out.println("UpdateStaffEmail - Update Staff Email");
+            System.out.println("COMMAND: updateStaffEmail COMMAND:StaffNum COMMAND:Email");
+
+        }else{
+
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] { "StaffNum", "Email" });
+
+            if(apiParams != null){
+                try {
+                    return HotelDB.updateStaffEmail(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+    /*
+    * UpdateStaffFirstName Method
+    * @author Nithisha Sathishkumar
+    */
+
+    public static boolean updateStaffFirstName(String[] params) {
+        System.out.println("");
+
+        if(params == null || params.length == 0){
+            System.out.println("UpdateStaffFirstName - Update Staff First Name");
+            System.out.println("COMMAND: updateStaffFirstName COMMAND:StaffNum COMMAND:FirstName");
+
+        }else{
+
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] { "StaffNum", "FirstName" });
+
+            if(apiParams != null){
+                try {
+                    return HotelDB.updateStaffFirstName(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+    /*
+    * UpdateStaffLastName Method
+    * @author Nithisha Sathishkumar
+    */
+
+    public static boolean updateStaffLastName(String[] params) {
+        System.out.println("");
+
+        if(params == null || params.length == 0){
+            System.out.println("UpdateStaffLastName - Update Staff Last Name");
+            System.out.println("COMMAND: updateStaffLastName COMMAND:StaffNum COMMAND:LastName");
+
+        }else{
+
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] { "StaffNum", "LastName" });
+
+            if(apiParams != null){
+                try {
+                    return HotelDB.updateStaffLastName(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+    /*
+    * UpdateStaffFirstName Method
+    * @author Nithisha Sathishkumar
+    */
+
+    public static boolean updateStaffPosition(String[] params) {
+        System.out.println("");
+
+        if(params == null || params.length == 0){
+            System.out.println("UpdateStaffPosition - Update Staff Position");
+            System.out.println("COMMAND: updateStaffPosition COMMAND:StaffNum COMMAND:Position");
+
+        }else{
+
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] { "StaffNum", "Name" });
+
+            if(apiParams != null){
+                try {
+                    return HotelDB.updateStaffPosition(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+    /*
+    * CreateStaff Method
+    * @author Nithisha Sathishkumar
+    */
+
 
     public static boolean createStaff(String[] params){
         if(params == null || params.length == 0){

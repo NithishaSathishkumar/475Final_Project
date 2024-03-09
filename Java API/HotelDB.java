@@ -432,7 +432,7 @@ public class HotelDB{
                 }
     
                 if (!gotRecords) {
-                    System.out.println("No results found for the updated StaffNum!");
+                    System.out.println("No results found for the updated Staff PhoneNumber!");
                     System.out.println("");
                 }
     
@@ -466,6 +466,497 @@ public class HotelDB{
             }
         }
     }    
+
+    /*
+    * updateStaffEmail Method
+    * @author Nithisha Sathishkumar
+    */
+
+    public static boolean updateStaffEmail(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+    
+        try {
+            // Get DB connection
+            Connection connection = getConnection();
+    
+            // SQL PreparedStatement
+            String updateSql = "UPDATE Staff SET Email = ? WHERE StaffNum = ?";
+    
+            String selectSql = "SELECT Staff.StaffNum, Staff.FirstName, Staff.LastName, Staff.PhoneNumber, Staff.Email, Position.Name " +
+                    "FROM Staff " +
+                    "JOIN Position ON Position.ID = Staff.PositionID " +
+                    "WHERE Staff.StaffNum = ? " +
+                    "ORDER BY FirstName ASC";
+    
+            preparedStatement = connection.prepareStatement(updateSql);
+            preparedStatement.setString(1, apiParams.get("Email"));
+            preparedStatement.setString(2, apiParams.get("StaffNum"));
+    
+            int rows = preparedStatement.executeUpdate();
+    
+            preparedStatement.close();  // Close the update statement
+    
+            if (rows > 0) {
+                System.out.println("Staff's Email updated successfully!");
+                System.out.println("");
+    
+                System.out.println("Updated Staff Email Information: ");
+    
+                preparedStatement = connection.prepareStatement(selectSql);
+                preparedStatement.setString(1, apiParams.get("StaffNum"));
+                resultSet = preparedStatement.executeQuery();
+    
+                boolean gotRecords = false;
+    
+                System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                        "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
+    
+                System.out.println("----------------------------------------------------------------------------------------------");
+    
+                while (resultSet.next()) {
+                    gotRecords = true;
+    
+                    System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                            resultSet.getString("StaffNum"),
+                            resultSet.getString("FirstName"),
+                            resultSet.getString("LastName"),
+                            resultSet.getString("PhoneNumber"),
+                            resultSet.getString("Email"),
+                            resultSet.getString("Name")
+                    );
+                }
+    
+                if (!gotRecords) {
+                    System.out.println("No results found for the updated Email!");
+                    System.out.println("");
+                }
+    
+                return true;
+    
+            } else {
+                System.out.println("Staff's Email update failed! StaffNum not found.");
+                System.out.println("");
+                return false;
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+    
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+    
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }    
+
+    /*
+    * updateStaffFirstName Method
+    * @author Nithisha Sathishkumar
+    */
+
+    public static boolean updateStaffFirstName(HashMap<String, String> apiParams) throws SQLException {
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
+
+    try {
+        // Get DB connection
+        Connection connection = getConnection();
+
+        // Fetch existing Email
+        String selectEmailSql = "SELECT Email FROM Staff WHERE StaffNum = ?";
+        preparedStatement = connection.prepareStatement(selectEmailSql);
+        preparedStatement.setString(1, apiParams.get("StaffNum"));
+        resultSet = preparedStatement.executeQuery();
+
+        String existingEmail = null;
+        if (resultSet.next()) {
+            existingEmail = resultSet.getString("Email");
+        }
+
+        // SQL PreparedStatement
+        String updateSql = "UPDATE Staff SET FirstName = ?, Email = ? WHERE StaffNum = ?";
+        preparedStatement = connection.prepareStatement(updateSql);
+        preparedStatement.setString(1, apiParams.get("FirstName"));
+        preparedStatement.setString(2, existingEmail); // Use existing Email
+        preparedStatement.setString(3, apiParams.get("StaffNum"));
+
+        int rows = preparedStatement.executeUpdate();
+
+        preparedStatement.close();  // Close the update statement
+
+        if (rows > 0) {
+            System.out.println("Staff's FirstName updated successfully!");
+            System.out.println("");
+
+            System.out.println("Updated FirstName Email Information: ");
+
+            // Retrieve updated information
+            String selectSql = "SELECT Staff.StaffNum, Staff.FirstName, Staff.LastName, Staff.PhoneNumber, Staff.Email, Position.Name " +
+                    "FROM Staff " +
+                    "JOIN Position ON Position.ID = Staff.PositionID " +
+                    "WHERE Staff.StaffNum = ? " +
+                    "ORDER BY FirstName ASC";
+
+            preparedStatement = connection.prepareStatement(selectSql);
+            preparedStatement.setString(1, apiParams.get("StaffNum"));
+            resultSet = preparedStatement.executeQuery();
+
+            boolean gotRecords = false;
+
+            System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                    "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
+
+            System.out.println("----------------------------------------------------------------------------------------------");
+
+            while (resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                        resultSet.getString("StaffNum"),
+                        resultSet.getString("FirstName"),
+                        resultSet.getString("LastName"),
+                        resultSet.getString("PhoneNumber"),
+                        resultSet.getString("Email"),
+                        resultSet.getString("Name")
+                );
+            }
+
+            if (!gotRecords) {
+                System.out.println("No results found for the updated FirstName!");
+                System.out.println("");
+            }
+
+            return true;
+
+        } else {
+            System.out.println("Staff's FirstName update failed! StaffNum not found.");
+            System.out.println("");
+            return false;
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+
+    } finally {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (preparedStatement != null) {
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+
+    // public static boolean updateStaffFirstName(HashMap<String, String> apiParams) throws SQLException {
+    //     PreparedStatement preparedStatement = null;
+    //     ResultSet resultSet = null;
+    
+    //     try {
+    //         // Get DB connection
+    //         Connection connection = getConnection();
+    
+    //         // SQL PreparedStatement
+    //         String updateSql = "UPDATE Staff SET FirstName = ? WHERE StaffNum = ?";
+    
+    //         String selectSql = "SELECT Staff.StaffNum, Staff.FirstName, Staff.LastName, Staff.PhoneNumber, Staff.Email, Position.Name " +
+    //                 "FROM Staff " +
+    //                 "JOIN Position ON Position.ID = Staff.PositionID " +
+    //                 "WHERE Staff.StaffNum = ? " +
+    //                 "ORDER BY FirstName ASC";
+    
+    //         preparedStatement = connection.prepareStatement(updateSql);
+    //         preparedStatement.setString(1, apiParams.get("FirstName"));
+    //         preparedStatement.setString(2, apiParams.get("StaffNum"));
+    
+    //         int rows = preparedStatement.executeUpdate();
+    
+    //         preparedStatement.close();  // Close the update statement
+    
+    //         if (rows > 0) {
+    //             System.out.println("Staff's FirstName updated successfully!");
+    //             System.out.println("");
+    
+    //             System.out.println("Updated FirstName Email Information: ");
+    
+    //             preparedStatement = connection.prepareStatement(selectSql);
+    //             preparedStatement.setString(1, apiParams.get("StaffNum"));
+    //             resultSet = preparedStatement.executeQuery();
+    
+    //             boolean gotRecords = false;
+    
+    //             System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+    //                     "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
+    
+    //             System.out.println("----------------------------------------------------------------------------------------------");
+    
+    //             while (resultSet.next()) {
+    //                 gotRecords = true;
+    
+    //                 System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+    //                         resultSet.getString("StaffNum"),
+    //                         resultSet.getString("FirstName"),
+    //                         resultSet.getString("LastName"),
+    //                         resultSet.getString("PhoneNumber"),
+    //                         resultSet.getString("Email"),
+    //                         resultSet.getString("Name")
+    //                 );
+    //             }
+    
+    //             if (!gotRecords) {
+    //                 System.out.println("No results found for the updated FirstName!");
+    //                 System.out.println("");
+    //             }
+    
+    //             return true;
+    
+    //         } else {
+    //             System.out.println("Staff's FirstName update failed! StaffNum not found.");
+    //             System.out.println("");
+    //             return false;
+    //         }
+    
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //         return false;
+    
+    //     } finally {
+    //         if (resultSet != null) {
+    //             try {
+    //                 resultSet.close();
+    //             } catch (SQLException e) {
+    //                 e.printStackTrace();
+    //             }
+    //         }
+    
+    //         if (preparedStatement != null) {
+    //             try {
+    //                 preparedStatement.close();
+    //             } catch (SQLException e) {
+    //                 e.printStackTrace();
+    //             }
+    //         }
+    //     }
+    // }  
+    
+    /*
+    * updateStaffFirstName Method
+    * @author Nithisha Sathishkumar
+    */
+
+    public static boolean updateStaffLastName(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+    
+        try {
+            // Get DB connection
+            Connection connection = getConnection();
+    
+            // SQL PreparedStatement
+            String updateSql = "UPDATE Staff SET LastName = ? WHERE StaffNum = ?";
+    
+            String selectSql = "SELECT Staff.StaffNum, Staff.FirstName, Staff.LastName, Staff.PhoneNumber, Staff.Email, Position.Name " +
+                    "FROM Staff " +
+                    "JOIN Position ON Position.ID = Staff.PositionID " +
+                    "WHERE Staff.StaffNum = ? " +
+                    "ORDER BY FirstName ASC";
+    
+            preparedStatement = connection.prepareStatement(updateSql);
+            preparedStatement.setString(1, apiParams.get("LastName"));
+            preparedStatement.setString(2, apiParams.get("StaffNum"));
+    
+            int rows = preparedStatement.executeUpdate();
+    
+            preparedStatement.close();  // Close the update statement
+    
+            if (rows > 0) {
+                System.out.println("Staff's LastName updated successfully!");
+                System.out.println("");
+    
+                System.out.println("Updated LastName Email Information: ");
+    
+                preparedStatement = connection.prepareStatement(selectSql);
+                preparedStatement.setString(1, apiParams.get("StaffNum"));
+                resultSet = preparedStatement.executeQuery();
+    
+                boolean gotRecords = false;
+    
+                System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                        "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
+    
+                System.out.println("----------------------------------------------------------------------------------------------");
+    
+                while (resultSet.next()) {
+                    gotRecords = true;
+    
+                    System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                            resultSet.getString("StaffNum"),
+                            resultSet.getString("FirstName"),
+                            resultSet.getString("LastName"),
+                            resultSet.getString("PhoneNumber"),
+                            resultSet.getString("Email"),
+                            resultSet.getString("Name")
+                    );
+                }
+    
+                if (!gotRecords) {
+                    System.out.println("No results found for the updated LastName!");
+                    System.out.println("");
+                }
+    
+                return true;
+    
+            } else {
+                System.out.println("Staff's LastName update failed! StaffNum not found.");
+                System.out.println("");
+                return false;
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+    
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+    
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
+    * updateStaffFirstName Method
+    * @author Nithisha Sathishkumar
+    */
+
+    public static boolean updateStaffPosition(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+    
+        try {
+            // Get DB connection
+            Connection connection = getConnection();
+    
+            // SQL PreparedStatement
+            String updateSql = "UPDATE Staff SET PositionID = (SELECT ID FROM Position WHERE Name = ?) WHERE StaffNum = ?";
+    
+            String selectSql = "SELECT Staff.StaffNum, Staff.FirstName, Staff.LastName, Staff.PhoneNumber, Staff.Email, Position.Name " +
+                    "FROM Staff " +
+                    "JOIN Position ON Position.ID = Staff.PositionID " +
+                    "WHERE Staff.StaffNum = ? " +
+                    "ORDER BY FirstName ASC";
+    
+            preparedStatement = connection.prepareStatement(updateSql);
+            preparedStatement.setString(1, apiParams.get("Name"));
+            preparedStatement.setString(2, apiParams.get("StaffNum"));
+    
+            int rows = preparedStatement.executeUpdate();
+    
+            preparedStatement.close();  // Close the update statement
+    
+            if (rows > 0) {
+                System.out.println("Staff's Position updated successfully!");
+                System.out.println("");
+    
+                System.out.println("Updated Position Information: ");
+    
+                preparedStatement = connection.prepareStatement(selectSql);
+                preparedStatement.setString(1, apiParams.get("StaffNum"));
+                resultSet = preparedStatement.executeQuery();
+    
+                boolean gotRecords = false;
+    
+                System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                        "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
+    
+                System.out.println("----------------------------------------------------------------------------------------------");
+    
+                while (resultSet.next()) {
+                    gotRecords = true;
+    
+                    System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                            resultSet.getString("StaffNum"),
+                            resultSet.getString("FirstName"),
+                            resultSet.getString("LastName"),
+                            resultSet.getString("PhoneNumber"),
+                            resultSet.getString("Email"),
+                            resultSet.getString("Name")
+                    );
+                }
+    
+                if (!gotRecords) {
+                    System.out.println("No results found for the updated Position!");
+                    System.out.println("");
+                }
+    
+                return true;
+    
+            } else {
+                System.out.println("Staff's Position update failed! StaffNum not found.");
+                System.out.println("");
+                return false;
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+    
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+    
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+
 
    /*
     * create Method
