@@ -1063,7 +1063,7 @@ public class HotelDB{
     * @author Andy Hoang
     *
     *    UNTESTED WIP
-    *    UNTESTED WIP
+    *    UNTESTED WIP  DRAFT
     *    UNTESTED WIP
     *
     */
@@ -1083,9 +1083,7 @@ public class HotelDB{
             boolean gotRecords = false;
 
             System.out.println("List of Rooms:");
-
             System.out.format("%-20s%-15s%-25s%n", "Room Number", "Capacity", "Price Per Day");
-           
             System.out.println("--------------------------------------------------------------------------------");
 
             while (resultSet != null && resultSet.next()) {
@@ -1115,6 +1113,60 @@ public class HotelDB{
         }
     }
 
+    /*
+    * With explicitly listed RoomNumber, list of all CiDate/CoDates are returned
+    * @author Andy Hoang
+    *
+    *    UNTESTED WIP
+    *    UNTESTED WIP  DRAFT
+    *    UNTESTED WIP
+    *
+    */
+    public static void getBookingsOnRoom(HashMap<String, String> apiParams) throws SQLException {
+        Statement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = getConnection();
+            String query = ""; 
+            //wip
+
+            preparedStatement = connection.prepareStatement(query);
+            //preparedStatement.setString(1, apiParams.get("RoomNumber"));
+            resultSet = preparedStatement.executeQuery(query);
+            
+            boolean gotRecords = false;
+
+            System.out.println("List of Dates:");
+            System.out.format("%-20s%-10s%-10s%n", "Room Number", "CiDate", "CoDate");
+            System.out.println("--------------------------------------------------------------------------------");
+
+            while (resultSet != null && resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-20s%-10s%-25s%n",
+                    resultSet.getString("RoomNumber"),
+                    resultSet.getString("CiDate"),
+                    resultSet.getString("CoDate"));
+            }
+
+            if(!gotRecords) {
+                System.out.println("No Result Found!");
+                System.out.println("");
+            }
+    
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+
+            if(resultSet != null) {
+                resultSet.close();
+            }
+        }
+    }
 }
 
 

@@ -86,6 +86,10 @@ public class HotelAPI {
                     Booking.getAvailableRooms(mainCmdArr);
                     break;
 
+                case Booking.getBookingsOnRoom: //unfinished
+                    Booking.getBookingsOnRoom(mainCmdArr);
+                    break;
+
                 case "clear":
                 case "Clear":
                     clearTerminal();
