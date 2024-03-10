@@ -89,6 +89,10 @@ public class HotelAPI {
                     Booking.getBookingsOnRoom(mainCmdArr);
                     break;
 
+                case Booking.getBookingInfo:
+                    Booking.getBookingInfo(mainCmdArr);
+                    break;
+
                 case Booking.listAllBookings:
                     Booking.listAllBookings(mainCmdArr);
                     break;
@@ -101,8 +105,8 @@ public class HotelAPI {
                     Booking.getRoomList(mainCmdArr);
                     break;
 
-                case Booking.getRoomInfobyRoomNum:
-                    Booking.getRoomInfobyRoomNum(mainCmdArr);
+                case Booking.getRoomInfo:
+                    Booking.getRoomInfo(mainCmdArr);
                     break;
 
                 case Guest.getPaymentList:
@@ -174,7 +178,8 @@ public class HotelAPI {
         Booking.listAllBookings(null);
         Booking.getRoomList(null);
         Booking.updateCheckoutTime(null);
-        Booking.getRoomInfobyRoomNum(null);
+        Booking.getRoomInfo(null);
+        Booking.getBookingInfo(null);
         ReservationAPI.Create_Reservation(null);
         Guest.getPaymentList(null);
         Guest.updateGuestAddress(null);

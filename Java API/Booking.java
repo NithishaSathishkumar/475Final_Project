@@ -12,7 +12,8 @@ public class Booking {
     public static final String listAllBookings = "listAllBookings";
     public static final String getRoomList = "getRoomList";
     public static final String updateCheckoutTime = "updateCheckoutTime";
-    public static final String getRoomInfobyRoomNum = "getRoomInfobyRoomNum";
+    public static final String getRoomInfo = "getRoomInfo";
+    public static final String getBookingInfo = "getBookingInfo";
 
     private String bookingNum;
     private String reservationNum;
@@ -119,6 +120,27 @@ public class Booking {
     }
 
     /*
+     * getBookingInfo method
+     * @author Andy Hoang
+     */
+    public static void getBookingInfo(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("getBookingInfo - Return list of all bookings within a reservation");
+            System.out.println("COMMAND: getBookingInfo COMMAND: reservationNum");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"reservationNum"});
+            if(apiParams != null) {
+                try {
+                    HotelDB.getBookingInfo(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
      * getRoomList method
      * @author Andy Hoang
      */
@@ -140,19 +162,19 @@ public class Booking {
     }
 
     /*
-     * getRoomInfobyRoomNum method
+     * getRoomInfo method
      * @author Andy Hoang
      */
-    public static void getRoomInfobyRoomNum(String[] params) {
+    public static void getRoomInfo(String[] params) {
         System.out.println("");
         if(params == null || params.length == 0) {
-            System.out.println("getRoomInfobyRoomNum - Return list of all rooms within hotel");
-            System.out.println("COMMAND: getRoomInfobyRoomNum COMMAND: roomNumber");
+            System.out.println("getRoomInfo - Return list of all rooms within hotel");
+            System.out.println("COMMAND: getRoomInfo COMMAND: roomNumber");
         } else {
             HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"roomNumber"});
             if(apiParams != null) {
                 try {
-                    HotelDB.getRoomInfobyRoomNum(apiParams);
+                    HotelDB.getRoomInfo(apiParams);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

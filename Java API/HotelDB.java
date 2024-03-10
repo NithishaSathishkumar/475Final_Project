@@ -1125,6 +1125,62 @@ public class HotelDB {
     }
 
     /*
+    * Specific Booking info is given with specified param (reservationNum) 
+    * @author Andy Hoang
+    */
+    public static void getBookingInfo(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = getConnection();
+            String query = "SELECT reservationNum, roomNumber, capacity, pricePerDay, CiDate, CoDate " 
+                                + "FROM Room R " 
+                                + "JOIN Booking B ON (R.ID = B.roomID) "
+                                + "JOIN Reservation Re ON (B.reservationID = Re.ID) " 
+                                + "WHERE reservationNum = ?"; 
+                               
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, apiParams.get("reservationNum"));
+            resultSet = preparedStatement.executeQuery();
+            
+            System.out.println("List of Rooms:");
+            System.out.format("%-20s%-15s%-10s%-15s%-25s%-25s%n", "ReservationNum", "RoomNumber", "Capacity", "PricePerDay", 
+                                "CheckinDate", "CheckoutDate");
+            System.out.println("--------------------------------------------------------------------------------------------------");
+            
+            boolean gotRecords = false;
+            while(resultSet != null && resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-20s%-15s%-10s%-15s%-25s%-25s%n",
+                    resultSet.getString("ReservationNum"),
+                    resultSet.getString("RoomNumber"),
+                    resultSet.getInt("Capacity"),
+                    resultSet.getDouble("PricePerDay"),
+                    resultSet.getString("CiDate"),
+                    resultSet.getString("CoDate"));
+            }
+
+            if(!gotRecords) {
+                System.out.println("No Result Found!");
+                System.out.println("");
+            }
+    
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+
+            if(resultSet != null) {
+                resultSet.close();
+            }
+        }
+    }
+
+    /*
      * updateCheckoutTime method
      * @authors Andy Hoang
      * 
@@ -1260,7 +1316,7 @@ public class HotelDB {
     * Specific Room info is given with specified param (roomNumber) 
     * @author Andy Hoang
     */
-    public static void getRoomInfobyRoomNum(HashMap<String, String> apiParams) throws SQLException {
+    public static void getRoomInfo(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
