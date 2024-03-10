@@ -93,8 +93,8 @@ public class HotelAPI {
                     Booking.listAllBookings(mainCmdArr);
                     break;
 
-                case Booking.listAllRooms:
-                    Booking.listAllRooms(mainCmdArr);
+                case Booking.getRoomList:
+                    Booking.getRoomList(mainCmdArr);
                     break;
 
                 case "clear":
@@ -128,7 +128,7 @@ public class HotelAPI {
      * @author Team
      */
 
-    private static void Menu(){
+    private static void Menu() {
         System.out.println("\nMENU: ");
         Staff.getStaffList(null);
         Staff.getStaffListByPosition(null);
@@ -144,7 +144,7 @@ public class HotelAPI {
         Booking.getAvailableRooms(null);
         Booking.getBookingsOnRoom(null);
         Booking.listAllBookings(null);
-        Booking.listAllRooms(null);
+        Booking.getRoomList(null);
         ReservationAPI.Create_Reservation(null);
     }
 }

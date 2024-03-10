@@ -10,7 +10,7 @@ public class Booking {
     public static final String getAvailableRooms = "getAvailableRooms";
     public static final String getBookingsOnRoom = "getBookingsOnRoom";
     public static final String listAllBookings = "listAllBookings";
-    public static final String listAllRooms = "listAllRooms";
+    public static final String getRoomList = "getRoomList";
 
     private String bookingNum;
     private String reservationNum;
@@ -117,14 +117,14 @@ public class Booking {
     }
 
     /*
-     * listAllRooms method
+     * getRoomList method
      * @author Andy Hoang
      */
-    public static void listAllRooms(String[] params) {
+    public static void getRoomList(String[] params) {
         System.out.println("");
         if(params == null || params.length == 0) {
-            System.out.println("listAllRooms - Return list of all rooms within hotel");
-            System.out.println("COMMAND: listAllRooms");
+            System.out.println("getRoomList - Return list of all rooms within hotel");
+            System.out.println("COMMAND: getRoomList");
         } else {
             HashMap<String, String> apiParams = input.ParseInputParams(new String[] {});
             if(apiParams != null) {
