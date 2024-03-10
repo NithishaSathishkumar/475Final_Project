@@ -1128,7 +1128,7 @@ public class HotelDB{
     }
 
     /*
-    * Lists every single booking made in this hotel
+    * Lists every single room in this hotel
     * @author Andy Hoang
     */
     public static void listAllRooms(HashMap<String, String> apiParams) throws SQLException {
