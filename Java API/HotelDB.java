@@ -1065,8 +1065,8 @@ public class HotelDB{
         }catch(SQLException e){
             e.printStackTrace();
         }finally{
-            if(statement != null){
-                statement.close();
+            if(preparedStatement != null){
+                preparedStatement.close();
             }
 
             if(resultSet != null){
