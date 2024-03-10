@@ -372,7 +372,7 @@ public class HotelDB {
     }
 
    /*
-    * updateStaffPhoneNumber Method
+    * PhoneNumber Method
     * @author Nithisha Sathishkumar
     */
 
@@ -969,9 +969,6 @@ public class HotelDB {
     * With explicitly listed date, rooms that are not occupied 
     * during the date are listed and returned
     * @author Andy Hoang
-    *
-    *    Works in normal postgres command prompt, but not here? Somehow mismatching outputs
-    *
     */
     public static void getAvailableRooms(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -985,10 +982,10 @@ public class HotelDB {
                                 + "WHERE NOT((?::timestamp, ?::timestamp) OVERLAPS (CiDate, CoDate)) " 
                                 + "OR (CiDate IS NULL AND CoDate IS NULL) " 
                                 + "ORDER BY roomNumber"; 
-
+                               
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, apiParams.get("CiDate"));
-            preparedStatement.setString(2, apiParams.get("CoDate"));
+            preparedStatement.setString(1, apiParams.get( "StartDate (yyyy-mm-dd)"));
+            preparedStatement.setString(2, apiParams.get("EndDate (yyyy-mm-dd)"));
             resultSet = preparedStatement.executeQuery();
             
             System.out.println("List of Rooms:");
@@ -999,7 +996,7 @@ public class HotelDB {
             while(resultSet != null && resultSet.next()) {
                 gotRecords = true;
 
-                System.out.format("%-20s%-10s%-25s%n",
+                System.out.format("%-20s%-15s%-25s%n",
                     resultSet.getString("RoomNumber"),
                     resultSet.getInt("Capacity"),
                     resultSet.getDouble("PricePerDay"));
@@ -1128,6 +1125,145 @@ public class HotelDB {
     }
 
     /*
+    * Specific Booking info is given with specified param (reservationNum) 
+    * @author Andy Hoang
+    */
+    public static void getBookingInfo(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = getConnection();
+            String query = "SELECT reservationNum, roomNumber, capacity, pricePerDay, CiDate, CoDate " 
+                                + "FROM Room R " 
+                                + "JOIN Booking B ON (R.ID = B.roomID) "
+                                + "JOIN Reservation Re ON (B.reservationID = Re.ID) " 
+                                + "WHERE reservationNum = ?"; 
+                               
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, apiParams.get("reservationNum"));
+            resultSet = preparedStatement.executeQuery();
+            
+            System.out.println("List of Rooms:");
+            System.out.format("%-20s%-15s%-10s%-15s%-25s%-25s%n", "ReservationNum", "RoomNumber", "Capacity", "PricePerDay", 
+                                "CheckinDate", "CheckoutDate");
+            System.out.println("--------------------------------------------------------------------------------------------------");
+            
+            boolean gotRecords = false;
+            while(resultSet != null && resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-20s%-15s%-10s%-15s%-25s%-25s%n",
+                    resultSet.getString("ReservationNum"),
+                    resultSet.getString("RoomNumber"),
+                    resultSet.getInt("Capacity"),
+                    resultSet.getDouble("PricePerDay"),
+                    resultSet.getString("CiDate"),
+                    resultSet.getString("CoDate"));
+            }
+
+            if(!gotRecords) {
+                System.out.println("No Result Found!");
+                System.out.println("");
+            }
+    
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+
+            if(resultSet != null) {
+                resultSet.close();
+            }
+        }
+    }
+
+    /*
+     * updateCheckoutTime method
+     * @authors Andy Hoang
+     * 
+     *  NOT DONE
+     */
+    public static boolean updateCheckoutTime(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+    
+        try {
+            // Get DB connection
+            Connection connection = getConnection();
+    
+            // SQL PreparedStatement
+            String updateQuery = "";
+            String selectQuery = "";
+
+            preparedStatement = connection.prepareStatement(updateQuery);
+            preparedStatement.setString(1, apiParams.get(""));
+            preparedStatement.setString(2, apiParams.get(""));
+
+            int rows = preparedStatement.executeUpdate();
+            preparedStatement.close();  // Close the update statement
+
+            if (rows > 0) {
+                System.out.println("Guest's checkouttime updated successfully!");
+                System.out.println("");
+    
+                System.out.println("Updated Booking Information: ");
+    
+                preparedStatement = connection.prepareStatement(selectQuery);
+                preparedStatement.setString(1, apiParams.get(""));
+                resultSet = preparedStatement.executeQuery();
+    
+                System.out.format("%-15s%-20s%-20s%n",
+                        "RoomNum", "CheckinTime", "CheckoutTime");
+                System.out.println("---------------------------------------------------------------------");
+                
+                boolean gotRecords = false;
+                while (resultSet.next()) {
+                    gotRecords = true;
+    
+                    System.out.format("%-15s%-20s%-20s%n",
+                            resultSet.getString("RoomNum"),
+                            resultSet.getString("CheckinTime"),
+                            resultSet.getString("CheckoutTime")
+                    );
+                }
+                if (!gotRecords) {
+                    System.out.println("No results found for the updated checkouttime!");
+                    System.out.println("");
+                }
+    
+                return true;
+            } else {
+                System.out.println("Guest's Email update failed! RoomNum not found.");
+                System.out.println("");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+    
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+    
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
     * Lists every single room in this hotel
     * @author Andy Hoang
     */
@@ -1175,6 +1311,58 @@ public class HotelDB {
             }
         }
     }
+
+    /*
+    * Specific Room info is given with specified param (roomNumber) 
+    * @author Andy Hoang
+    */
+    public static void getRoomInfo(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = getConnection();
+            String query = "SELECT roomNumber, capacity, pricePerDay " 
+                                + "FROM Room R " 
+                                + "LEFT JOIN Booking B ON (R.ID = B.roomID) " 
+                                + "WHERE roomNumber = ?"; 
+                               
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, apiParams.get("roomNumber"));
+            resultSet = preparedStatement.executeQuery();
+            
+            System.out.println("List of Rooms:");
+            System.out.format("%-20s%-15s%-25s%n", "Room Number", "Capacity", "Price Per Day");
+            System.out.println("--------------------------------------------------------------------------------");
+            
+            boolean gotRecords = false;
+            while(resultSet != null && resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-20s%-15s%-25s%n",
+                    resultSet.getString("RoomNumber"),
+                    resultSet.getInt("Capacity"),
+                    resultSet.getDouble("PricePerDay"));
+            }
+
+            if(!gotRecords) {
+                System.out.println("No Result Found!");
+                System.out.println("");
+            }
+    
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+
+            if(resultSet != null) {
+                resultSet.close();
+            }
+        }
+    }
+
     /*
      * getGuestList
      * @authors Nithisha Sathishkumar & Andy Hoang
@@ -1190,7 +1378,7 @@ public class HotelDB {
             String query = "SELECT guestNum, firstName, lastName, phoneNumber, email, " +
                             "address1, address2, city, zipcode, stateID " +
                             "FROM Guest G " +
-                            "JOIN Phone P ON (G.id = P.guestID) " +
+                            "JOIN Phone P ON (G.ID = P.guestID) " +
                             "ORDER BY firstName";
 
             statement = connection.createStatement();
@@ -1290,71 +1478,268 @@ public class HotelDB {
         }
     }
 
-
-    public static void getGuestInfoByGuestNum(HashMap<String, String> apiParams) throws SQLException {
+    /*
+     * updateGuestAddress method
+     * @author Andy Hoang
+     */
+    public static boolean updateGuestAddress(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-
-        System.out.println("");
-
+    
         try {
+            // Get DB connection
             Connection connection = getConnection();
+    
+            // SQL PreparedStatement
+            String updateQuery = "UPDATE Guest SET address1 = ?, address2 = ?, city = ?, zipcode = ?, " +
+                                "stateID = ? WHERE GuestNum = ?";
+            String selectQuery = "SELECT GuestNum, FirstName, LastName, Address1, address2, City, ZipCode, StateID " +
+                                "FROM Guest " +
+                                "WHERE guestNum = ?";
+    
+            preparedStatement = connection.prepareStatement(updateQuery);
+            preparedStatement.setString(1, apiParams.get("NewAddress1"));
+            preparedStatement.setString(2, apiParams.get("NewAddress2 (nullable)"));
+            preparedStatement.setString(3, apiParams.get("City"));
+            preparedStatement.setString(4, apiParams.get("Zipcode (nullable)"));
+            preparedStatement.setString(5, apiParams.get("State (XX)"));
+            preparedStatement.setString(6, apiParams.get("GuestNum"));
+            
+            int rows = preparedStatement.executeUpdate();
+            preparedStatement.close();  // Close the update statement
 
-            String query = "SELECT Guest.GuestNum, Guest.FirstName, Guest.LastName, Phone.PhoneNumber, Guest.Email, Guest.address1, Guest.city, State.Name " +
-                        "FROM Guest " +
-                        "JOIN State ON Guest.StateID = State.ID " +
-                        "JOIN Phone ON Guest.ID = Phone.GuestID " +
-                        "WHERE Guest.GuestNum = ? " +
-                        "ORDER BY FirstName ASC";                 
-
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, apiParams.get("GuestNum").toUpperCase());
-            resultSet = preparedStatement.executeQuery();
-
-            boolean gotRecords = false;
-
-            System.out.println("Guest Info By GuestNum: ");
-
-            System.out.format("%-10s%-15s%-15s%-15s%-25s%-25s%-15s%-15s%n",
-                "GuestNum", "First Name", "Last Name", "Phone Number", "Email", " Address", "City", "State Name");
-
-            System.out.println("----------------------------------------------------------------------------------------------------------------------------------");
-
-            while (resultSet != null && resultSet.next()) {
-                gotRecords = true;
-
-                System.out.format("%-10s%-15s%-15s%-15s%-25s%-25s%-15s%-15s%n",
-                    resultSet.getString("GuestNum"),
-                    resultSet.getString("FirstName"),
-                    resultSet.getString("LastName"),
-                    resultSet.getString("PhoneNumber"),
-                    resultSet.getString("Email"),
-                    resultSet.getString("address1"),
-                    resultSet.getString("city"),
-                    resultSet.getString("Name")
-                );
-            }
-
-            if(!gotRecords){
-                System.out.println("No results found !");
+            if (rows > 0) {
+                System.out.println("Guest's Address updated successfully!");
                 System.out.println("");
-            }            
+    
+                System.out.println("Updated Guest Information: ");
+    
+                preparedStatement = connection.prepareStatement(selectQuery);
+                preparedStatement.setString(1, apiParams.get("GuestNum"));
+                System.out.println(preparedStatement);
+                resultSet = preparedStatement.executeQuery();
 
+                System.out.format("%-10s%-15s%-15s%-15s%-15s%-15s%-10s%-5s%n",
+                        "GuestNum", "FirstName", "LastName", "Address1", "Address2", "City", "ZipCode", "State");
+                System.out.println("----------------------------------------------------------------------------------------------");
+                
+                boolean gotRecords = false;
+                while (resultSet.next()) {
+                    gotRecords = true;
+    
+                    System.out.format("%-10s%-15s%-15s%-15s%-15s%-15s%-10s%-5s%n",
+                            resultSet.getString("GuestNum"),
+                            resultSet.getString("FirstName"),
+                            resultSet.getString("LastName"),
+                            resultSet.getString("Address1"),
+                            resultSet.getString("Address2"),
+                            resultSet.getString("City"),
+                            resultSet.getString("Zipcode"),
+                            resultSet.getString("StateID")
+                    );
+                }
+                if (!gotRecords) {
+                    System.out.println("No results found for the updated Address!");
+                    System.out.println("");
+                }
+    
+                return true;
+            } else {
+                System.out.println("Guest's address update failed! GuestNum not found.");
+                System.out.println("");
+                return false;
+            }
         } catch (SQLException e) {
-            
             e.printStackTrace();
-
+            return false;
+    
         } finally {
-            if (preparedStatement != null){
-                preparedStatement.close();
-            }   
-            
             if (resultSet != null) {
-                resultSet.close();
-            }             
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+    
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
+    /*
+     * updateGuestEmail method
+     * @authors Andy Hoang
+     */
+    public static boolean updateGuestEmail(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+    
+        try {
+            // Get DB connection
+            Connection connection = getConnection();
+    
+            // SQL PreparedStatement
+            String updateQuery = "UPDATE Guest SET email = ? WHERE GuestNum = ?";
+            String selectQuery = "SELECT GuestNum, FirstName, LastName, email " +
+                                "FROM Guest " +
+                                "WHERE guestNum = ?";
+
+            preparedStatement = connection.prepareStatement(updateQuery);
+            preparedStatement.setString(1, apiParams.get("email"));
+            preparedStatement.setString(2, apiParams.get("guestNum"));
+
+            int rows = preparedStatement.executeUpdate();
+            preparedStatement.close();  // Close the update statement
+
+            if (rows > 0) {
+                System.out.println("Guest's email updated successfully!");
+                System.out.println("");
+    
+                System.out.println("Updated Guest Information: ");
+    
+                preparedStatement = connection.prepareStatement(selectQuery);
+                preparedStatement.setString(1, apiParams.get("guestNum"));
+                resultSet = preparedStatement.executeQuery();
+    
+                System.out.format("%-15s%-15s%-15s%-20s%n",
+                        "GuestNum", "FirstName", "LastName", "Email");
+                System.out.println("---------------------------------------------------------------------");
+                
+                boolean gotRecords = false;
+                while (resultSet.next()) {
+                    gotRecords = true;
+    
+                    System.out.format("%-15s%-15s%-15s%-20s%n",
+                            resultSet.getString("GuestNum"),
+                            resultSet.getString("FirstName"),
+                            resultSet.getString("LastName"),
+                            resultSet.getString("Email")
+                    );
+                }
+                if (!gotRecords) {
+                    System.out.println("No results found for the updated Email!");
+                    System.out.println("");
+                }
+    
+                return true;
+            } else {
+                System.out.println("Guest's Email update failed! GuestNum not found.");
+                System.out.println("");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+    
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+    
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
+     * updateGuestPhoneNumber method
+     * @authors Andy Hoang
+     */
+    public static boolean updateGuestPhoneNumber(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+    
+        try {
+            // Get DB connection
+            Connection connection = getConnection();
+    
+            // SQL PreparedStatement
+            String updateQuery = "UPDATE Phone SET phoneNumber = ? WHERE " +
+                                "ID = (SELECT ID FROM Guest WHERE guestNum = ?)";
+            String selectQuery = "SELECT guestNum, firstName, LastName, phoneNUmber FROM Guest G " +
+                "JOIN Phone P ON (G.ID = P.guestID) WHERE guestNum = ? " +
+                "ORDER BY firstName";
+    
+            preparedStatement = connection.prepareStatement(updateQuery);
+            preparedStatement.setString(1, apiParams.get("PhoneNumber"));
+            preparedStatement.setString(2, apiParams.get("GuestNum"));
+
+            int rows = preparedStatement.executeUpdate();
+            preparedStatement.close();  // Close the update statement
+    
+            if (rows > 0) {
+                System.out.println("Guest's phonenumber updated successfully!");
+                System.out.println("");
+    
+                System.out.println("Updated Guest Information: ");
+    
+                preparedStatement = connection.prepareStatement(selectQuery);
+                preparedStatement.setString(1, apiParams.get("GuestNum"));
+                resultSet = preparedStatement.executeQuery();
+    
+                System.out.format("%-10s%-15s%-15s%-15s%n",
+                        "GuestNum", "FirstName", "LastName", "PhoneNumber");
+                System.out.println("----------------------------------------------------------------------------------------------");
+                
+                boolean gotRecords = false;
+                while (resultSet.next()) {
+                    gotRecords = true;
+    
+                    System.out.format("%-10s%-15s%-15s%-15s%n",
+                            resultSet.getString("GuestNum"),
+                            resultSet.getString("FirstName"),
+                            resultSet.getString("LastName"),
+                            resultSet.getString("PhoneNumber")
+                    );
+                }
+                if (!gotRecords) {
+                    System.out.println("No results found for the updated phonenumber!");
+                    System.out.println("");
+                }
+    
+                return true;
+            } else {
+                System.out.println("Guest's phonenumber update failed! GuestNum not found.");
+                System.out.println("");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+    
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+    
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
 
 

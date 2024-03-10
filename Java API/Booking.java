@@ -11,6 +11,9 @@ public class Booking {
     public static final String getBookingsOnRoom = "getBookingsOnRoom";
     public static final String listAllBookings = "listAllBookings";
     public static final String getRoomList = "getRoomList";
+    public static final String updateCheckoutTime = "updateCheckoutTime";
+    public static final String getRoomInfo = "getRoomInfo";
+    public static final String getBookingInfo = "getBookingInfo";
 
     private String bookingNum;
     private String reservationNum;
@@ -117,6 +120,27 @@ public class Booking {
     }
 
     /*
+     * getBookingInfo method
+     * @author Andy Hoang
+     */
+    public static void getBookingInfo(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("getBookingInfo - Return list of all bookings within a reservation");
+            System.out.println("COMMAND: getBookingInfo COMMAND: reservationNum");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"reservationNum"});
+            if(apiParams != null) {
+                try {
+                    HotelDB.getBookingInfo(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
      * getRoomList method
      * @author Andy Hoang
      */
@@ -130,6 +154,50 @@ public class Booking {
             if(apiParams != null) {
                 try {
                     HotelDB.getRoomList(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
+     * getRoomInfo method
+     * @author Andy Hoang
+     */
+    public static void getRoomInfo(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("getRoomInfo - Return list of all rooms within hotel");
+            System.out.println("COMMAND: getRoomInfo COMMAND: roomNumber");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"roomNumber"});
+            if(apiParams != null) {
+                try {
+                    HotelDB.getRoomInfo(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
+     * updateCheckoutTime method
+     * @author Andy Hoang
+     * 
+     * @params params RoomNumber to find bookings of
+     */
+    public static void updateCheckoutTime(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("updateCheckoutTime - Updates Checkout time with new input");
+            System.out.println("COMMAND: updateCheckoutTime COMMAND: RoomNumber COMMAND: CheckoutTime");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"RoomNumber", "CheckOutTime"});
+            if(apiParams != null) {
+                try {
+                    HotelDB.updateCheckoutTime(apiParams);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
