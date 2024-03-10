@@ -996,7 +996,7 @@ public class HotelDB {
             while(resultSet != null && resultSet.next()) {
                 gotRecords = true;
 
-                System.out.format("%-20s%-10s%-25s%n",
+                System.out.format("%-20s%-15s%-25s%n",
                     resultSet.getString("RoomNumber"),
                     resultSet.getInt("Capacity"),
                     resultSet.getDouble("PricePerDay"));
@@ -1125,6 +1125,89 @@ public class HotelDB {
     }
 
     /*
+     * updateCheckoutTime method
+     * @authors Andy Hoang
+     * 
+     *  NOT DONE
+     */
+    public static boolean updateCheckoutTime(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+    
+        try {
+            // Get DB connection
+            Connection connection = getConnection();
+    
+            // SQL PreparedStatement
+            String updateQuery = "";
+            String selectQuery = "";
+
+            preparedStatement = connection.prepareStatement(updateQuery);
+            preparedStatement.setString(1, apiParams.get(""));
+            preparedStatement.setString(2, apiParams.get(""));
+
+            int rows = preparedStatement.executeUpdate();
+            preparedStatement.close();  // Close the update statement
+
+            if (rows > 0) {
+                System.out.println("Guest's checkouttime updated successfully!");
+                System.out.println("");
+    
+                System.out.println("Updated Booking Information: ");
+    
+                preparedStatement = connection.prepareStatement(selectQuery);
+                preparedStatement.setString(1, apiParams.get(""));
+                resultSet = preparedStatement.executeQuery();
+    
+                System.out.format("%-15s%-20s%-20s%n",
+                        "RoomNum", "CheckinTime", "CheckoutTime");
+                System.out.println("---------------------------------------------------------------------");
+                
+                boolean gotRecords = false;
+                while (resultSet.next()) {
+                    gotRecords = true;
+    
+                    System.out.format("%-15s%-20s%-20s%n",
+                            resultSet.getString("RoomNum"),
+                            resultSet.getString("CheckinTime"),
+                            resultSet.getString("CheckoutTime")
+                    );
+                }
+                if (!gotRecords) {
+                    System.out.println("No results found for the updated checkouttime!");
+                    System.out.println("");
+                }
+    
+                return true;
+            } else {
+                System.out.println("Guest's Email update failed! RoomNum not found.");
+                System.out.println("");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+    
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+    
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
     * Lists every single room in this hotel
     * @author Andy Hoang
     */
@@ -1172,6 +1255,58 @@ public class HotelDB {
             }
         }
     }
+
+    /*
+    * Specific Room info is given with specified param (roomNumber) 
+    * @author Andy Hoang
+    */
+    public static void getRoomInfobyRoomNum(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = getConnection();
+            String query = "SELECT roomNumber, capacity, pricePerDay " 
+                                + "FROM Room R " 
+                                + "LEFT JOIN Booking B ON (R.ID = B.roomID) " 
+                                + "WHERE roomNumber = ?"; 
+                               
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, apiParams.get("roomNumber"));
+            resultSet = preparedStatement.executeQuery();
+            
+            System.out.println("List of Rooms:");
+            System.out.format("%-20s%-15s%-25s%n", "Room Number", "Capacity", "Price Per Day");
+            System.out.println("--------------------------------------------------------------------------------");
+            
+            boolean gotRecords = false;
+            while(resultSet != null && resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-20s%-15s%-25s%n",
+                    resultSet.getString("RoomNumber"),
+                    resultSet.getInt("Capacity"),
+                    resultSet.getDouble("PricePerDay"));
+            }
+
+            if(!gotRecords) {
+                System.out.println("No Result Found!");
+                System.out.println("");
+            }
+    
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+
+            if(resultSet != null) {
+                resultSet.close();
+            }
+        }
+    }
+
     /*
      * getGuestList
      * @authors Nithisha Sathishkumar & Andy Hoang

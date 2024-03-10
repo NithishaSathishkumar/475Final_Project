@@ -81,7 +81,7 @@ public class HotelAPI {
                     Staff.createStaff(mainCmdArr);
                     break;
 
-                case Booking.getAvailableRooms: //UNFINISHED WIP
+                case Booking.getAvailableRooms:
                     Booking.getAvailableRooms(mainCmdArr);
                     break;
 
@@ -93,8 +93,16 @@ public class HotelAPI {
                     Booking.listAllBookings(mainCmdArr);
                     break;
 
+                case Booking.updateCheckoutTime: //not done
+                    Booking.updateCheckoutTime(mainCmdArr);
+                    break;
+
                 case Booking.getRoomList:
                     Booking.getRoomList(mainCmdArr);
+                    break;
+
+                case Booking.getRoomInfobyRoomNum:
+                    Booking.getRoomInfobyRoomNum(mainCmdArr);
                     break;
 
                 case Guest.getPaymentList:
@@ -165,6 +173,8 @@ public class HotelAPI {
         Booking.getBookingsOnRoom(null);
         Booking.listAllBookings(null);
         Booking.getRoomList(null);
+        Booking.updateCheckoutTime(null);
+        Booking.getRoomInfobyRoomNum(null);
         ReservationAPI.Create_Reservation(null);
         Guest.getPaymentList(null);
         Guest.updateGuestAddress(null);
