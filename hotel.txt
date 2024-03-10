@@ -21,7 +21,7 @@ CREATE TABLE Guest(
 	Address1 VARCHAR(30) NOT NULL, 
 	Address2 VARCHAR(30),
 	City VARCHAR(20) NOT NULL,
-	Zipcode CHAR(2),
+	Zipcode CHAR(5),
 	StateID char(2), 
 
 	Primary Key (ID),
