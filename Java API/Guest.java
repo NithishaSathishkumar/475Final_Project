@@ -89,7 +89,7 @@ public class Guest {
             System.out.println("updateGuestPhoneNumber - Updates Guest's phone number");
             System.out.println("COMMAND: updateGuestPhoneNumber COMMAND: GuestNum COMMAND: PhoneNumber");
         } else {
-            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "New PhoneNumber"});
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "PhoneNumber"});
             if(apiParams != null) {
                 try {
                     HotelDB.updateGuestPhoneNumber(apiParams);
@@ -108,9 +108,9 @@ public class Guest {
         System.out.println("");
         if(params == null || params.length == 0) {
             System.out.println("updateGuestEmail - Updates Guest's email");
-            System.out.println("COMMAND: updateGuestEmail COMMAND: GuestNum COMMAND: Email");
+            System.out.println("COMMAND: updateGuestEmail COMMAND: Email COMMAND: GuestNum");
         } else {
-            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "New Email"});
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"guestNum", "email"});
             if(apiParams != null) {
                 try {
                     HotelDB.updateGuestEmail(apiParams);
@@ -131,7 +131,8 @@ public class Guest {
             System.out.println("updateGuestAddress - Updates Guest's address");
             System.out.println("COMMAND: updateGuestAddress COMMAND: GuestNum COMMAND: Address1 COMMAND: Address2");
         } else {
-            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "NewAddress1", "NewAddress2"});
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "NewAddress1", 
+                "NewAddress2 (nullable)", "City", "ZipCode (nullable)", "State (XX)"});
             if(apiParams != null) {
                 try {
                     HotelDB.updateGuestAddress(apiParams);
