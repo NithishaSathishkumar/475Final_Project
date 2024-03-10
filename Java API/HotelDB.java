@@ -10,7 +10,7 @@ import java.util.Properties;
 public class HotelDB{
     private static final String URL = "jdbc:postgresql://localhost/hotel";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "Hoang2317"; //Enter your postgres password //Gayathri@27
+    private static final String PASSWORD = "Gayathri@27"; //Enter your postgres password //Gayathri@27
     private static Connection connection = null;
 
 
