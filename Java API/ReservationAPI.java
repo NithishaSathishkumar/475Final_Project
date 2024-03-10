@@ -74,7 +74,7 @@ public class ReservationAPI {
             }
 
             int numberOfRoom = Integer.parseInt(apiParams.get("number_of_room"));
-            ArrayList<Booking> bookings = getBookings(numberOfRoom);// to get the room info from guese 
+            ArrayList<Booking> bookings = getBookings(numberOfRoom);// to get the room info from guest 
             HashMap<String, Room> rooms = getRooms(bookings);// to get the info from the room obj by using the roomnum
 
             int numberOfGuest = Integer.parseInt(apiParams.get("number_of_guest"));

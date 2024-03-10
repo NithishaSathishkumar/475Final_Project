@@ -9,6 +9,8 @@ import java.util.HashMap;
 public class Booking {
     public static final String getAvailableRooms = "getAvailableRooms";
     public static final String getBookingsOnRoom = "getBookingsOnRoom";
+    public static final String listAllBookings = "listAllBookings";
+    public static final String listAllRooms = "listAllRooms";
 
     private String bookingNum;
     private String reservationNum;
@@ -48,16 +50,18 @@ public class Booking {
     }
 
     /*
-     * getAvailableRooms method
+     * getAvailableRooms for a date range method
      * @author Andy Hoang
+     * 
+     * @params params StartDate and EndDate
      */
     public static void getAvailableRooms(String[] params) {
         System.out.println("");
         if(params == null || params.length == 0) {
             System.out.println("getAvailableRooms - Return list of available rooms/bookings for listed time");
-            System.out.println("COMMAND: getAvailableRooms COMMAND: Date");
+            System.out.println("COMMAND: getAvailableRooms COMMAND: StartDate (yyyy-mm-dd) COMMAND: EndDate (yyyy-mm-dd)");
         } else {
-            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"Date"});
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"StartDate (yyyy-mm-dd)", "EndDate (yyyy-mm-dd)"});
             if(apiParams != null) {
                 try {
                     HotelDB.getAvailableRooms(apiParams);
@@ -71,6 +75,8 @@ public class Booking {
     /*
      * getBookingsOnRoom method
      * @author Andy Hoang
+     * 
+     * @params params RoomNumber to find bookings of
      */
     public static void getBookingsOnRoom(String[] params) {
         System.out.println("");
@@ -89,7 +95,49 @@ public class Booking {
         }
     }
 
-    // Getters and setters go here
+/*
+     * listAllBookings method
+     * @author Andy Hoang
+     */
+    public static void listAllBookings(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("listAllBookings - Return list bookings that have been made with rooms");
+            System.out.println("COMMAND: listAllBookings");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {});
+            if(apiParams != null) {
+                try {
+                    HotelDB.listAllBookings(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
+     * listAllRooms method
+     * @author Andy Hoang
+     */
+    public static void listAllRooms(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("listAllRooms - Return list of all rooms within hotel");
+            System.out.println("COMMAND: listAllRooms");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {});
+            if(apiParams != null) {
+                try {
+                    HotelDB.listAllRooms(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    // Getters and setters go here (Potentially not used)
     public String getBookingNum() {
         return bookingNum;
     }

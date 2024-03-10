@@ -10,7 +10,7 @@ import java.util.Properties;
 public class HotelDB{
     private static final String URL = "jdbc:postgresql://localhost/hotel";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "Gayathri@27"; //Enter your postgres password
+    private static final String PASSWORD = "Hoang2317"; //Enter your postgres password //Gayathri@27
     private static Connection connection = null;
 
 
@@ -1062,31 +1062,33 @@ public class HotelDB{
     * during the date are listed and returned
     * @author Andy Hoang
     *
-    *    UNTESTED WIP
-    *    UNTESTED WIP  DRAFT
-    *    UNTESTED WIP
+    *    Works in normal postgres command prompt, but not here? Somehow mismatching outputs
     *
     */
     public static void getAvailableRooms(HashMap<String, String> apiParams) throws SQLException {
-        Statement preparedStatement = null;
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
             Connection connection = getConnection();
-            String query = ""; 
-            //Thinking of Logic to handle all various NULL dates of Rooms and CoDate
+            String query = "SELECT roomNumber, capacity, pricePerDay " 
+                                + "FROM Room R " 
+                                + "LEFT JOIN Booking B ON (R.ID = B.roomID) " 
+                                + "WHERE NOT((?::timestamp, ?::timestamp) OVERLAPS (CiDate, CoDate)) " 
+                                + "OR (CiDate IS NULL AND CoDate IS NULL) " 
+                                + "ORDER BY roomNumber"; 
 
             preparedStatement = connection.prepareStatement(query);
-            //preparedStatement.setString(1, apiParams.get("Date"));
-            resultSet = preparedStatement.executeQuery(query);
+            preparedStatement.setString(1, apiParams.get("CiDate"));
+            preparedStatement.setString(2, apiParams.get("CoDate"));
+            resultSet = preparedStatement.executeQuery();
             
-            boolean gotRecords = false;
-
             System.out.println("List of Rooms:");
             System.out.format("%-20s%-15s%-25s%n", "Room Number", "Capacity", "Price Per Day");
             System.out.println("--------------------------------------------------------------------------------");
-
-            while (resultSet != null && resultSet.next()) {
+            
+            boolean gotRecords = false;
+            while(resultSet != null && resultSet.next()) {
                 gotRecords = true;
 
                 System.out.format("%-20s%-10s%-25s%n",
@@ -1116,38 +1118,35 @@ public class HotelDB{
     /*
     * With explicitly listed RoomNumber, list of all CiDate/CoDates are returned
     * @author Andy Hoang
-    *
-    *    UNTESTED WIP
-    *    UNTESTED WIP  DRAFT
-    *    UNTESTED WIP
-    *
     */
     public static void getBookingsOnRoom(HashMap<String, String> apiParams) throws SQLException {
-        Statement preparedStatement = null;
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
             Connection connection = getConnection();
-            String query = ""; 
-            //wip
+            String query = "SELECT roomNumber, CiDate \"CheckinDate\", CoDate \"CheckoutDate\" " +
+                                "FROM Room R " +
+                                "JOIN Booking B ON (R.ID = B.roomID) " +
+                                "WHERE roomNumber = ? " +
+                                "ORDER BY roomNumber";
 
             preparedStatement = connection.prepareStatement(query);
-            //preparedStatement.setString(1, apiParams.get("RoomNumber"));
-            resultSet = preparedStatement.executeQuery(query);
+            preparedStatement.setString(1, apiParams.get("RoomNumber"));
+            resultSet = preparedStatement.executeQuery();
+            
+            System.out.println("List of Rooms and Dates:");
+            System.out.format("%-15s%-25s%-25s%n", "Room Number", "CheckinDate", "CheckoutDate");
+            System.out.println("--------------------------------------------------------------------------------");
             
             boolean gotRecords = false;
-
-            System.out.println("List of Dates:");
-            System.out.format("%-20s%-10s%-10s%n", "Room Number", "CiDate", "CoDate");
-            System.out.println("--------------------------------------------------------------------------------");
-
             while (resultSet != null && resultSet.next()) {
                 gotRecords = true;
 
-                System.out.format("%-20s%-10s%-10s%n",
+                System.out.format("%-15s%-25s%-25s%n",
                     resultSet.getString("RoomNumber"),
-                    resultSet.getString("CiDate"),
-                    resultSet.getString("CoDate"));
+                    resultSet.getString("CheckinDate"),
+                    resultSet.getString("CheckoutDate"));
             }
 
             if(!gotRecords) {
@@ -1160,6 +1159,107 @@ public class HotelDB{
         } finally {
             if(preparedStatement != null) {
                 preparedStatement.close();
+            }
+
+            if(resultSet != null) {
+                resultSet.close();
+            }
+        }
+    }
+
+    /*
+    * Lists every single booking made in this hotel
+    * @author Andy Hoang
+    */
+    public static void listAllBookings(HashMap<String, String> apiParams) throws SQLException {
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = getConnection();
+            String query = "SELECT reservationNum, roomNumber, CiDate \"CheckinDate\", CoDate \"CheckoutDate\" " +
+                                "FROM Reservation R " + 
+                                "JOIN Booking B ON (R.ID = B.reservationID) " + 
+                                "JOIN Room Ro ON (B.roomID = Ro.ID) " +
+                                "ORDER BY reservationNum";
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            
+            System.out.println("List of Bookings:");
+            System.out.format("%-20s%-15s%-25s%-25s%n", "reservationNum", "roomNumber", "CheckinDate", "CheckoutDate");
+            System.out.println("--------------------------------------------------------------------------------");
+            
+            boolean gotRecords = false;
+            while (resultSet != null && resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-20s%-15s%-25s%-25s%n",
+                    resultSet.getString("reservationNum"),
+                    resultSet.getString("roomNumber"),
+                    resultSet.getString("CheckinDate"),
+                    resultSet.getString("CheckoutDate"));
+            }
+
+            if(!gotRecords) {
+                System.out.println("No Result Found!");
+                System.out.println("");
+            }
+    
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                statement.close();
+            }
+
+            if(resultSet != null) {
+                resultSet.close();
+            }
+        }
+    }
+
+    /*
+    * Lists every single booking made in this hotel
+    * @author Andy Hoang
+    */
+    public static void listAllRooms(HashMap<String, String> apiParams) throws SQLException {
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = getConnection();
+            String query = "SELECT roomNumber, capacity, pricePerDay " +
+                            "FROM Room " +
+                            "ORDER BY roomNumber";
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            
+            System.out.println("List of Rooms:");
+            System.out.format("%-20s%-15s%-25s%n", "roomNumber", "capacity", "pricePerDay");
+            System.out.println("--------------------------------------------------------------------------------");
+            
+            boolean gotRecords = false;
+            while (resultSet != null && resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-20s%-15s%-25s%n",
+                    resultSet.getString("RoomNumber"),
+                    resultSet.getString("Capacity"),
+                    resultSet.getString("PricePerDay"));
+            }
+
+            if(!gotRecords) {
+                System.out.println("No Result Found!");
+                System.out.println("");
+            }
+    
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                statement.close();
             }
 
             if(resultSet != null) {

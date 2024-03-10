@@ -17,14 +17,13 @@ public class HotelAPI {
 
             String[] mainCmdArr = cmb.split(" ", 2);
 
-            if(mainCmdArr.length > 1)
-            {
+            if(mainCmdArr.length > 1) {
                 System.out.println("Providing more than one command not supported");
                 System.out.println("");
                 continue;
             }
 
-            switch(mainCmdArr[0]){
+            switch(mainCmdArr[0]) {
                 case "Help":
                 case "help":
                 case "?":
@@ -86,8 +85,16 @@ public class HotelAPI {
                     Booking.getAvailableRooms(mainCmdArr);
                     break;
 
-                case Booking.getBookingsOnRoom: //unfinished draft
+                case Booking.getBookingsOnRoom:
                     Booking.getBookingsOnRoom(mainCmdArr);
+                    break;
+
+                case Booking.listAllBookings:
+                    Booking.listAllBookings(mainCmdArr);
+                    break;
+
+                case Booking.listAllRooms:
+                    Booking.listAllRooms(mainCmdArr);
                     break;
 
                 case "clear":
@@ -105,7 +112,6 @@ public class HotelAPI {
         }
 
         HotelDB.disconnect();
-
     }
 
     /*
@@ -137,8 +143,8 @@ public class HotelAPI {
         Staff.createStaff(null);
         Booking.getAvailableRooms(null);
         Booking.getBookingsOnRoom(null);
+        Booking.listAllBookings(null);
+        Booking.listAllRooms(null);
         ReservationAPI.Create_Reservation(null);
-
     }
-    
 }
