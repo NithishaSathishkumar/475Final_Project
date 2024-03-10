@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class Guest {
     public static final String getPaymentList = "getPaymentList";
-
+    public static final String getGuestList = "getGuestList";
     private String guestNum;
     private String firstName;
     private String lastName;
@@ -43,6 +43,23 @@ public class Guest {
             if(apiParams != null) {
                 try {
                     HotelDB.getPaymentList(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void getGuestList(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("getGuestList - Return list of all guests within hotel");
+            System.out.println("COMMAND: getGuestList");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {});
+            if(apiParams != null) {
+                try {
+                    HotelDB.getGuestList(apiParams);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

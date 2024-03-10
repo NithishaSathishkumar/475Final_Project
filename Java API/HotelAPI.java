@@ -100,6 +100,10 @@ public class HotelAPI {
                 case Guest.getPaymentList:
                     Guest.getPaymentList(mainCmdArr);
                     break;
+
+                case Guest.getGuestList:
+                    Guest.getGuestList(mainCmdArr);
+                    break;
                 
                 case "clear":
                 case "Clear":

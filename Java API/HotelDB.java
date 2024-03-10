@@ -7,7 +7,7 @@ import java.util.Properties;
  * @author Nithisha Sathishkumar
 */
 
-public class HotelDB{
+public class HotelDB {
     private static final String URL = "jdbc:postgresql://localhost/hotel";
     private static final String USER = "postgres";
     private static final String PASSWORD = "Gayathri@27"; //Enter your postgres password //Gayathri@27
@@ -1175,6 +1175,10 @@ public class HotelDB{
             }
         }
     }
+    /*
+     * getGuestList
+     * @authors Nithisha Sathishkumar & Andy Hoang
+     */
     public static void getGuestList(HashMap<String, String> apiParams) throws SQLException {
         Statement statement = null;
         ResultSet resultSet = null;
@@ -1182,33 +1186,36 @@ public class HotelDB{
         try {
             Connection connection = HotelDB.getConnection();
 
-            String query = "SELECT Guest.GuestNum, Guest.FirstName, Guest.LastName, Phone.PhoneNumber, Guest.Email, Guest.Address1, Guest.Address2, Guest.City, Gest " + 
-                            "FROM Staff " +
-                            "JOIN Position ON Position.ID = Staff.PositionID " +
-                            "ORDER BY FirstName ASC";
+            String query = "SELECT guestNum, firstName, lastName, phoneNumber, email, " +
+                            "address1, address2, city, zipcode, stateID " +
+                            "FROM Guest G " +
+                            "JOIN Phone P ON (G.id = P.guestID) " +
+                            "ORDER BY firstName";
 
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             
-            boolean gotRecords = false;
-
-            System.out.println("List of Employees: ");
-
-            System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
-                "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name" );
-
+            System.out.println("List of Guests:");
+            System.out.format("%-10s%-15s%-15s%-15s%-25s%-20s%-20s%-15s%-15s%-5s%n",
+                "GuestNum", "FirstName", "LastName", "PhoneNumber", "Email", 
+                "Address1", "Address2", "City", "Zipcode", "State");
             System.out.println("----------------------------------------------------------------------------------------------");
-
+            
+            boolean gotRecords = false;
             while (resultSet != null && resultSet.next()) {
                 gotRecords = true;
 
-                System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
-                    resultSet.getString("StaffNum"),
-                    resultSet.getString("FirstName"),
-                    resultSet.getString("LastName"),
-                    resultSet.getString("PhoneNumber"),
-                    resultSet.getString("Email"),
-                    resultSet.getString("Name")
+                System.out.format("%-10s%-15s%-15s%-15s%-25s%-20s%-20s%-15s%-15s%-5s%n",
+                    resultSet.getString("guestNum"),
+                    resultSet.getString("firstName"),
+                    resultSet.getString("lastName"),
+                    resultSet.getString("phoneNumber"),
+                    resultSet.getString("email"),
+                    resultSet.getString("address1"),
+                    resultSet.getString("address2"),
+                    resultSet.getString("city"),
+                    resultSet.getString("zipcode"),
+                    resultSet.getString("stateID")
                 );
             }
 

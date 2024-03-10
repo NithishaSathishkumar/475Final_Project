@@ -40,7 +40,7 @@ insert into guest(firstname, lastname, guestnum, email,address1,city,stateid) va
 ('Jack','Sparrow','G00PWN6','POTC@gmail.com','1212 Black Pearl Rd.','Tortuga','FL'),
 ('George','Lucas','G01KFML','StarWars@disney.com','123 1234 St.','Space','HI'),
 ('Steven','Spielberg','G09FSK','Hollywood@gmail.com','12 1656 Rd.','Hollywood','CA'),
-('Robin','Hood','G03KDF','money@yahoo.com','123 Forest St.','Sherwood Forest','OH'),
+('Robin','Hood','G03KDF','money@yahoo.com','123 Forest St.','Sherwood','OH'),
 ('Spider','Man','G02DKN','marvel@gmail.com','1234 Web St.','Brooklyn','NY'),
 ('Tony','Stark','G06KPFE','stark@yahoo.com','address97','Malibu','CA');
 
