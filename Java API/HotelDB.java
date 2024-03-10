@@ -671,98 +671,6 @@ public class HotelDB{
     }
 }
 
-
-    // public static boolean updateStaffFirstName(HashMap<String, String> apiParams) throws SQLException {
-    //     PreparedStatement preparedStatement = null;
-    //     ResultSet resultSet = null;
-    
-    //     try {
-    //         // Get DB connection
-    //         Connection connection = getConnection();
-    
-    //         // SQL PreparedStatement
-    //         String updateSql = "UPDATE Staff SET FirstName = ? WHERE StaffNum = ?";
-    
-    //         String selectSql = "SELECT Staff.StaffNum, Staff.FirstName, Staff.LastName, Staff.PhoneNumber, Staff.Email, Position.Name " +
-    //                 "FROM Staff " +
-    //                 "JOIN Position ON Position.ID = Staff.PositionID " +
-    //                 "WHERE Staff.StaffNum = ? " +
-    //                 "ORDER BY FirstName ASC";
-    
-    //         preparedStatement = connection.prepareStatement(updateSql);
-    //         preparedStatement.setString(1, apiParams.get("FirstName"));
-    //         preparedStatement.setString(2, apiParams.get("StaffNum"));
-    
-    //         int rows = preparedStatement.executeUpdate();
-    
-    //         preparedStatement.close();  // Close the update statement
-    
-    //         if (rows > 0) {
-    //             System.out.println("Staff's FirstName updated successfully!");
-    //             System.out.println("");
-    
-    //             System.out.println("Updated FirstName Email Information: ");
-    
-    //             preparedStatement = connection.prepareStatement(selectSql);
-    //             preparedStatement.setString(1, apiParams.get("StaffNum"));
-    //             resultSet = preparedStatement.executeQuery();
-    
-    //             boolean gotRecords = false;
-    
-    //             System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
-    //                     "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
-    
-    //             System.out.println("----------------------------------------------------------------------------------------------");
-    
-    //             while (resultSet.next()) {
-    //                 gotRecords = true;
-    
-    //                 System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
-    //                         resultSet.getString("StaffNum"),
-    //                         resultSet.getString("FirstName"),
-    //                         resultSet.getString("LastName"),
-    //                         resultSet.getString("PhoneNumber"),
-    //                         resultSet.getString("Email"),
-    //                         resultSet.getString("Name")
-    //                 );
-    //             }
-    
-    //             if (!gotRecords) {
-    //                 System.out.println("No results found for the updated FirstName!");
-    //                 System.out.println("");
-    //             }
-    
-    //             return true;
-    
-    //         } else {
-    //             System.out.println("Staff's FirstName update failed! StaffNum not found.");
-    //             System.out.println("");
-    //             return false;
-    //         }
-    
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //         return false;
-    
-    //     } finally {
-    //         if (resultSet != null) {
-    //             try {
-    //                 resultSet.close();
-    //             } catch (SQLException e) {
-    //                 e.printStackTrace();
-    //             }
-    //         }
-    
-    //         if (preparedStatement != null) {
-    //             try {
-    //                 preparedStatement.close();
-    //             } catch (SQLException e) {
-    //                 e.printStackTrace();
-    //             }
-    //         }
-    //     }
-    // }  
-    
     /*
     * updateStaffFirstName Method
     * @author Nithisha Sathishkumar
@@ -1149,19 +1057,19 @@ public class HotelDB{
                     resultSet.getString("CheckoutDate"));
             }
 
-            if(!gotRecords) {
+            if(!gotRecords){
                 System.out.println("No Result Found!");
                 System.out.println("");
             }
     
-        } catch(SQLException e) {
+        }catch(SQLException e){
             e.printStackTrace();
-        } finally {
-            if(preparedStatement != null) {
-                preparedStatement.close();
+        }finally{
+            if(statement != null){
+                statement.close();
             }
 
-            if(resultSet != null) {
+            if(resultSet != null){
                 resultSet.close();
             }
         }
@@ -1267,6 +1175,61 @@ public class HotelDB{
             }
         }
     }
+    public static void getGuestList(HashMap<String, String> apiParams) throws SQLException {
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = HotelDB.getConnection();
+
+            String query = "SELECT Guest.GuestNum, Guest.FirstName, Guest.LastName, Phone.PhoneNumber, Guest.Email, Guest.Address1, Guest.Address2, Guest.City, Gest " + 
+                            "FROM Staff " +
+                            "JOIN Position ON Position.ID = Staff.PositionID " +
+                            "ORDER BY FirstName ASC";
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            
+            boolean gotRecords = false;
+
+            System.out.println("List of Employees: ");
+
+            System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name" );
+
+            System.out.println("----------------------------------------------------------------------------------------------");
+
+            while (resultSet != null && resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
+                    resultSet.getString("StaffNum"),
+                    resultSet.getString("FirstName"),
+                    resultSet.getString("LastName"),
+                    resultSet.getString("PhoneNumber"),
+                    resultSet.getString("Email"),
+                    resultSet.getString("Name")
+                );
+            }
+
+            if(!gotRecords){
+                System.out.println("No Result Found!");
+                System.out.println("");
+            }
+    
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            if(statement != null){
+                statement.close();
+            }
+
+            if(resultSet != null){
+                resultSet.close();
+            }
+        }
+    }
+
 }
 
 
