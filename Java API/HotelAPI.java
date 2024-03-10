@@ -105,6 +105,18 @@ public class HotelAPI {
                     Guest.getGuestList(mainCmdArr);
                     break;
                 
+                case Guest.updateGuestAddress:
+                    Guest.updateGuestAddress(mainCmdArr);
+                    break;
+                
+                case Guest.updateGuestEmail:
+                    Guest.updateGuestEmail(mainCmdArr);
+                    break;
+
+                case Guest.updateGuestPhoneNumber:
+                    Guest.updateGuestPhoneNumber(mainCmdArr);
+                    break;
+                
                 case "clear":
                 case "Clear":
                     clearTerminal();
@@ -155,5 +167,8 @@ public class HotelAPI {
         Booking.getRoomList(null);
         ReservationAPI.Create_Reservation(null);
         Guest.getPaymentList(null);
+        Guest.updateGuestAddress(null);
+        Guest.updateGuestEmail(null);
+        Guest.updateGuestPhoneNumber(null);
     }
 }

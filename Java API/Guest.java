@@ -9,6 +9,10 @@ import java.util.Properties;
 public class Guest {
     public static final String getPaymentList = "getPaymentList";
     public static final String getGuestList = "getGuestList";
+    public static final String updateGuestPhoneNumber = "updateGuestPhoneNumber";
+    public static final String updateGuestEmail = "updateGuestEmail";
+    public static final String updateGuestAddress = "updateGuestAddress";
+
     private String guestNum;
     private String firstName;
     private String lastName;
@@ -33,6 +37,10 @@ public class Guest {
         this.state = state;
     }
 
+    /*
+     * getPaymentList method
+     * @author Andy Hoang
+     */
     public static void getPaymentList(String[] params) {
         System.out.println("");
         if(params == null || params.length == 0) {
@@ -50,6 +58,10 @@ public class Guest {
         }
     }
 
+    /*
+     * getGuestList method
+     * @author Andy Hoang
+     */
     public static void getGuestList(String[] params) {
         System.out.println("");
         if(params == null || params.length == 0) {
@@ -66,6 +78,68 @@ public class Guest {
             }
         }
     }
-
+    /*
+     * updateGuestPhoneNumber method
+     * @author Andy Hoang
+     * @params params GuestNum and PhoneNumber
+     */
+    public static void updateGuestPhoneNumber(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("updateGuestPhoneNumber - Updates Guest's phone number");
+            System.out.println("COMMAND: updateGuestPhoneNumber COMMAND: GuestNum COMMAND: PhoneNumber");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "New PhoneNumber"});
+            if(apiParams != null) {
+                try {
+                    HotelDB.updateGuestPhoneNumber(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+        /*
+         * updateGuestEmail method
+         * @author Andy Hoang    
+         * @params params GuestNum and Email
+         */    
+        public static void updateGuestEmail(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("updateGuestEmail - Updates Guest's email");
+            System.out.println("COMMAND: updateGuestEmail COMMAND: GuestNum COMMAND: Email");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "New Email"});
+            if(apiParams != null) {
+                try {
+                    HotelDB.updateGuestEmail(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    /*
+     * updateGuestAddress method
+     * @author Andy Hoang
+     * @params params GuestNum, Address1, & Address2
+     */
+    public static void updateGuestAddress(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("updateGuestAddress - Updates Guest's address");
+            System.out.println("COMMAND: updateGuestAddress COMMAND: GuestNum COMMAND: Address1 COMMAND: Address2");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "NewAddress1", "NewAddress2"});
+            if(apiParams != null) {
+                try {
+                    HotelDB.updateGuestAddress(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
     // Getters and setters go here
 }

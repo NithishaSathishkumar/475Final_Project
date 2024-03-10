@@ -15,13 +15,13 @@ public class HotelDB {
 
 
     public static Connection getConnection() throws SQLException{
-        if(connection != null && !connection.isValid(0000)){
+        if(connection != null && !connection.isValid(0000)) {
             connection = null;
         }
 
         int connectionAttempts = 0;
-        while(connection == null || connection.isClosed()){
-            try{
+        while(connection == null || connection.isClosed()) {
+            try {
 
                 connectionAttempts++;
                 System.err.println("Creating connection to HotelDB...");
@@ -32,20 +32,20 @@ public class HotelDB {
 
                 connection = DriverManager.getConnection(URL, connectionProps);
 
-                if(!connection.isValid(100)){
+                if(!connection.isValid(100)) {
                     connection = null;
                     throw new SQLException("Connection not Valid");
                 }
             }catch(SQLException e){
                 System.out.println("Failed connecting to DB");
-                if(connectionAttempts >= 1){
+                if(connectionAttempts >= 1) {
                     connection = null;
                     throw e;
                 }
 
-                try{
+                try {
                     Thread.sleep(10000);
-                }catch(InterruptedException e1){
+                } catch(InterruptedException e1) {
                     e1.printStackTrace();
                 }
             }
@@ -54,12 +54,12 @@ public class HotelDB {
         return connection;
     }
     
-    public static void disconnect(){
-        try{
-            if(connection != null && !connection.isClosed()){
+    public static void disconnect() {
+        try {
+            if(connection != null && !connection.isClosed()) {
                 connection.close();
             }
-        }catch(SQLException e){
+        } catch(SQLException e) {
             e.printStackTrace();
         }
     }
