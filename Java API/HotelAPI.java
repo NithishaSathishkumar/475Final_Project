@@ -117,8 +117,8 @@ public class HotelAPI {
                     Guest.getGuestList(mainCmdArr);
                     break;
 
-                case Guest.GuestInfoByGuestNum:
-                    Guest.getGuestInfoByGuestNum(mainCmdArr);
+                case Guest.GetGuestByGuestNum:
+                    Guest.getGuestByGuestNum(mainCmdArr);
                     break;
                 
                 // case Guest.updateGuestAddress:
@@ -186,7 +186,7 @@ public class HotelAPI {
         Booking.getBookingInfo(null);
         ReservationAPI.Create_Reservation(null);
         Guest.getPaymentList(null);
-        Guest.getGuestInfoByGuestNum(null);
+        Guest.getGuestByGuestNum(null);
         // Guest.updateGuestAddress(null);
         // Guest.updateGuestEmail(null);
         // Guest.updateGuestPhoneNumber(null);
