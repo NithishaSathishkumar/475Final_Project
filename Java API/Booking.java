@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class Booking {
     public static final String getAvailableRooms = "getAvailableRooms";
-
+    public static final String getBookingsOnRoom = "getBookingsOnRoom";
 
     private String bookingNum;
     private String reservationNum;
@@ -61,6 +61,27 @@ public class Booking {
             if(apiParams != null) {
                 try {
                     HotelDB.getAvailableRooms(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
+     * getBookingsOnRoom method
+     * @author Andy Hoang
+     */
+    public static void getBookingsOnRoom(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("getBookingsOnRoom - Return list of checked out/in times of specific room");
+            System.out.println("COMMAND: getBookingsOnRoom COMMAND: RoomNumber");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"RoomNumber"});
+            if(apiParams != null) {
+                try {
+                    HotelDB.getBookingsOnRoom(apiParams);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

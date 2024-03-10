@@ -86,6 +86,10 @@ public class HotelAPI {
                     Booking.getAvailableRooms(mainCmdArr);
                     break;
 
+                case Booking.getBookingsOnRoom: //unfinished draft
+                    Booking.getBookingsOnRoom(mainCmdArr);
+                    break;
+
                 case "clear":
                 case "Clear":
                     clearTerminal();
@@ -132,6 +136,7 @@ public class HotelAPI {
         Staff.updateStaffPosition(null);
         Staff.createStaff(null);
         Booking.getAvailableRooms(null);
+        Booking.getBookingsOnRoom(null);
         ReservationAPI.Create_Reservation(null);
 
     }

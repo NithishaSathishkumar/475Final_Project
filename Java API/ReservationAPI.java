@@ -74,8 +74,8 @@ public class ReservationAPI {
             }
 
             int numberOfRoom = Integer.parseInt(apiParams.get("number_of_room"));
-            ArrayList<Booking> bookings = getBookings(numberOfRoom);
-            HashMap<String, Room> rooms = getRooms(bookings);
+            ArrayList<Booking> bookings = getBookings(numberOfRoom);// to get the room info from guese 
+            HashMap<String, Room> rooms = getRooms(bookings);// to get the info from the room obj by using the roomnum
 
             int numberOfGuest = Integer.parseInt(apiParams.get("number_of_guest"));
 
@@ -136,6 +136,9 @@ public class ReservationAPI {
                 bookings.add(new Booking(roomNum, checkInDate, checkOutDate));
             } catch (Exception ex) {
                 // error
+                System.out.println("Error to acccept this room info. Please enter again!");
+                i--;
+                continue;
             }
         }
         return bookings;
@@ -303,7 +306,7 @@ public class ReservationAPI {
 
         int bookingId = -1; // Default value if payment creation fails
 
-        String query = "INSERT INTO Booking (reservationId, roomId, ciDate, coexpectdate) VALUES (?, ?, ?, ?) RETURNING ID";
+        String query = "INSERT INTO Booking (reservationId, roomId, ciDate, codate) VALUES (?, ?, ?, ?) RETURNING ID";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1, reservationId);
         preparedStatement.setInt(2, roomId);

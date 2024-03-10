@@ -971,7 +971,7 @@ public class HotelDB{
     * @author Andy Hoang
     *
     *    UNTESTED WIP
-    *    UNTESTED WIP
+    *    UNTESTED WIP  DRAFT
     *    UNTESTED WIP
     *
     */
@@ -991,9 +991,7 @@ public class HotelDB{
             boolean gotRecords = false;
 
             System.out.println("List of Rooms:");
-
             System.out.format("%-20s%-15s%-25s%n", "Room Number", "Capacity", "Price Per Day");
-           
             System.out.println("--------------------------------------------------------------------------------");
 
             while (resultSet != null && resultSet.next()) {
