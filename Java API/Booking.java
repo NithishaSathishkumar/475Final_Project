@@ -129,7 +129,7 @@ public class Booking {
             HashMap<String, String> apiParams = input.ParseInputParams(new String[] {});
             if(apiParams != null) {
                 try {
-                    HotelDB.listAllRooms(apiParams);
+                    HotelDB.getRoomList(apiParams);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

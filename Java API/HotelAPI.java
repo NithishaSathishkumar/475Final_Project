@@ -97,6 +97,10 @@ public class HotelAPI {
                     Booking.getRoomList(mainCmdArr);
                     break;
 
+                case Guest.getPaymentList:
+                    Guest.getPaymentList(mainCmdArr);
+                    break;
+                
                 case "clear":
                 case "Clear":
                     clearTerminal();
@@ -146,5 +150,6 @@ public class HotelAPI {
         Booking.listAllBookings(null);
         Booking.getRoomList(null);
         ReservationAPI.Create_Reservation(null);
+        Guest.getPaymentList(null);
     }
 }

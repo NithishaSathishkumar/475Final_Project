@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Properties;
 
 public class Guest {
+    public static final String getPaymentList = "getPaymentList";
+
     private String guestNum;
     private String firstName;
     private String lastName;
@@ -31,7 +33,22 @@ public class Guest {
         this.state = state;
     }
 
-
+    public static void getPaymentList(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("getPaymentList - Return list of all payments within hotel");
+            System.out.println("COMMAND: getPaymentList");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {});
+            if(apiParams != null) {
+                try {
+                    HotelDB.getPaymentList(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     // Getters and setters go here
 }

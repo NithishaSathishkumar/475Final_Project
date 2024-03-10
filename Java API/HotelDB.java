@@ -1229,7 +1229,58 @@ public class HotelDB{
             }
         }
     }
+    
+    /*
+     * getPaymentList of all payments that have been made
+     * @author Andy Hoang
+     */
+    public static void getPaymentList(HashMap<String, String> apiParams) throws SQLException {
+        Statement statement = null;
+        ResultSet resultSet = null;
 
+        try {
+            Connection connection = getConnection();
+            String query = "SELECT reservationNum, amount, methodName, paymentDate " +
+            "FROM Reservation R " +
+            "JOIN Payment P ON (R.paymentID = P.ID) " +
+            "JOIN PaymentType PT ON (P.paymentTypeID = PT.ID) " +
+            "ORDER BY methodName";
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            
+            System.out.println("List of Payments:");
+            System.out.format("%-20s%-15s%-25s%-25s%n", "reservationNum", "amount", "methodName", "paymentDate");
+            System.out.println("--------------------------------------------------------------------------------");
+            
+            boolean gotRecords = false;
+            while (resultSet != null && resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-20s%-15s%-25s%-25s%n",
+                    resultSet.getString("reservationNum"),
+                    resultSet.getString("amount"),
+                    resultSet.getString("methodName"),
+                    resultSet.getString("paymentDate"));
+            }
+
+            if(!gotRecords) {
+                System.out.println("No Result Found!");
+                System.out.println("");
+            }
+    
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                statement.close();
+            }
+
+            if(resultSet != null) {
+                resultSet.close();
+            }
+        }
+    }
 }
 
 
