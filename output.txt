@@ -1,4 +1,3 @@
-DROP DATABASE
  current_database 
 ------------------
  postgres
@@ -25,12 +24,15 @@ CREATE TABLE
 CREATE TABLE
 INSERT 0 2
 INSERT 0 8
+INSERT 0 50
 INSERT 0 2
-INSERT 0 2
-INSERT 0 2
+INSERT 0 8
+INSERT 0 8
+INSERT 0 14
 INSERT 0 2
 INSERT 0 3
-INSERT 0 2
+INSERT 0 5
+INSERT 0 7
  current_database 
 ------------------
  postgres

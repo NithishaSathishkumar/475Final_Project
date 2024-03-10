@@ -35,14 +35,14 @@ insert into state values('AL','Alabama'), ('AK','Alaska'), ('AZ','Arizona'),
 
 insert into phonetype values('M','mobile'), ('H','home');
 
-insert into guest(firstname, lastname, guestnum, email,address1,city,stateid) values('F1','L1','1111', '1@1.com','address11', 'seattle', 'WA'),
-('F2','L2','2222', '2@2.com','address12', 'orlando', 'FL'),
-('Jack','Sparrow','G00PWN6','POTC@gmail.com','1212 Black Pearl Rd.','Tortuga','FL'),
-('George','Lucas','G01KFML','StarWars@disney.com','123 1234 St.','Space','HI'),
+insert into guest(firstname, lastname, guestnum, email, address1, city, stateid) values('F1','L1','G10FPK', '1@1.com','address11', 'seattle', 'WA'),
+('F2','L2','G10FSK', '2@2.com','address12', 'orlando', 'FL'),
+('Jack','Sparrow','G00PWN','POTC@gmail.com','1212 Black Pearl Rd.','Tortuga','FL'),
+('George','Lucas','G01KFM','StarWars@disney.com','123 1234 St.','Space','HI'),
 ('Steven','Spielberg','G09FSK','Hollywood@gmail.com','12 1656 Rd.','Hollywood','CA'),
 ('Robin','Hood','G03KDF','money@yahoo.com','123 Forest St.','Sherwood','OH'),
 ('Spider','Man','G02DKN','marvel@gmail.com','1234 Web St.','Brooklyn','NY'),
-('Tony','Stark','G06KPFE','stark@yahoo.com','address97','Malibu','CA');
+('Tony','Stark','G06KPF','stark@yahoo.com','address97','Malibu','CA');
 
 insert into phone(guestid,phonetypeid,phonenumber) 
 values(1,'M','12345678'), (2,'H','12345672'), (3,'M','325624209'), (4,'H','1323564'),

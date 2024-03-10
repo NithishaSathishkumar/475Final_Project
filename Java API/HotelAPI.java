@@ -104,18 +104,22 @@ public class HotelAPI {
                 case Guest.getGuestList:
                     Guest.getGuestList(mainCmdArr);
                     break;
-                
-                case Guest.updateGuestAddress:
-                    Guest.updateGuestAddress(mainCmdArr);
-                    break;
-                
-                case Guest.updateGuestEmail:
-                    Guest.updateGuestEmail(mainCmdArr);
-                    break;
 
-                case Guest.updateGuestPhoneNumber:
-                    Guest.updateGuestPhoneNumber(mainCmdArr);
+                case Guest.GuestInfoByGuestNum:
+                    Guest.getGuestInfoByGuestNum(mainCmdArr);
                     break;
+                
+                // case Guest.updateGuestAddress:
+                //     Guest.updateGuestAddress(mainCmdArr);
+                //     break;
+                
+                // case Guest.updateGuestEmail:
+                //     Guest.updateGuestEmail(mainCmdArr);
+                //     break;
+
+                // case Guest.updateGuestPhoneNumber:
+                //     Guest.updateGuestPhoneNumber(mainCmdArr);
+                //     break;
                 
                 case "clear":
                 case "Clear":
@@ -167,8 +171,9 @@ public class HotelAPI {
         Booking.getRoomList(null);
         ReservationAPI.Create_Reservation(null);
         Guest.getPaymentList(null);
-        Guest.updateGuestAddress(null);
-        Guest.updateGuestEmail(null);
-        Guest.updateGuestPhoneNumber(null);
+        Guest.getGuestInfoByGuestNum(null);
+        // Guest.updateGuestAddress(null);
+        // Guest.updateGuestEmail(null);
+        // Guest.updateGuestPhoneNumber(null);
     }
 }
