@@ -4,6 +4,8 @@
 import java.sql.*;
 
 public class Create {
+public static final String createGuest = "createGuest";
+
     /*
      * Create a new reservation in the database.
      * @author Song Sahong

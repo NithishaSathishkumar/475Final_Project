@@ -11,7 +11,7 @@ public class Booking {
     //////////////////////////////////////////////////////////////
     public static final String getAvailableRooms = "getAvailableRooms";
     public static final String getBookingsOnRoom = "getBookingsOnRoom";
-    public static final String listAllBookings = "listAllBookings";
+    public static final String getBookingList = "getBookingList";
     public static final String getRoomList = "getRoomList";
     public static final String updateCheckoutTime = "updateCheckoutTime";
     public static final String getRoomInfo = "getRoomInfo";
@@ -125,20 +125,20 @@ public class Booking {
     }
 
     /*
-     * listAllBookings method
+     * getBookingList method
      * @author Andy Hoang
      * 
      * Lists all bookings that have been made with rooms.
      * 
      * @params Input parameter
      */
-    public static void listAllBookings(String[] params) {
+    public static void getBookingList(String[] params) {
         System.out.println("");
 
         // Check if parameters are provided
         if(params == null || params.length == 0) {
-            System.out.println("listAllBookings - Return list bookings that have been made with rooms");
-            System.out.println("COMMAND: listAllBookings");
+            System.out.println("getBookingList - Return list bookings that have been made with rooms");
+            System.out.println("COMMAND: getBookingList");
 
         } else {
             // Parse input parameters into a HashMap
@@ -149,7 +149,7 @@ public class Booking {
                 try {
 
                     // Call HotelDB method to list all bookings
-                    HotelDB.listAllBookings(apiParams);
+                    HotelDB.getBookingList(apiParams);
 
                 } catch (SQLException e) {
                     e.printStackTrace();

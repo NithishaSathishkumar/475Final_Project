@@ -10,13 +10,14 @@ public class Guest {
     //                      GLOBAL VARIABLES                    //
     //////////////////////////////////////////////////////////////
     public static final String getPaymentList = "getPaymentList";
+    public static final String createGuest = "createGuest";
     public static final String getGuestList = "getGuestList";
     public static final String updateGuestPhoneNumber = "updateGuestPhoneNumber";
     public static final String updateGuestEmail = "updateGuestEmail";
     public static final String updateGuestAddress = "updateGuestAddress";
-    public static final String GuestInfoByGuestNum = "getGuestInfoByGuestNum";
-    public static final String GetGuestByGuestNum = "getGuestByGuestNum";
-    public static final String GetGuestInfoWithoutGuestNum = "getGuestInfoWithoutGuestNum";
+    public static final String getGuestInfoByGuestNum = "getGuestInfoByGuestNum";
+    public static final String getGuestByGuestNum = "getGuestByGuestNum";
+    public static final String getGuestInfoWithoutGuestNum = "getGuestInfoWithoutGuestNum";
 
     private String guestNum;
     private String firstName;
@@ -223,11 +224,11 @@ public class Guest {
         if(params == null || params.length == 0)
         {
             System.out.println("GetGuestInfoWithoutGuestNum - Return list of Guest filtered by Email ");
-            System.out.println("COMMAND: getGuestInfoWithoutGuestNum Command:FirstName Command:LastName Command:Email");
+            System.out.println("COMMAND: getGuestInfoWithoutGuestNum Command:LastName Command:Email");
         }
         else
         {
-            HashMap<String, String> apiParams = input.ParseInputParams(new String[] { "FirstName", "LastName", "Email" });
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"LastName", "Email" });
 
             if(apiParams != null){
                 try {
@@ -239,4 +240,33 @@ public class Guest {
         }
     } 
 
+    /*
+     * createGuest Method
+     * @author Andy Hoang
+     * 
+     * Creates a new guest.
+     * 
+     * @params params FirstName, LastName, GuestNum, Email, Address1, Address2, City, Zipcode, StateID
+     * @return boolean Indicates if the creation was successful
+     */
+    public static boolean createGuest(String[] params) {
+        if(params == null || params.length == 0){
+            System.out.println("createGuest - Create Guest");
+            System.out.println("COMMAND: createGuest COMMAND: FirstName COMMAND: LastName COMMAND: GuestNum"
+            + "\nCOMMAND: Email COMMAND: Address1 COMMAND: Address2 COMMAND: City \nCOMMAND: Zipcode COMMAND: StateID");
+        } else {
+
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] { "GuestNum", "FirstName (nullable)", 
+            "LastName", "PhoneNumber", "PhoneType (X)", "Email", "Address1", "Address2 (nullable)", "City", "Zipcode (nullable)", "State (XX)"});
+
+            if(apiParams != null){
+                try {
+                    return HotelDB.createGuest(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
 }
