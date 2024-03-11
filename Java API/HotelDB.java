@@ -1,3 +1,6 @@
+//////////////////////////////////////////////////////////////
+//                          IMPORTS                         //
+//////////////////////////////////////////////////////////////
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Properties;
@@ -8,9 +11,12 @@ import java.util.Properties;
 */
 
 public class HotelDB {
+    //////////////////////////////////////////////////////////////
+    //                      CONNECTOR VARIABLES                 //
+    //////////////////////////////////////////////////////////////
     private static final String URL = "jdbc:postgresql://localhost/hotel";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "Gayathri@27"; //Enter your postgres password //Gayathri@27
+    private static final String PASSWORD = "Gayathri@27"; 
     private static Connection connection = null;
 
     public static Connection getConnection() throws SQLException{
@@ -63,23 +69,33 @@ public class HotelDB {
         }
     }
 
+        //////////////////////////////////////////////////////////////
+        //                      METHODS                             //
+        //////////////////////////////////////////////////////////////
+
     /*
     * GetStaffList Method
     * @author Nithisha Sathishkumar
+    * Retrieves a list of staff members along with their details from the database.
+    *
+    * @param apiParams HashMap containing API parameters (not used in this method).
+    * @throws SQLException if a database access error occurs.
     */
-
     public static void getStaffList(HashMap<String, String> apiParams) throws SQLException {
         Statement statement = null;
         ResultSet resultSet = null;
 
         try {
+            // Get a database connection
             Connection connection = HotelDB.getConnection();
 
+            // SQL query to retrieve staff information
             String query = "SELECT Staff.StaffNum, Staff.FirstName, Staff.LastName, Staff.PhoneNumber, Staff.Email, Position.Name " + 
                             "FROM Staff " +
                             "JOIN Position ON Position.ID = Staff.PositionID " +
                             "ORDER BY FirstName ASC";
 
+            // Create a statement and execute the query
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             
@@ -87,11 +103,13 @@ public class HotelDB {
 
             System.out.println("List of Employees: ");
 
+            // Print header for the table
             System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
                 "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name" );
 
             System.out.println("----------------------------------------------------------------------------------------------");
 
+            // Iterate through the result set and print staff details
             while (resultSet != null && resultSet.next()) {
                 gotRecords = true;
 
@@ -105,6 +123,7 @@ public class HotelDB {
                 );
             }
 
+            // Display a message if no records are found
             if(!gotRecords){
                 System.out.println("No Result Found!");
                 System.out.println("");
@@ -113,6 +132,7 @@ public class HotelDB {
         }catch(SQLException e){
             e.printStackTrace();
         }finally{
+            // Close the statement and result set in the finally block
             if(statement != null){
                 statement.close();
             }
@@ -126,20 +146,26 @@ public class HotelDB {
    /*
     * GetJobPositionList Method
     * @author Nithisha Sathishkumar
+    *
+    * Retrieves a list of job positions from the database.
+    *
+    * @param apiParams HashMap containing API parameters (not used in this method).
+    * @throws SQLException if a database access error occurs.
     */
-
     public static void getJobPositionList(HashMap<String, String> apiParams) throws SQLException {
         Statement statement = null;
         ResultSet resultSet = null;
 
         try {
-
+            // Get a database connection
             Connection connection = HotelDB.getConnection();
 
+            // SQL query to retrieve job positions
             String query = "SELECT Position.Name " + 
                             "FROM Position " +
                             "ORDER BY Name ASC";
 
+            // Create a statement and execute the query
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             
@@ -147,11 +173,13 @@ public class HotelDB {
 
             System.out.println("List of Job Position: ");
 
+            // Print header for the table
             System.out.format("%-10s%n",
                 "Position Name" );
 
             System.out.println("-------------------");
 
+            // Iterate through the result set and print job positions
             while (resultSet != null && resultSet.next()) {
                 gotRecords = true;
 
@@ -160,6 +188,7 @@ public class HotelDB {
                 );
             }
 
+            // Display a message if no records are found
             if(!gotRecords){
                 System.out.println("No Result Found!");
                 System.out.println("");
@@ -168,6 +197,7 @@ public class HotelDB {
         }catch(SQLException e){
             e.printStackTrace();
         }finally{
+            // Close the statement and result set in the finally block
             if(statement != null){
                 statement.close();
             }
@@ -181,8 +211,11 @@ public class HotelDB {
    /*
     * GetStaffListByPosition Method
     * @author Nithisha Sathishkumar
+    * Retrieves a list of employees by a specific job position from the database.
+    *
+    * @param apiParams HashMap containing API parameters, specifically the job position.
+    * @throws SQLException if a database access error occurs.
     */
-
     public static void getStaffListByPosition(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -190,15 +223,16 @@ public class HotelDB {
         System.out.println("");
 
         try {
+            // Get a database connection
             Connection connection = getConnection();
 
-            // SQL PreparedStatement
             String query = "SELECT Staff.StaffNum, Staff.FirstName, Staff.LastName, Staff.PhoneNumber, Staff.Email, Position.Name " +
                         "FROM Staff " +
                         "JOIN Position ON Position.ID = Staff.PositionID " +
                         "WHERE Staff.PositionID = (SELECT Position.ID " + " From Position WHERE Name = ?)" +
                         "ORDER BY FirstName ASC";                 
 
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, apiParams.get("Position"));
             resultSet = preparedStatement.executeQuery();
@@ -207,6 +241,7 @@ public class HotelDB {
 
             System.out.println("List of Employees by Specific Position: ");
 
+            // Print header for the table
             System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
                 "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
 
@@ -225,6 +260,7 @@ public class HotelDB {
                 );
             }
 
+            // Display a message if no records are found
             if(!gotRecords)
             {
                 System.out.println("No results found !");
@@ -235,6 +271,7 @@ public class HotelDB {
             e.printStackTrace();
 
         } finally {
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 preparedStatement.close();
             }   
@@ -248,8 +285,11 @@ public class HotelDB {
    /*
     * GetStaffInfoByStaffNum Method
     * @author Nithisha Sathishkumar
+    * Retrieves information about a staff member by staff number from the database.
+    *
+    * @param apiParams HashMap containing API parameters, specifically the staff number.
+    * @throws SQLException if a database access error occurs.
     */
-
     public static void getStaffInfoByStaffNum(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -265,6 +305,7 @@ public class HotelDB {
                         "WHERE Staff.StaffNum = ? " +
                         "ORDER BY FirstName ASC";                 
 
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, apiParams.get("StaffNum"));
             resultSet = preparedStatement.executeQuery();
@@ -273,6 +314,7 @@ public class HotelDB {
 
             System.out.println("Staff Info By StaffNum: ");
 
+            // Print header for the table
             System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
                 "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
 
@@ -291,6 +333,7 @@ public class HotelDB {
                 );
             }
 
+            // Display a message if no records are found
             if(!gotRecords){
                 System.out.println("No results found !");
                 System.out.println("");
@@ -314,8 +357,11 @@ public class HotelDB {
    /*
     * getStaff_Staffnum Method
     * @author Nithisha Sathishkumar
+    * Retrieves the StaffNum based on matching FirstName, LastName, and Email from the database.
+    *
+    * @param apiParams HashMap containing API parameters, including FirstName, LastName, and Email.
+    * @throws SQLException if a database access error occurs.
     */
-
     public static void getStaff_Staffnum(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -329,6 +375,7 @@ public class HotelDB {
                          "FROM Staff " +
                          "WHERE FirstName ILIKE ? AND LastName ILIKE ? AND Email ILIKE ? ";
 
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, apiParams.get("FirstName"));
             preparedStatement.setString(2, apiParams.get("LastName"));
@@ -338,6 +385,8 @@ public class HotelDB {
             boolean gotRecords = false;
 
             System.out.println("The StaffNum: ");
+
+            // Print header for the table
             System.out.format("%-10s%n","StaffNum");
 
             System.out.println("------------------");
@@ -350,6 +399,7 @@ public class HotelDB {
                 );
             }
 
+            // Display a message if no records are found
             if(!gotRecords)
             {
                 System.out.println("No results found !");
@@ -360,6 +410,7 @@ public class HotelDB {
             e.printStackTrace();
 
         } finally {
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 preparedStatement.close();
             }   
@@ -373,8 +424,12 @@ public class HotelDB {
    /*
     * PhoneNumber Method
     * @author Nithisha Sathishkumar
+    * Updates the PhoneNumber of a staff member in the database based on StaffNum.
+    *
+    * @param apiParams HashMap containing API parameters, including StaffNum and PhoneNumber.
+    * @return true if the update is successful, false otherwise.
+    * @throws SQLException if a database access error occurs.
     */
-
     public static boolean updateStaffPhoneNumber(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -392,6 +447,7 @@ public class HotelDB {
                     "WHERE Staff.StaffNum = ? " +
                     "ORDER BY FirstName ASC";
     
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(updateSql);
             preparedStatement.setString(1, apiParams.get("PhoneNumber"));
             preparedStatement.setString(2, apiParams.get("StaffNum"));
@@ -406,12 +462,14 @@ public class HotelDB {
     
                 System.out.println("Updated Staff Information: ");
     
+                // Create a prepared statement and set the parameter
                 preparedStatement = connection.prepareStatement(selectSql);
                 preparedStatement.setString(1, apiParams.get("StaffNum"));
                 resultSet = preparedStatement.executeQuery();
     
                 boolean gotRecords = false;
     
+                // Print header for the table
                 System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
                         "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
     
@@ -430,6 +488,7 @@ public class HotelDB {
                     );
                 }
     
+                // Display a message if no records are found
                 if (!gotRecords) {
                     System.out.println("No results found for the updated Staff PhoneNumber!");
                     System.out.println("");
@@ -455,7 +514,7 @@ public class HotelDB {
                     e.printStackTrace();
                 }
             }
-    
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
@@ -469,8 +528,12 @@ public class HotelDB {
     /*
     * updateStaffEmail Method
     * @author Nithisha Sathishkumar
+    * Updates the Email of a staff member in the database based on StaffNum.
+    *
+    * @param apiParams HashMap containing API parameters, including StaffNum and Email.
+    * @return true if the update is successful, false otherwise.
+    * @throws SQLException if a database access error occurs.
     */
-
     public static boolean updateStaffEmail(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -488,6 +551,7 @@ public class HotelDB {
                     "WHERE Staff.StaffNum = ? " +
                     "ORDER BY FirstName ASC";
     
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(updateSql);
             preparedStatement.setString(1, apiParams.get("Email"));
             preparedStatement.setString(2, apiParams.get("StaffNum"));
@@ -508,6 +572,7 @@ public class HotelDB {
     
                 boolean gotRecords = false;
     
+                // Print header for the table
                 System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
                         "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
     
@@ -526,6 +591,7 @@ public class HotelDB {
                     );
                 }
     
+                // Display a message if no records are found
                 if (!gotRecords) {
                     System.out.println("No results found for the updated Email!");
                     System.out.println("");
@@ -551,7 +617,8 @@ public class HotelDB {
                     e.printStackTrace();
                 }
             }
-    
+
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
@@ -565,8 +632,12 @@ public class HotelDB {
     /*
     * updateStaffFirstName Method
     * @author Nithisha Sathishkumar
+    * Updates the FirstName of a staff member in the database based on StaffNum.
+    *
+    * @param apiParams HashMap containing API parameters, including StaffNum and FirstName.
+    * @return true if the update is successful, false otherwise.
+    * @throws SQLException if a database access error occurs.
     */
-
     public static boolean updateStaffFirstName(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -577,6 +648,8 @@ public class HotelDB {
 
             // Fetch existing Email
             String selectEmailSql = "SELECT Email FROM Staff WHERE StaffNum = ?";
+
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(selectEmailSql);
             preparedStatement.setString(1, apiParams.get("StaffNum"));
             resultSet = preparedStatement.executeQuery();
@@ -588,6 +661,8 @@ public class HotelDB {
 
             // SQL PreparedStatement
             String updateSql = "UPDATE Staff SET FirstName = ?, Email = ? WHERE StaffNum = ?";
+
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(updateSql);
             preparedStatement.setString(1, apiParams.get("FirstName"));
             preparedStatement.setString(2, existingEmail); // Use existing Email
@@ -610,12 +685,14 @@ public class HotelDB {
                         "WHERE Staff.StaffNum = ? " +
                         "ORDER BY FirstName ASC";
 
+                // Create a prepared statement and set the parameter
                 preparedStatement = connection.prepareStatement(selectSql);
                 preparedStatement.setString(1, apiParams.get("StaffNum"));
                 resultSet = preparedStatement.executeQuery();
 
                 boolean gotRecords = false;
 
+                // Print header for the table
                 System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
                         "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
 
@@ -634,6 +711,7 @@ public class HotelDB {
                     );
                 }
 
+                // Display a message if no records are found
                 if (!gotRecords) {
                     System.out.println("No results found for the updated FirstName!");
                     System.out.println("");
@@ -659,7 +737,7 @@ public class HotelDB {
                     e.printStackTrace();
                 }
             }
-
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
@@ -673,8 +751,12 @@ public class HotelDB {
     /*
     * updateStaffFirstName Method
     * @author Nithisha Sathishkumar
+    * Updates the LastName of a staff member in the database based on StaffNum.
+    *
+    * @param apiParams HashMap containing API parameters, including StaffNum and LastName.
+    * @return true if the update is successful, false otherwise.
+    * @throws SQLException if a database access error occurs.
     */
-
     public static boolean updateStaffLastName(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -692,6 +774,7 @@ public class HotelDB {
                     "WHERE Staff.StaffNum = ? " +
                     "ORDER BY FirstName ASC";
     
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(updateSql);
             preparedStatement.setString(1, apiParams.get("LastName"));
             preparedStatement.setString(2, apiParams.get("StaffNum"));
@@ -706,12 +789,14 @@ public class HotelDB {
     
                 System.out.println("Updated LastName Email Information: ");
     
+                // Create a prepared statement and set the parameter
                 preparedStatement = connection.prepareStatement(selectSql);
                 preparedStatement.setString(1, apiParams.get("StaffNum"));
                 resultSet = preparedStatement.executeQuery();
     
                 boolean gotRecords = false;
     
+                // Print header for the table
                 System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
                         "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
     
@@ -730,6 +815,7 @@ public class HotelDB {
                     );
                 }
     
+                // Display a message if no records are found
                 if (!gotRecords) {
                     System.out.println("No results found for the updated LastName!");
                     System.out.println("");
@@ -755,7 +841,7 @@ public class HotelDB {
                     e.printStackTrace();
                 }
             }
-    
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
@@ -769,8 +855,12 @@ public class HotelDB {
     /*
     * updateStaffFirstName Method
     * @author Nithisha Sathishkumar
+    * Updates the Position of a staff member in the database based on StaffNum.
+    *
+    * @param apiParams HashMap containing API parameters, including StaffNum and PositionName.
+    * @return true if the update is successful, false otherwise.
+    * @throws SQLException if a database access error occurs.
     */
-
     public static boolean updateStaffPosition(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -788,6 +878,7 @@ public class HotelDB {
                     "WHERE Staff.StaffNum = ? " +
                     "ORDER BY FirstName ASC";
     
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(updateSql);
             preparedStatement.setString(1, apiParams.get("Name"));
             preparedStatement.setString(2, apiParams.get("StaffNum"));
@@ -802,12 +893,14 @@ public class HotelDB {
     
                 System.out.println("Updated Position Information: ");
     
+                // Create a prepared statement and set the parameter
                 preparedStatement = connection.prepareStatement(selectSql);
                 preparedStatement.setString(1, apiParams.get("StaffNum"));
                 resultSet = preparedStatement.executeQuery();
     
                 boolean gotRecords = false;
     
+                // Print header for the table
                 System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
                         "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
     
@@ -826,6 +919,7 @@ public class HotelDB {
                     );
                 }
     
+                // Display a message if no records are found
                 if (!gotRecords) {
                     System.out.println("No results found for the updated Position!");
                     System.out.println("");
@@ -851,7 +945,8 @@ public class HotelDB {
                     e.printStackTrace();
                 }
             }
-    
+
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
@@ -865,8 +960,12 @@ public class HotelDB {
    /*
     * create Method
     * @author Nithisha Sathishkumar
+    * Creates a new staff member in the database with the specified details.
+    *
+    * @param apiParams HashMap containing API parameters, including FirstName, LastName, Email, PhoneNumber, and PositionName.
+    * @return true if the creation is successful, false otherwise.
+    * @throws SQLException if a database access error occurs.
     */
-
     public static boolean createStaff(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -885,6 +984,7 @@ public class HotelDB {
                     "WHERE Staff.Email = ? " +
                     "ORDER BY FirstName ASC";
 
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(insertSql);
             preparedStatement.setString(1, apiParams.get("FirstName"));
             preparedStatement.setString(2, apiParams.get("LastName"));
@@ -905,7 +1005,8 @@ public class HotelDB {
                 resultSet = preparedStatement.executeQuery();
     
                 boolean gotRecords = false;
-    
+
+                // Print header for the table
                 System.out.format("%-10s%-15s%-15s%-15s%-25s%-15s%n",
                         "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
     
@@ -924,6 +1025,7 @@ public class HotelDB {
                     );
                 }
     
+                // Display a message if no records are found
                 if (!gotRecords) {
                     System.out.println("No results found for the updated StaffNum!");
                     System.out.println("");
@@ -951,6 +1053,7 @@ public class HotelDB {
                 }
             }
 
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
@@ -962,8 +1065,11 @@ public class HotelDB {
     }
 
     /*
-    * With explicitly listed date, rooms that are not occupied 
-    * during the date are listed and returned
+    * getAvailableRooms methods
+    * Retrieves a list of available rooms based on the specified start and end dates.
+    *
+    * @param apiParams HashMap containing API parameters, including StartDate and EndDate.
+    * @throws SQLException if a database access error occurs.
     * @author Andy Hoang
     */
     public static void getAvailableRooms(HashMap<String, String> apiParams) throws SQLException {
@@ -978,7 +1084,8 @@ public class HotelDB {
                                 + "WHERE NOT((?::timestamp, ?::timestamp) OVERLAPS (CiDate, CoDate)) " 
                                 + "OR (CiDate IS NULL AND CoDate IS NULL) " 
                                 + "ORDER BY roomNumber"; 
-                               
+
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, apiParams.get( "StartDate (yyyy-mm-dd)"));
             preparedStatement.setString(2, apiParams.get("EndDate (yyyy-mm-dd)"));
@@ -998,6 +1105,7 @@ public class HotelDB {
                     resultSet.getDouble("PricePerDay"));
             }
 
+            // Display a message if no records are found
             if(!gotRecords) {
                 System.out.println("No Result Found!");
                 System.out.println("");
@@ -1017,7 +1125,11 @@ public class HotelDB {
     }
 
     /*
-    * With explicitly listed RoomNumber, list of all CiDate/CoDates are returned
+    *getBookingsOnRoom Method
+    * Retrieves a list of CheckinDate and CheckoutDate for a specific room.
+    *
+    * @param apiParams HashMap containing API parameters, including RoomNumber.
+    * @throws SQLException if a database access error occurs.
     * @author Andy Hoang
     */
     public static void getBookingsOnRoom(HashMap<String, String> apiParams) throws SQLException {
@@ -1032,6 +1144,7 @@ public class HotelDB {
                                 "WHERE roomNumber = ? " +
                                 "ORDER BY roomNumber";
 
+            // Create a prepared statement and set the parameter                
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, apiParams.get("RoomNumber"));
             resultSet = preparedStatement.executeQuery();
@@ -1050,6 +1163,7 @@ public class HotelDB {
                     resultSet.getString("CheckoutDate"));
             }
 
+            // Display a message if no records are found
             if(!gotRecords){
                 System.out.println("No Result Found!");
                 System.out.println("");
@@ -1069,7 +1183,11 @@ public class HotelDB {
     }
 
     /*
-    * Lists every single booking made in this hotel
+    * listAllBookings Method
+    * Lists every single booking made in the hotel.
+    *
+    * @param apiParams HashMap containing API parameters.
+    * @throws SQLException if a database access error occurs.
     * @author Andy Hoang
     */
     public static void listAllBookings(HashMap<String, String> apiParams) throws SQLException {
@@ -1102,6 +1220,7 @@ public class HotelDB {
                     resultSet.getString("CheckoutDate"));
             }
 
+            // Display a message if no records are found
             if(!gotRecords) {
                 System.out.println("No Result Found!");
                 System.out.println("");
@@ -1121,8 +1240,11 @@ public class HotelDB {
     }
 
     /*
-    * Specific Booking info is given with specified param (reservationNum) 
+    * getBookingInfo Method
+    * Retrieves information about a specific booking based on the reservation number.
     * @author Andy Hoang
+    * @param apiParams HashMap containing API parameters, including reservationNum.
+    * @throws SQLException if a database access error occurs.
     */
     public static void getBookingInfo(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -1135,7 +1257,8 @@ public class HotelDB {
                                 + "JOIN Booking B ON (R.ID = B.roomID) "
                                 + "JOIN Reservation Re ON (B.reservationID = Re.ID) " 
                                 + "WHERE reservationNum = ?"; 
-                               
+            
+            // Create a prepared statement and set the parameter                    
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, apiParams.get("reservationNum"));
             resultSet = preparedStatement.executeQuery();
@@ -1158,6 +1281,7 @@ public class HotelDB {
                     resultSet.getString("CoDate"));
             }
 
+            // Display a message if no records are found
             if(!gotRecords) {
                 System.out.println("No Result Found!");
                 System.out.println("");
@@ -1177,11 +1301,14 @@ public class HotelDB {
     }
 
     /*
-     * updateCheckoutTime method
-     * @authors Andy Hoang
-     * 
-     *  NOT DONE
-     */
+    * updateCheckoutTime Method
+    * Updates the checkout time for a guest.
+    *
+    * @param apiParams HashMap containing API parameters.
+    * @return true if the update is successful, false otherwise.
+    * @throws SQLException if a database access error occurs.
+    * @authors Andy Hoang (Note: Marked as "NOT DONE")
+    */
     public static boolean updateCheckoutTime(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -1194,6 +1321,7 @@ public class HotelDB {
             String updateQuery = "";
             String selectQuery = "";
 
+            // Create a prepared statement and set the parameter
             preparedStatement = connection.prepareStatement(updateQuery);
             preparedStatement.setString(1, apiParams.get(""));
             preparedStatement.setString(2, apiParams.get(""));
@@ -1207,6 +1335,7 @@ public class HotelDB {
     
                 System.out.println("Updated Booking Information: ");
     
+                // Create a prepared statement and set the parameter
                 preparedStatement = connection.prepareStatement(selectQuery);
                 preparedStatement.setString(1, apiParams.get(""));
                 resultSet = preparedStatement.executeQuery();
@@ -1225,6 +1354,8 @@ public class HotelDB {
                             resultSet.getString("CheckoutTime")
                     );
                 }
+
+                // Display a message if no records are found
                 if (!gotRecords) {
                     System.out.println("No results found for the updated checkouttime!");
                     System.out.println("");
@@ -1248,7 +1379,8 @@ public class HotelDB {
                     e.printStackTrace();
                 }
             }
-    
+            
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
@@ -1260,7 +1392,11 @@ public class HotelDB {
     }
 
     /*
-    * Lists every single room in this hotel
+    * getRoomList Method
+    * Lists every single room in the hotel.
+    *
+    * @param apiParams HashMap containing API parameters.
+    * @throws SQLException if a database access error occurs.
     * @author Andy Hoang
     */
     public static void getRoomList(HashMap<String, String> apiParams) throws SQLException {
@@ -1290,6 +1426,7 @@ public class HotelDB {
                     resultSet.getString("PricePerDay"));
             }
 
+            // Display a message if no records are found
             if(!gotRecords) {
                 System.out.println("No Result Found!");
                 System.out.println("");
@@ -1308,6 +1445,13 @@ public class HotelDB {
         }
     }
 
+    /*
+    * getGuestByGuestNum Method
+    * Retrieves information about a guest based on the guest number.
+    * @ author Nithisha Sathishkumar
+    * @param apiParams HashMap containing API parameters, including GuestNum.
+    * @throws SQLException if a database access error occurs.
+    */
     public static void getGuestByGuestNum(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -1324,6 +1468,7 @@ public class HotelDB {
                     "WHERE Guest.GuestNum = ? " + 
                     "ORDER BY FirstName ASC";
     
+            // Create a prepared statement and set the parameter        
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, apiParams.get("GuestNum").toUpperCase()); 
             resultSet = preparedStatement.executeQuery();
@@ -1332,6 +1477,7 @@ public class HotelDB {
     
             System.out.println("Guest Info By GuestNum: ");
     
+            // Print header for the table
             System.out.format("%-10s%-15s%-15s%-15s%-25s%-25s%-15s%-15s%n",
                     "GuestNum", "First Name", "Last Name", "Phone Number", "Email", " Address", "City", "State Name");
     
@@ -1351,7 +1497,8 @@ public class HotelDB {
                         resultSet.getString("Name")
                 );
             }
-    
+            
+            // Display a message if no records are found
             if (!gotRecords) {
                 System.out.println("No results found !");
                 System.out.println("");
@@ -1362,6 +1509,8 @@ public class HotelDB {
             e.printStackTrace();
     
         } finally {
+
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 preparedStatement.close();
             }
@@ -1374,7 +1523,11 @@ public class HotelDB {
     
 
     /*
-    * Specific Room info is given with specified param (roomNumber) 
+    * getRoomInfo Method
+    * Retrieves information about a specific room based on the room number.
+    *
+    * @param apiParams HashMap containing API parameters, including roomNumber.
+    * @throws SQLException if a database access error occurs.
     * @author Andy Hoang
     */
     public static void getRoomInfo(HashMap<String, String> apiParams) throws SQLException {
@@ -1387,7 +1540,8 @@ public class HotelDB {
                                 + "FROM Room R " 
                                 + "LEFT JOIN Booking B ON (R.ID = B.roomID) " 
                                 + "WHERE roomNumber = ?"; 
-                               
+    
+            // Create a prepared statement and set the parameter                    
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, apiParams.get("roomNumber"));
             resultSet = preparedStatement.executeQuery();
@@ -1406,6 +1560,7 @@ public class HotelDB {
                     resultSet.getDouble("PricePerDay"));
             }
 
+            // Display a message if no records are found
             if(!gotRecords) {
                 System.out.println("No Result Found!");
                 System.out.println("");
@@ -1425,10 +1580,13 @@ public class HotelDB {
     }
 
     /*
-     * getGuestList
-     * @authors Nithisha Sathishkumar & Andy Hoang
-     */
-
+    * getGuestList Method
+    * Retrieves a list of all guests in the hotel.
+    *
+    * @param apiParams HashMap containing API parameters.
+    * @throws SQLException if a database access error occurs.
+    * @authors Nithisha Sathishkumar & Andy Hoang
+    */
     public static void getGuestList(HashMap<String, String> apiParams) throws SQLException {
         Statement statement = null;
         ResultSet resultSet = null;
@@ -1446,6 +1604,8 @@ public class HotelDB {
             resultSet = statement.executeQuery(query);
             
             System.out.println("List of Guests:");
+
+            // Print header for the table
             System.out.format("%-10s%-15s%-15s%-15s%-25s%-20s%-20s%-15s%-15s%-5s%n",
                 "GuestNum", "FirstName", "LastName", "PhoneNumber", "Email", 
                 "Address1", "Address2", "City", "Zipcode", "State");
@@ -1469,6 +1629,7 @@ public class HotelDB {
                 );
             }
 
+            // Display a message if no records are found
             if(!gotRecords){
                 System.out.println("No Result Found!");
                 System.out.println("");
@@ -1488,9 +1649,13 @@ public class HotelDB {
     }
     
     /*
-     * getPaymentList of all payments that have been made
-     * @author Andy Hoang
-     */
+    * getPaymentList Method
+    * Retrieves a list of all payments that have been made.
+    *
+    * @param apiParams HashMap containing API parameters.
+    * @throws SQLException if a database access error occurs.
+    * @author Andy Hoang
+    */
     public static void getPaymentList(HashMap<String, String> apiParams) throws SQLException {
         Statement statement = null;
         ResultSet resultSet = null;
@@ -1521,6 +1686,7 @@ public class HotelDB {
                     resultSet.getString("paymentDate"));
             }
 
+            // Display a message if no records are found
             if(!gotRecords) {
                 System.out.println("No Result Found!");
                 System.out.println("");
@@ -1540,9 +1706,14 @@ public class HotelDB {
     }
 
     /*
-     * updateGuestAddress method
-     * @author Andy Hoang
-     */
+    * updateGuestAddress Method
+    * Updates the address information for a guest.
+    *
+    * @param apiParams HashMap containing API parameters.
+    * @return true if the update is successful, false otherwise.
+    * @throws SQLException if a database access error occurs.
+    * @author Andy Hoang
+    */
     public static boolean updateGuestAddress(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -1558,6 +1729,7 @@ public class HotelDB {
                                 "FROM Guest " +
                                 "WHERE guestNum = ?";
     
+            // Create a prepared statement and set the parameter                    
             preparedStatement = connection.prepareStatement(updateQuery);
             preparedStatement.setString(1, apiParams.get("NewAddress1"));
             preparedStatement.setString(2, apiParams.get("NewAddress2 (nullable)"));
@@ -1575,10 +1747,12 @@ public class HotelDB {
     
                 System.out.println("Updated Guest Information: ");
                 
+                // Create a prepared statement and set the parameter
                 preparedStatement = connection.prepareStatement(selectQuery);
                 preparedStatement.setString(1, apiParams.get("GuestNum"));
                 resultSet = preparedStatement.executeQuery();
 
+                // Print header for the table
                 System.out.format("%-10s%-15s%-15s%-15s%-15s%-15s%-10s%-5s%n",
                         "GuestNum", "FirstName", "LastName", "Address1", "Address2", "City", "Zipcode", "State");
                 System.out.println("--------------------------------------------------------------------------------------------------------");
@@ -1621,7 +1795,8 @@ public class HotelDB {
                     e.printStackTrace();
                 }
             }
-    
+            
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
@@ -1633,9 +1808,14 @@ public class HotelDB {
     }
 
     /*
-     * updateGuestEmail method
-     * @authors Andy Hoang
-     */
+    * updateGuestEmail Method
+    * Updates the email address for a guest.
+    *
+    * @param apiParams HashMap containing API parameters.
+    * @return true if the update is successful, false otherwise.
+    * @throws SQLException if a database access error occurs.
+    * @authors Andy Hoang
+    */
     public static boolean updateGuestEmail(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -1650,6 +1830,7 @@ public class HotelDB {
                                 "FROM Guest " +
                                 "WHERE guestNum = ?";
 
+            // Create a prepared statement and set the parameter                    
             preparedStatement = connection.prepareStatement(updateQuery);
             preparedStatement.setString(1, apiParams.get("email"));
             preparedStatement.setString(2, apiParams.get("guestNum"));
@@ -1663,6 +1844,7 @@ public class HotelDB {
     
                 System.out.println("Updated Guest Information: ");
     
+                // Create a prepared statement and set the parameter
                 preparedStatement = connection.prepareStatement(selectQuery);
                 preparedStatement.setString(1, apiParams.get("guestNum"));
                 resultSet = preparedStatement.executeQuery();
@@ -1705,7 +1887,8 @@ public class HotelDB {
                     e.printStackTrace();
                 }
             }
-    
+            
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
@@ -1717,9 +1900,14 @@ public class HotelDB {
     }
 
     /*
-     * updateGuestPhoneNumber method
-     * @authors Andy Hoang
-     */
+    * updateGuestPhoneNumber Method
+    * Updates the phone number for a guest.
+    *
+    * @param apiParams HashMap containing API parameters.
+    * @return true if the update is successful, false otherwise.
+    * @throws SQLException if a database access error occurs.
+    * @authors Andy Hoang
+    */
     public static boolean updateGuestPhoneNumber(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -1735,6 +1923,7 @@ public class HotelDB {
                 "JOIN Phone P ON (G.ID = P.guestID) WHERE guestNum = ? " +
                 "ORDER BY firstName";
     
+            // Create a prepared statement and set the parameter    
             preparedStatement = connection.prepareStatement(updateQuery);
             preparedStatement.setString(1, apiParams.get("PhoneNumber"));
             preparedStatement.setString(2, apiParams.get("GuestNum"));
@@ -1748,10 +1937,12 @@ public class HotelDB {
     
                 System.out.println("Updated Guest Information: ");
     
+                // Create a prepared statement and set the parameter
                 preparedStatement = connection.prepareStatement(selectQuery);
                 preparedStatement.setString(1, apiParams.get("GuestNum"));
                 resultSet = preparedStatement.executeQuery();
     
+                // Print header for the table
                 System.out.format("%-10s%-15s%-15s%-15s%n",
                         "GuestNum", "FirstName", "LastName", "PhoneNumber");
                 System.out.println("----------------------------------------------------------------------------------------------");
@@ -1790,7 +1981,8 @@ public class HotelDB {
                     e.printStackTrace();
                 }
             }
-    
+            
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
@@ -1802,10 +1994,13 @@ public class HotelDB {
     }
 
     /*
-    * GetGuestInfoWithoutGuestNum Method
+    * getGuestInfoWithoutGuestNum Method
+    * Retrieves guest information without specifying the guest number.
+    *
+    * @param apiParams HashMap containing API parameters.
+    * @throws SQLException if a database access error occurs.
     * @author Nithisha Sathishkumar
     */
-
     public static void getGuestInfoWithoutGuestNum(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -1821,6 +2016,7 @@ public class HotelDB {
                     "JOIN Phone ON Guest.ID = Phone.GuestID " +
                     "WHERE FirstName ILIKE ? AND LastName ILIKE ? AND Email ILIKE ? ";
 
+            // Create a prepared statement and set the parameter        
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, apiParams.get("FirstName"));
             preparedStatement.setString(2, apiParams.get("LastName"));
@@ -1831,6 +2027,7 @@ public class HotelDB {
 
             System.out.println("Guest Info By Firstname, Lastname and Email: ");
     
+            // Print header for the table
             System.out.format("%-10s%-15s%-15s%-15s%-25s%-25s%-15s%-15s%n",
                     "GuestNum", "First Name", "Last Name", "Phone Number", "Email", " Address", "City", "State Name");
     
@@ -1851,6 +2048,7 @@ public class HotelDB {
                 );
             }
 
+            // Display a message if no records are found
             if(!gotRecords)
             {
                 System.out.println("No results found !");
@@ -1861,6 +2059,8 @@ public class HotelDB {
             e.printStackTrace();
 
         } finally {
+
+            // Close the prepared statement and result set in the finally block
             if (preparedStatement != null) {
                 preparedStatement.close();
             }   

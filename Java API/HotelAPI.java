@@ -2,7 +2,6 @@
 * Main Method
 * @author Nithisha Sathishkumar
 */
-
 public class HotelAPI {
     public static void main(String[] args){
         System.out.println();
@@ -167,7 +166,6 @@ public class HotelAPI {
      * Menu Method
      * @author Team
      */
-
     private static void Menu() {
         System.out.println("\nMENU: ");
 

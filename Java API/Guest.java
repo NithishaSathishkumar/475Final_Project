@@ -1,8 +1,14 @@
+//////////////////////////////////////////////////////////////
+//                          IMPORTS                         //
+//////////////////////////////////////////////////////////////
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Properties;
 
 public class Guest {
+    //////////////////////////////////////////////////////////////
+    //                      GLOBAL VARIABLES                    //
+    //////////////////////////////////////////////////////////////
     public static final String getPaymentList = "getPaymentList";
     public static final String getGuestList = "getGuestList";
     public static final String updateGuestPhoneNumber = "updateGuestPhoneNumber";
@@ -23,6 +29,22 @@ public class Guest {
     private String zipcode;
     private String state;
 
+    /*
+     * Constructor to initialize a Guest object.
+     * 
+     * @param guestNum The guest number.
+     * @param firstName The first name of the guest.
+     * @param lastName The last name of the guest.
+     * @param email The email address of the guest.
+     * @param address1 The first line of the guest's address.
+     * @param address2 The second line of the guest's address.
+     * @param phoneType The type of phone used by the guest.
+     * @param city The city of the guest's address.
+     * @param zipcode The ZIP code of the guest's address.
+     * @param state The state of the guest's address.
+     * 
+     * @author Andy Hoang
+     */
     public Guest(String guestNum, String firstName, String lastName, String email, String address1, String address2, String phoneType, String city, String zipcode, String state) {
         this.guestNum = guestNum;
         this.firstName = firstName;
@@ -37,9 +59,12 @@ public class Guest {
     }
 
     /*
-     * getPaymentList method
-     * @author Andy Hoang
-     */
+    * getPaymentList method
+    * Method to retrieve the list of payments for a guest.
+    * 
+    * @param params The input parameters (not used in the current implementation).
+    * @author Andy Hoang
+    */
     public static void getPaymentList(String[] params) {
         System.out.println("");
         if(params == null || params.length == 0) {
@@ -58,9 +83,12 @@ public class Guest {
     }
 
     /*
-     * getGuestList method
-     * @author Andy Hoang
-     */
+    * getGuestList method
+    * Method to retrieve the list of guests within the hotel.
+    * 
+    * @param params The input parameters (not used in the current implementation).
+    * @author Andy Hoang
+    */
     public static void getGuestList(String[] params) {
         System.out.println("");
         if(params == null || params.length == 0) {
@@ -80,10 +108,12 @@ public class Guest {
 
 
     /*
-     * updateGuestPhoneNumber method
-     * @author Andy Hoang
-     * @params params GuestNum and PhoneNumber
-     */
+    * updateGuestPhoneNumber method
+    * Method to update a guest's phone number.
+    * 
+    * @param params GuestNum and PhoneNumber to be updated.
+    * @author Andy Hoang
+    */
     public static void updateGuestPhoneNumber(String[] params) {
         System.out.println("");
         if(params == null || params.length == 0) {
@@ -102,10 +132,12 @@ public class Guest {
     }
     
     /*
-     * updateGuestEmail method
-     * @author Andy Hoang    
-     * @params params GuestNum and Email
-     */    
+    * updateGuestEmail method
+    * Method to update a guest's email address.
+    * 
+    * @param params GuestNum and Email to be updated.
+    * @author Andy Hoang
+    */  
     public static void updateGuestEmail(String[] params) {
         System.out.println("");
         if(params == null || params.length == 0) {
@@ -125,10 +157,11 @@ public class Guest {
 
 
     /*
-     * updateGuestAddress method
-     * @author Andy Hoang
-     * @params params GuestNum, Address1, & Address2
-     */
+     * updateGuestAdress method
+     * @author Andy Hoang    
+     * @params params GuestNum, Address1 Address2
+     */ 
+   
     public static void updateGuestAddress(String[] params){
         System.out.println("");
         if(params == null || params.length == 0) {
@@ -149,11 +182,12 @@ public class Guest {
     } 
 
     /*
-     * getGuestByGuestNum method
-     * @author Nithisha Sathishkumar 
-     * @params guestnum
-     */
-
+    * getGuestByGuestNum method
+    * Method to retrieve guest information based on the guest number.
+    * 
+    * @param params GuestNum for retrieving guest information.
+    * @author Nithisha Sathishkumar
+    */
     public static void getGuestByGuestNum(String[] params){
         System.out.println("");
 
@@ -178,9 +212,11 @@ public class Guest {
 
    /*
     * GetGuestInfoWithoutGuestNum Method
+    * Method to retrieve guest information without specifying the guest number.
+    * 
+    * @param params FirstName, LastName, and Email for retrieving guest information.
     * @author Nithisha Sathishkumar
-    */  
-
+    */
     public static void getGuestInfoWithoutGuestNum(String[] params){
         System.out.println("");
         

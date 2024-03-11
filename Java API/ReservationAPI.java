@@ -1,10 +1,13 @@
-
+//////////////////////////////////////////////////////////////
+//                          IMPORTS                         //
+//////////////////////////////////////////////////////////////
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.time.LocalDate;
 
 public class ReservationAPI {
 
@@ -53,6 +56,17 @@ public class ReservationAPI {
     static PreparedStatement preparedStatement = null;
     static ResultSet resultSet = null;
 
+    //////////////////////////////////////////////////////////////
+    //                      METHODS                             //
+    //////////////////////////////////////////////////////////////
+
+    /*
+     * Creates a reservation based on user input or provided parameters.
+     * Displays usage information if no parameters are provided.
+     * @author Song Sahong
+     * @param params Optional parameters for creating a reservation interactively
+     * @return boolean Indicates whether the reservation creation was successful
+     */
     public static boolean Create_Reservation(String[] params) {
 
         System.out.println("");
@@ -115,6 +129,14 @@ public class ReservationAPI {
 
     }
 
+    /*
+    * Private method to interactively gather booking information for a specified number of rooms.
+    * 
+    * @param rooms The number of rooms for which booking information needs to be entered.
+    * @return ArrayList<Booking> List of Booking objects containing room number, check-in, and check-out dates.
+    * 
+    * @author Song Sahong
+    */
     private static ArrayList<Booking> getBookings(int rooms) {
         System.out.println("Start enter the booking info:");
         ArrayList<Booking> bookings = new ArrayList<>();
@@ -127,7 +149,8 @@ public class ReservationAPI {
 
                 java.util.Date checkInDate = dateFormat.parse(ps.get("checkin_date"));
                 java.util.Date checkOutDate = dateFormat.parse(ps.get("checkout_date"));
-                if (checkInDate.getTime() - new java.util.Date().getTime() <= 0
+                java.util.Date today = dateFormat.parse(LocalDate.now().toString());
+                if (checkInDate.getTime() - today.getTime() < 0
                         || getStayNights(checkInDate, checkOutDate) <= 0) {
                     System.out.println("The check in or out date is invalid! Please reenter.");
                     i--;
@@ -144,6 +167,16 @@ public class ReservationAPI {
         return bookings;
     }
 
+    /*
+    * Private method to retrieve room details from the database based on provided bookings.
+    * 
+    * @param bookings List of Booking objects containing room numbers.
+    * @return HashMap<String, Room> Map of room numbers to Room objects containing room details.
+    * 
+    * @throws SQLException If a database access error occurs.
+    * 
+    * @author Song Sahong
+    */
     private static HashMap<String, Room> getRooms(ArrayList<Booking> bookings) throws SQLException {
         // get rooms detail from db
         ArrayList<String> roomNums = new ArrayList<>();
@@ -184,6 +217,16 @@ public class ReservationAPI {
         return rooms;
     }
 
+    /*
+    * Private method to retrieve guest information based on the provided guest email.
+    * 
+    * @param guestEmail The email address of the guest.
+    * @return Guest Guest object containing guest details.
+    * 
+    * @throws SQLException If a database access error occurs.
+    * 
+    * @author Song Sahong
+    */
     private static Guest getGuest(String guestEmail) throws SQLException {
 
         String query = "SELECT * FROM guest WHERE email = ?";
@@ -202,6 +245,16 @@ public class ReservationAPI {
         return null;
     }
 
+    /*
+    * Private method to retrieve the staff ID based on the staff number.
+    * 
+    * @param staffNumber The staff number to look up in the database.
+    * @return int The staff ID if found, otherwise -1.
+    * 
+    * @throws SQLException If a database access error occurs.
+    * 
+    * @author Song Sahong
+    */
     private static int getStaffId(String staffNumber) throws SQLException {
         int staffId = -1; // Default value if no staff id found
         String query = "SELECT id FROM staff WHERE staffnum = ?";
@@ -216,6 +269,16 @@ public class ReservationAPI {
         return staffId;
     }
 
+    /*
+    * Private method to retrieve the payment type ID based on the payment type name.
+    * 
+    * @param paymentType The payment type to look up in the database.
+    * @return String The payment type ID if found, otherwise an empty string.
+    * 
+    * @throws SQLException If a database access error occurs.
+    * 
+    * @author Song Sahong
+    */
     private static String getPaymentTypeId(String paymentType) throws SQLException {
         String paymentTypeId = ""; // Default value if no payment type id found
 
@@ -231,6 +294,16 @@ public class ReservationAPI {
         return paymentTypeId;
     }
 
+    /*
+    * Private method to create a payment record in the database.
+    * 
+    * @param paymentTypeId The payment type ID associated with the payment.
+    * @return int The ID of the newly created payment record.
+    * 
+    * @throws SQLException If a database access error occurs.
+    * 
+    * @author Song Sahong
+    */
     private static int createPayment(String paymentTypeId) throws SQLException {
         int paymentId = -1; // Default value if payment creation fails
 
@@ -246,6 +319,13 @@ public class ReservationAPI {
         return paymentId;
     }
 
+    /*
+    * Private method to generate a reservation number based on the current timestamp.
+    * 
+    * @return String The generated reservation number.
+    * 
+    * @author Song Sahong
+    */
     private static String getReservationNumber() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyddMMHHmmss");
 
@@ -255,6 +335,15 @@ public class ReservationAPI {
         // return String.format("%d-%s", guestId, formattedTime);
     }
 
+    /*
+    * Private method to calculate the number of stay nights between two dates.
+    * 
+    * @param date1 The check-in date.
+    * @param date2 The check-out date.
+    * @return int The number of stay nights.
+    * 
+    * @author Song Sahong
+    */
     private static int getStayNights(java.util.Date date1, java.util.Date date2) {
         long diffInMillies = date2.getTime() - date1.getTime();
         long diffInDays = diffInMillies / (1000 * 60 * 60 * 24);
@@ -270,6 +359,15 @@ public class ReservationAPI {
         return (int) diffInDays;
     }
 
+    /*
+    * Private method to calculate the total amount for the given bookings and room details.
+    * 
+    * @param bookings List of Booking objects containing room number, check-in, and check-out dates.
+    * @param rooms Map of room numbers to Room objects containing room details.
+    * @return double The total amount for the reservation.
+    * 
+    * @author Song Sahong
+    */
     private static double getTotalAmount(ArrayList<Booking> bookings, HashMap<String, Room> rooms) {
         double amount = 0;
         for (int i = 0; i < bookings.size(); i++) {
@@ -280,11 +378,26 @@ public class ReservationAPI {
         return amount;
     }
 
+    /*
+    * Private method to create a reservation record in the database.
+    * 
+    * @param reservationNumber The reservation number.
+    * @param numberOfGuest The number of guests for the reservation.
+    * @param paymentId The ID of the associated payment record.
+    * @param amount The total amount for the reservation.
+    * @param guestId The ID of the guest making the reservation.
+    * @param staffId The ID of the staff member handling the reservation.
+    * @return int The ID of the newly created reservation record.
+    * 
+    * @throws Exception If an unexpected error occurs.
+    * 
+    * @author Song Sahong
+    */
     private static int createReservation(String reservationNumber, int numberOfGuest, int paymentId, double amount,
             int guestId, int staffId) throws Exception {
         int reservationId = -1; // Default value if payment creation fails
 
-        String query = "INSERT INTO Reservation (reservationnum, numberOfGuest,paymentid, amount,guestid,staffId, createtime) VALUES (?,?,?,?,?,?, CURRENT_TIMESTAMP ) RETURNING ID";
+        String query = "INSERT INTO Reservation (reservationnum, numberOfGuest,paymentid, amount,guestid,staffId, createtime) VALUES (?,?,?,?,?,?, now()::timestamp(0)) RETURNING ID";
         preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, reservationNumber);
         preparedStatement.setInt(2, numberOfGuest);
@@ -301,6 +414,19 @@ public class ReservationAPI {
         return reservationId;
     }
 
+    /*
+    * Private method to create a booking record in the database.
+    * 
+    * @param reservationId The ID of the associated reservation record.
+    * @param roomId The ID of the room for the booking.
+    * @param checkInDate The check-in date for the booking.
+    * @param checkOutDate The check-out date for the booking.
+    * @return int The ID of the newly created booking record.
+    * 
+    * @throws Exception If an unexpected error occurs.
+    * 
+    * @author Song Sahong
+    */
     private static int createBooking(int reservationId, int roomId, java.util.Date checkInDate,
             java.util.Date checkOutDate) throws Exception {
 
