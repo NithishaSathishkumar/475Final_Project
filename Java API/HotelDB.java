@@ -10,7 +10,7 @@ import java.util.Properties;
 public class HotelDB {
     private static final String URL = "jdbc:postgresql://localhost/hotel";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "Gayathri@27"; //Enter your postgres password //Gayathri@27
+    private static final String PASSWORD = "Hoang2317"; //Enter your postgres password //Gayathri@27
     private static Connection connection = null;
 
 
@@ -1546,6 +1546,8 @@ public class HotelDB {
     /*
      * updateGuestAddress method
      * @author Andy Hoang
+     * 
+     * somehow broke in one of the last merges/commits
      */
     public static boolean updateGuestAddress(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -1569,7 +1571,7 @@ public class HotelDB {
             preparedStatement.setString(4, apiParams.get("Zipcode (nullable)"));
             preparedStatement.setString(5, apiParams.get("State (XX)"));
             preparedStatement.setString(6, apiParams.get("GuestNum"));
-            
+
             int rows = preparedStatement.executeUpdate();
             preparedStatement.close();  // Close the update statement
 
@@ -1578,14 +1580,14 @@ public class HotelDB {
                 System.out.println("");
     
                 System.out.println("Updated Guest Information: ");
-    
+                
                 preparedStatement = connection.prepareStatement(selectQuery);
                 preparedStatement.setString(1, apiParams.get("GuestNum"));
-                System.out.println(preparedStatement);
                 resultSet = preparedStatement.executeQuery();
+                System.out.println(resultSet);
 
                 System.out.format("%-10s%-15s%-15s%-15s%-15s%-15s%-10s%-5s%n",
-                        "GuestNum", "FirstName", "LastName", "Address1", "Address2", "City", "ZipCode", "State");
+                        "GuestNum", "FirstName", "LastName", "Address1", "Address2", "City", "Zipcode", "State");
                 System.out.println("----------------------------------------------------------------------------------------------");
                 
                 boolean gotRecords = false;
