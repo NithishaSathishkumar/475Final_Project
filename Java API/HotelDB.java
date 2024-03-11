@@ -10,9 +10,8 @@ import java.util.Properties;
 public class HotelDB {
     private static final String URL = "jdbc:postgresql://localhost/hotel";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "Hoang2317"; //Enter your postgres password //Gayathri@27
+    private static final String PASSWORD = "Gayathri@27"; //Enter your postgres password //Gayathri@27
     private static Connection connection = null;
-
 
     public static Connection getConnection() throws SQLException{
         if(connection != null && !connection.isValid(0000)) {
@@ -1543,8 +1542,6 @@ public class HotelDB {
     /*
      * updateGuestAddress method
      * @author Andy Hoang
-     * 
-     * somehow broke in one of the last merges/commits
      */
     public static boolean updateGuestAddress(HashMap<String, String> apiParams) throws SQLException {
         PreparedStatement preparedStatement = null;
