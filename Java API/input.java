@@ -1,9 +1,15 @@
+//////////////////////////////////////////////////////////////
+//                          IMPORTS                         //
+//////////////////////////////////////////////////////////////
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 
 public class input {
+    //////////////////////////////////////////////////////////////
+    //                      GLOBAL VARIABLES                    //
+    //////////////////////////////////////////////////////////////
     private static final DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
