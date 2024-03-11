@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.time.LocalDate;
 
 public class ReservationAPI {
 
@@ -127,7 +128,8 @@ public class ReservationAPI {
 
                 java.util.Date checkInDate = dateFormat.parse(ps.get("checkin_date"));
                 java.util.Date checkOutDate = dateFormat.parse(ps.get("checkout_date"));
-                if (checkInDate.getTime() - new java.util.Date().getTime() <= 0
+                java.util.Date today = dateFormat.parse(LocalDate.now().toString());
+                if (checkInDate.getTime() - today.getTime() < 0
                         || getStayNights(checkInDate, checkOutDate) <= 0) {
                     System.out.println("The check in or out date is invalid! Please reenter.");
                     i--;
@@ -284,7 +286,7 @@ public class ReservationAPI {
             int guestId, int staffId) throws Exception {
         int reservationId = -1; // Default value if payment creation fails
 
-        String query = "INSERT INTO Reservation (reservationnum, numberOfGuest,paymentid, amount,guestid,staffId, createtime) VALUES (?,?,?,?,?,?, CURRENT_TIMESTAMP ) RETURNING ID";
+        String query = "INSERT INTO Reservation (reservationnum, numberOfGuest,paymentid, amount,guestid,staffId, createtime) VALUES (?,?,?,?,?,?, now()::timestamp(0)) RETURNING ID";
         preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, reservationNumber);
         preparedStatement.setInt(2, numberOfGuest);
