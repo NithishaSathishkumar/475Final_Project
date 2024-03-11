@@ -7,6 +7,12 @@ public class input {
     private static final DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+    /*
+     * Checks if a string is null or equals "null" and returns an empty string in such cases.
+     * @author Nithisha Sathishkumar
+     * @param value The input string to check.
+     * @return An empty string if the input is null or equals "null"; otherwise, the input string.
+     */
     public static String CheckStringForNull(String value)
     {
         if(value == null || value.equals("null"))
@@ -16,6 +22,12 @@ public class input {
         return value;
     }
 
+    /*
+     * Parses input parameters based on the provided parameter names.
+     * @author Nithisha Sathishkumar
+     * @param params An array of parameter names.
+     * @return A HashMap containing the parameter names and their corresponding values.
+     */
     public static HashMap<String, String> ParseInputParams(String[] params)
     {
         HashMap<String, String> map = new HashMap<>();
@@ -40,6 +52,14 @@ public class input {
         return map;
     }
 
+    /*
+     * Checks if the provided parameter values match the expected values for certain parameters.
+     * Prints error messages if unexpected values are encountered.
+     * @author Nithisha Sathishkumar
+     * @param paramName  The name of the parameter to check.
+     * @param paramValue The value of the parameter to check.
+     * @return True if the parameter values are as expected; otherwise, false.
+     */
     private static boolean CheckKnownParamValues(String paramName, String paramValue)
     {
         boolean valueOk = true;
@@ -90,5 +110,4 @@ public class input {
         return valueOk;
     }
     
-
 }

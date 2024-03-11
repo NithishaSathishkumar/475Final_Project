@@ -3,6 +3,9 @@
 * @author Nithisha Sathishkumar
 */
 
+//////////////////////////////////////////////////////////////
+//                          IMPORTS                         //
+//////////////////////////////////////////////////////////////
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +14,9 @@ import java.util.HashMap;
 
 public class Staff {
 
+    //////////////////////////////////////////////////////////////
+    //                      GLOBAL VARIABLES                    //
+    //////////////////////////////////////////////////////////////
     public static final String ListOfStaff = "getStaffList";
     public static final String ListOfStaffByPosition = "getStaffListByPosition";
     public static final String StaffInfoByStaffNum = "getStaffInfoByStaffNum";
@@ -23,11 +29,19 @@ public class Staff {
     public static final String UpdateStaffPosition = "updateStaffPosition";
     public static final String CreateStaff = "createStaff";  
 
-    /*
-    * GetStaffList Method
-    * @author Nithisha Sathishkumar
-    */ 
 
+    //////////////////////////////////////////////////////////////
+    //                          METHODS                         //
+    //////////////////////////////////////////////////////////////
+
+    /*
+     * getStaffList Method
+     * @author Nithisha Sathishkumar
+     * 
+     * Retrieves and prints a list of staff members.
+     * 
+     * @params params None or Command
+     */
     public static void getStaffList(String[] params){
         System.out.println("");
         
@@ -48,10 +62,13 @@ public class Staff {
     }
 
     /*
-    * GetStaffListByPosition Method
-    * @author Nithisha Sathishkumar
-    */ 
-
+     * getStaffListByPosition Method
+     * @author Nithisha Sathishkumar
+     * 
+     * Retrieves and prints a list of staff members filtered by job position.
+     * 
+     * @params params Position
+     */
     public static void getStaffListByPosition(String[] params){
         System.out.println("");
 
@@ -75,10 +92,13 @@ public class Staff {
     } 
 
     /*
-    * GetStaffInfoByStaffNum Method
-    * @author Nithisha Sathishkumar
-    */  
-
+     * getStaffInfoByStaffNum Method
+     * @author Nithisha Sathishkumar
+     * 
+     * Retrieves and prints staff information filtered by staff number.
+     * 
+     * @params params StaffNum
+     */  
     public static void getStaffInfoByStaffNum(String[] params){
         System.out.println("");
 
@@ -102,10 +122,13 @@ public class Staff {
     } 
 
    /*
-    * GetJobPositionList Method
-    * @author Nithisha Sathishkumar
-    */   
-
+     * getJobPositionList Method
+     * @author Nithisha Sathishkumar
+     * 
+     * Retrieves and prints a list of job positions.
+     * 
+     * @params params None or Command
+     */     
     public static void getJobPositionList(String[] params){
         System.out.println("");
 
@@ -126,10 +149,13 @@ public class Staff {
     }
 
     /*
-    * GetStaff_Staffnum Method
-    * @author Nithisha Sathishkumar
-    */
-
+     * getStaff_Staffnum Method
+     * @author Nithisha Sathishkumar
+     * 
+     * Retrieves and prints staff information filtered by first name, last name, and email.
+     * 
+     * @params params FirstName, LastName, Email
+     */
     public static void getStaff_Staffnum(String[] params){
         System.out.println("");
         
@@ -153,10 +179,14 @@ public class Staff {
     } 
 
    /*
-    * UpdateStaffPhoneNumber Method
-    * @author Nithisha Sathishkumar
-    */
-
+     * updateStaffPhoneNumber Method
+     * @author Nithisha Sathishkumar
+     * 
+     * Updates staff phone number.
+     * 
+     * @params params StaffNum, PhoneNumber
+     * @return boolean Indicates if the update was successful
+     */
     public static boolean updateStaffPhoneNumber(String[] params) {
         System.out.println("");
 
@@ -181,10 +211,14 @@ public class Staff {
 
 
     /*
-    * UpdateStaffEmail Method
-    * @author Nithisha Sathishkumar
-    */
-
+     * updateStaffEmail Method
+     * @author Nithisha Sathishkumar
+     * 
+     * Updates staff email.
+     * 
+     * @params params StaffNum, Email
+     * @return boolean Indicates if the update was successful
+     */
     public static boolean updateStaffEmail(String[] params) {
         System.out.println("");
 
@@ -208,10 +242,14 @@ public class Staff {
     }
 
     /*
-    * UpdateStaffFirstName Method
-    * @author Nithisha Sathishkumar
-    */
-
+     * updateStaffFirstName Method
+     * @author Nithisha Sathishkumar
+     * 
+     * Updates staff first name.
+     * 
+     * @params params StaffNum, FirstName
+     * @return boolean Indicates if the update was successful
+     */
     public static boolean updateStaffFirstName(String[] params) {
         System.out.println("");
 
@@ -235,10 +273,14 @@ public class Staff {
     }
 
     /*
-    * UpdateStaffLastName Method
-    * @author Nithisha Sathishkumar
-    */
-
+     * updateStaffLastName Method
+     * @author Nithisha Sathishkumar
+     * 
+     * Updates staff last name.
+     * 
+     * @params params StaffNum, LastName
+     * @return boolean Indicates if the update was successful
+     */
     public static boolean updateStaffLastName(String[] params) {
         System.out.println("");
 
@@ -262,10 +304,14 @@ public class Staff {
     }
 
     /*
-    * UpdateStaffFirstName Method
-    * @author Nithisha Sathishkumar
-    */
-
+     * updateStaffPosition Method
+     * @author Nithisha Sathishkumar
+     * 
+     * Updates staff position.
+     * 
+     * @params params StaffNum, PositionName
+     * @return boolean Indicates if the update was successful
+     */
     public static boolean updateStaffPosition(String[] params) {
         System.out.println("");
 
@@ -289,11 +335,14 @@ public class Staff {
     }
 
     /*
-    * CreateStaff Method
-    * @author Nithisha Sathishkumar
-    */
-
-
+     * createStaff Method
+     * @author Nithisha Sathishkumar
+     * 
+     * Creates a new staff member.
+     * 
+     * @params params FirstName, LastName, Email, PhoneNumber, PositionName
+     * @return boolean Indicates if the creation was successful
+     */
     public static boolean createStaff(String[] params){
         if(params == null || params.length == 0){
             System.out.println("CreateStaff - Create Staff");

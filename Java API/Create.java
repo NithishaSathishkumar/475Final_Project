@@ -1,46 +1,60 @@
-/*
- * JUST DRAFT of create methods
- */
-
-
+//////////////////////////////////////////////////////////////
+//                          IMPORTS                         //
+//////////////////////////////////////////////////////////////
 import java.sql.*;
 
 public class Create {
+    /*
+     * Create a new reservation in the database.
+     * @author Song Sahong
+     * @param numberOfGuest The number of guests for the reservation.
+     * @param paymentType The payment type for the reservation.
+     * @param amount The total amount for the reservation.
+     * @param createdTime The timestamp of when the reservation was created.
+     * @param guestNum The guest number associated with the reservation.
+     * @param staffNum The staff number associated with the reservation.
+     * @return Reservation The created Reservation object.
+     */
+    public static Reservation createReservation(Integer numberOfGuest, String paymentType, double amount, Timestamp createdTime, String guestNum, String staffNum) {
+        try (Connection connection = HotelDB.getConnection()) {
+            String query = "INSERT INTO Reservation (numberOfGuest, paymentType, amount, createdTime, guestNum, staffNum) VALUES (?, ?, ?, ?, ?, ?) RETURNING reservationNum, numberOfGuest, paymentType, amount, createdTime, guestNum, staffNum";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, numberOfGuest);
+                preparedStatement.setString(2, paymentType);
+                preparedStatement.setDouble(3, amount);
+                preparedStatement.setTimestamp(4, createdTime);
+                preparedStatement.setString(5, guestNum);
+                preparedStatement.setString(6, staffNum);
 
-    // Create Reservation GuestNum?? ReservationNum??
-public static Reservation createReservation(Integer numberOfGuest, String paymentType, double amount, Timestamp createdTime, String guestNum, String staffNum) {
-    try (Connection connection = HotelDB.getConnection()) {
-        String query = "INSERT INTO Reservation (numberOfGuest, paymentType, amount, createdTime, guestNum, staffNum) VALUES (?, ?, ?, ?, ?, ?) RETURNING reservationNum, numberOfGuest, paymentType, amount, createdTime, guestNum, staffNum";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, numberOfGuest);
-            preparedStatement.setString(2, paymentType);
-            preparedStatement.setDouble(3, amount);
-            preparedStatement.setTimestamp(4, createdTime);
-            preparedStatement.setString(5, guestNum);
-            preparedStatement.setString(6, staffNum);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new Reservation(
-                            resultSet.getString("reservationNum"),
-                            resultSet.getInt("numberOfGuest"),
-                            resultSet.getString("paymentType"),
-                            resultSet.getDouble("amount"),
-                            resultSet.getTimestamp("createdTime"),
-                            resultSet.getString("guestNum"),
-                            resultSet.getString("staffNum")
-                    );
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return new Reservation(
+                                resultSet.getString("reservationNum"),
+                                resultSet.getInt("numberOfGuest"),
+                                resultSet.getString("paymentType"),
+                                resultSet.getDouble("amount"),
+                                resultSet.getTimestamp("createdTime"),
+                                resultSet.getString("guestNum"),
+                                resultSet.getString("staffNum")
+                        );
+                    }
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return null;
     }
-    return null;
-}
 
-
-    // Create Booking
+    /*
+     * Create a new booking in the database.
+     * @author Song Sahong
+     * @param reservationNum The reservation number associated with the booking.
+     * @param roomNum The room number associated with the booking.
+     * @param CIDate The check-in date for the booking.
+     * @param CoExpectDate The expected check-out date for the booking.
+     * @return Booking The created Booking object.
+     */
     public static Booking createBooking(String reservationNum, String roomNum, Timestamp CIDate, Timestamp CoExpectDate) {
         try (Connection connection = HotelDB.getConnection()) {
             String query = "INSERT INTO Booking (reservationNum, roomNum, CIDate, CoExpectDate) VALUES (?, ?, ?, ?) RETURNING *";
@@ -68,7 +82,20 @@ public static Reservation createReservation(Integer numberOfGuest, String paymen
         return null;
     }
 
-    // Create Guest
+    /*
+     * Create a new guest in the database.
+     * 
+     * @param firstName The first name of the guest.
+     * @param lastName The last name of the guest.
+     * @param email The email address of the guest.
+     * @param address1 The first line of the guest's address.
+     * @param address2 The second line of the guest's address.
+     * @param phoneType The type of phone used by the guest.
+     * @param city The city of the guest's address.
+     * @param zipcode The ZIP code of the guest's address.
+     * @param state The state of the guest's address.
+     * @return Guest The created Guest object.
+     */
     public static Guest createGuest(String firstName, String lastName, String email, String address1, String address2, String phoneType, String city, char zipcode, String state) {
         try (Connection connection = HotelDB.getConnection()) {
             String query = "INSERT INTO Guest (firstName, lastName, email, address1, address2, phoneType, city, zipcode, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *";
@@ -105,35 +132,5 @@ public static Reservation createReservation(Integer numberOfGuest, String paymen
         }
         return null;
     }
-
-    // Create Staff
-    // public static Staff createStaff(String firstName, String lastName, Integer positionId, String phoneNumber, String email) {
-    //     try (Connection connection = HotelDB.getConnection()) {
-    //         String query = "INSERT INTO Staff (firstName, lastName, positionId, phoneNumber, email) VALUES (?, ?, ?, ?, ?) RETURNING *";
-    //         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-    //             preparedStatement.setString(1, firstName);
-    //             preparedStatement.setString(2, lastName);
-    //             preparedStatement.setInt(3, positionId);
-    //             preparedStatement.setString(4, phoneNumber);
-    //             preparedStatement.setString(5, email);
-
-    //             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-    //                 if (resultSet.next()) {
-    //                     return new Staff(
-    //                             resultSet.getString("staffNum"),
-    //                             resultSet.getString("firstName"),
-    //                             resultSet.getString("lastName"),
-    //                             resultSet.getInt("positionId"),
-    //                             resultSet.getString("phoneNumber"),
-    //                             resultSet.getString("email")
-    //                     );
-    //                 }
-    //             }
-    //         }
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //     }
-    //     return null;
-    // }
 }
 
