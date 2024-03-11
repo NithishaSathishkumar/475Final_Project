@@ -1,7 +1,3 @@
-/*
- * JUST DRAFT of Guest
- */
-
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Properties;
@@ -14,6 +10,7 @@ public class Guest {
     public static final String updateGuestAddress = "updateGuestAddress";
     public static final String GuestInfoByGuestNum = "getGuestInfoByGuestNum";
     public static final String GetGuestByGuestNum = "getGuestByGuestNum";
+    public static final String GetGuestInfoWithoutGuestNum = "getGuestInfoWithoutGuestNum";
 
     private String guestNum;
     private String firstName;
@@ -80,6 +77,7 @@ public class Guest {
             }
         }
     }
+
     /*
      * updateGuestPhoneNumber method
      * @author Andy Hoang
@@ -101,12 +99,13 @@ public class Guest {
             }
         }
     }
-        /*
-         * updateGuestEmail method
-         * @author Andy Hoang    
-         * @params params GuestNum and Email
-         */    
-        public static void updateGuestEmail(String[] params) {
+
+    /*
+     * updateGuestEmail method
+     * @author Andy Hoang    
+     * @params params GuestNum and Email
+     */    
+    public static void updateGuestEmail(String[] params) {
         System.out.println("");
         if(params == null || params.length == 0) {
             System.out.println("updateGuestEmail - Updates Guest's email");
@@ -122,28 +121,13 @@ public class Guest {
             }
         }
     }
-    /*
-     * updateGuestAddress method
-     * @author Andy Hoang
-     * @params params GuestNum, Address1, & Address2
-     */
-    // public static void updateGuestAddress(String[] params) {
-    //     System.out.println("");
-    //     if(params == null || params.length == 0) {
-    //         System.out.println("updateGuestAddress - Updates Guest's address");
-    //         System.out.println("COMMAND: updateGuestAddress COMMAND: GuestNum COMMAND: Address1 COMMAND: Address2");
-    //     } else {
-    //         HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "NewAddress1", "NewAddress2"});
-    //         if(apiParams != null) {
-    //             try {
-    //                 HotelDB.updateGuestAddress(apiParams);
-    //             } catch (SQLException e) {
-    //                 e.printStackTrace();
-    //             }
-    //         }
-    //     }
-    // }
 
+    /*
+     * updateGuestAdress method
+     * @author Andy Hoang    
+     * @params params GuestNum, Address1 Address2
+     */ 
+   
     public static void updateGuestAddress(String[] params){
         System.out.println("");
         if(params == null || params.length == 0) {
@@ -161,6 +145,12 @@ public class Guest {
             }
         }
     } 
+
+    /*
+     * getGuestByGuestNum method
+     * @author Nithisha Sathishkumar 
+     * @params guestnum
+     */
 
     public static void getGuestByGuestNum(String[] params){
         System.out.println("");
@@ -181,6 +171,33 @@ public class Guest {
                     e.printStackTrace();
                 }
             }
+        }
+    } 
+
+   /*
+    * GetGuestInfoWithoutGuestNum Method
+    * @author Nithisha Sathishkumar
+    */  
+
+    public static void getGuestInfoWithoutGuestNum(String[] params){
+        System.out.println("");
+        
+        if(params == null || params.length == 0)
+        {
+            System.out.println("GetGuestInfoWithoutGuestNum - Return list of Guest filtered by Email ");
+            System.out.println("COMMAND: getGuestInfoWithoutGuestNum Command:FirstName Command:LastName Command:Email");
+        }
+        else
+        {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] { "FirstName", "LastName", "Email" });
+
+            if(apiParams != null){
+                try {
+                    HotelDB.getGuestInfoWithoutGuestNum(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }            
         }
     } 
 

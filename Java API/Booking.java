@@ -1,12 +1,14 @@
-/*
- * JUST DRAFT of Booking
- */
-
-
+//////////////////////////////////////////////////////////////
+//                          IMPORTS                         //
+//////////////////////////////////////////////////////////////
 import java.sql.*;
 import java.util.HashMap;
 
 public class Booking {
+
+    //////////////////////////////////////////////////////////////
+    //                      GLOBAL VARIABLES                    //
+    //////////////////////////////////////////////////////////////
     public static final String getAvailableRooms = "getAvailableRooms";
     public static final String getBookingsOnRoom = "getBookingsOnRoom";
     public static final String listAllBookings = "listAllBookings";
@@ -20,8 +22,11 @@ public class Booking {
     private String roomNum;
     private Timestamp CIDate;
     private Timestamp CoExpectDate;
-    private Timestamp CoDate; //Did we not need a CoDate, I did not see one listed beforehand
+    private Timestamp CoDate; 
 
+    //////////////////////////////////////////////////////////////
+    //                          METHODS                         //
+    //////////////////////////////////////////////////////////////
     public Booking() {
         this.bookingNum = null;
         this.reservationNum = null;
@@ -56,17 +61,27 @@ public class Booking {
      * getAvailableRooms for a date range method
      * @author Andy Hoang
      * 
+     * Retrieves and prints a list of available rooms/bookings for the specified time range.
+     * If no parameters are provided, displays usage information.
+     * 
      * @params params StartDate and EndDate
      */
     public static void getAvailableRooms(String[] params) {
         System.out.println("");
+
+        // Check if parameters are provided
         if(params == null || params.length == 0) {
             System.out.println("getAvailableRooms - Return list of available rooms/bookings for listed time");
             System.out.println("COMMAND: getAvailableRooms COMMAND: StartDate (yyyy-mm-dd) COMMAND: EndDate (yyyy-mm-dd)");
+
         } else {
+            // Parse input parameters into a HashMap
             HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"StartDate (yyyy-mm-dd)", "EndDate (yyyy-mm-dd)"});
+
+            // Check if parsing was successful
             if(apiParams != null) {
                 try {
+                    // Call HotelDB method to get available rooms
                     HotelDB.getAvailableRooms(apiParams);
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -79,18 +94,29 @@ public class Booking {
      * getBookingsOnRoom method
      * @author Andy Hoang
      * 
-     * @params params RoomNumber to find bookings of
+     * Retrieves and prints a list of checked out/in times for a specific room.
+     * If no parameters are provided, displays usage information.
+     * 
+     * @params params RoomNumber
      */
     public static void getBookingsOnRoom(String[] params) {
         System.out.println("");
+
+        // Check if parameters are provided
         if(params == null || params.length == 0) {
             System.out.println("getBookingsOnRoom - Return list of checked out/in times of specific room");
             System.out.println("COMMAND: getBookingsOnRoom COMMAND: RoomNumber");
+
         } else {
+            // Parse input parameters into a HashMap
             HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"RoomNumber"});
+
+            // Check if parsing was successful
             if(apiParams != null) {
                 try {
+                    // Call HotelDB method to get bookings for the specified room
                     HotelDB.getBookingsOnRoom(apiParams);
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -98,20 +124,33 @@ public class Booking {
         }
     }
 
-/*
+    /*
      * listAllBookings method
      * @author Andy Hoang
+     * 
+     * Lists all bookings that have been made with rooms.
+     * 
+     * @params Input parameter
      */
     public static void listAllBookings(String[] params) {
         System.out.println("");
+
+        // Check if parameters are provided
         if(params == null || params.length == 0) {
             System.out.println("listAllBookings - Return list bookings that have been made with rooms");
             System.out.println("COMMAND: listAllBookings");
+
         } else {
+            // Parse input parameters into a HashMap
             HashMap<String, String> apiParams = input.ParseInputParams(new String[] {});
+
+            // Check if parsing was successful
             if(apiParams != null) {
                 try {
+
+                    // Call HotelDB method to list all bookings
                     HotelDB.listAllBookings(apiParams);
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -122,17 +161,28 @@ public class Booking {
     /*
      * getBookingInfo method
      * @author Andy Hoang
+     * 
+     * Returns a list of all bookings within a reservation.
+     * 
+     * @params ReservationNum
      */
     public static void getBookingInfo(String[] params) {
         System.out.println("");
+
+        // Check if parameters are provided
         if(params == null || params.length == 0) {
             System.out.println("getBookingInfo - Return list of all bookings within a reservation");
             System.out.println("COMMAND: getBookingInfo COMMAND: reservationNum");
+
         } else {
+            // Parse input parameters into a HashMap
             HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"reservationNum"});
             if(apiParams != null) {
+
                 try {
+                    // Call HotelDB method to get booking information for the specified reservation
                     HotelDB.getBookingInfo(apiParams);
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -143,17 +193,29 @@ public class Booking {
     /*
      * getRoomList method
      * @author Andy Hoang
+     * 
+     * Returns a list of all rooms within the hotel
+     * 
+     * @params Input parameter
      */
     public static void getRoomList(String[] params) {
         System.out.println("");
+
+        // Check if parameters are provided
         if(params == null || params.length == 0) {
             System.out.println("getRoomList - Return list of all rooms within hotel");
             System.out.println("COMMAND: getRoomList");
         } else {
+
+            // Parse input parameters into a HashMap
             HashMap<String, String> apiParams = input.ParseInputParams(new String[] {});
+
+            // Check if parsing was successful
             if(apiParams != null) {
                 try {
+                    // Call HotelDB method to get the list of all rooms within the hotel
                     HotelDB.getRoomList(apiParams);
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -164,14 +226,24 @@ public class Booking {
     /*
      * getRoomInfo method
      * @author Andy Hoang
+     * 
+     * Returns information about a specific room within the hotel.
+     * 
+     * @params roomNumber
      */
     public static void getRoomInfo(String[] params) {
         System.out.println("");
+
+        // Check if parameters are provided
         if(params == null || params.length == 0) {
             System.out.println("getRoomInfo - Return list of all rooms within hotel");
             System.out.println("COMMAND: getRoomInfo COMMAND: roomNumber");
+
         } else {
+            // Parse input parameters into a HashMap
             HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"roomNumber"});
+
+            // Check if parsing was successful
             if(apiParams != null) {
                 try {
                     HotelDB.getRoomInfo(apiParams);
@@ -186,18 +258,28 @@ public class Booking {
      * updateCheckoutTime method
      * @author Andy Hoang
      * 
-     * @params params RoomNumber to find bookings of
+     * Updates the checkout time for a specific room.
+     * 
+     * @params params RoomNumber, checkouttime
      */
     public static void updateCheckoutTime(String[] params) {
         System.out.println("");
+
+        // Check if parameters are provided
         if(params == null || params.length == 0) {
             System.out.println("updateCheckoutTime - Updates Checkout time with new input");
             System.out.println("COMMAND: updateCheckoutTime COMMAND: RoomNumber COMMAND: CheckoutTime");
         } else {
+
+            // Parse input parameters into a HashMap
             HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"RoomNumber", "CheckOutTime"});
+
+            // Check if parsing was successful
             if(apiParams != null) {
                 try {
+                    // Call HotelDB method to update checkout time for the specified room
                     HotelDB.updateCheckoutTime(apiParams);
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -205,7 +287,10 @@ public class Booking {
         }
     }
 
-    // Getters and setters go here (Potentially not used)
+    //////////////////////////////////////////////////////////////
+    //                      GETTER & SETTER                     //
+    //////////////////////////////////////////////////////////////
+  
     public String getBookingNum() {
         return bookingNum;
     }
@@ -254,24 +339,44 @@ public class Booking {
         this.CoDate = CoDate;
     }
 
-    //toString
+    /*
+    * Returns a String representation of the Booking object.
+    *
+    * @return String representation of the Booking.
+    */
+  
     public String toString() {
+        // Build the string with Booking information
         String temp = "BookingNum: " + bookingNum + "\nReservationNum: " + reservationNum 
             + "\nRoomNum: " + roomNum + "\nCIDate: " + CIDate + "\nCoExpectDate: " + CoExpectDate;
         
+        // Add CoDate information if it's not null
         if(CoDate != null)
             temp += "\nCoDate: " + CoDate;
         
+            // Return the constructed string
         return temp;
     }
+
+    /*
+    * Compares this Booking object with another Booking object for equality.
+    *
+    * @param toCompare The Booking object to compare with.
+    * @return true if the objects are equal, false otherwise.
+    */
     
-    //equals
     public boolean equals(Booking toCompare) {
+        // Check if the object to compare is null or of a different class
         if(toCompare == null || toCompare.getClass() != getClass()) 
             return false;
 
+        // Cast the object to a Booking for comparison
         Booking that = (Booking) toCompare;
+
+        // Check equality for Booking attributes
         if(this.CoDate == null && that.CoDate == null) {
+
+            // If both CoDate are null, compare other attributes
             return this.bookingNum.equals(that.bookingNum)
                 && this.reservationNum.equals(that.reservationNum)
                 && this.roomNum.equals(that.roomNum)
@@ -279,6 +384,7 @@ public class Booking {
                 && this.CoExpectDate.equals(that.CoExpectDate);
 
         } else if(this.CoDate != null && that.CoDate != null) { //if CoDate not null
+            // If CoDate is not null for both, compare all attributes including CoDate
             return this.bookingNum.equals(that.bookingNum)
                 && this.reservationNum.equals(that.reservationNum)
                 && this.roomNum.equals(that.roomNum)
@@ -289,16 +395,4 @@ public class Booking {
             return false;
         }
     }
-
-
-    //simple testing
-    /*public static void main(String[] args) { 
-        Booking a = new Booking("testBNum", "TestRNum", "TestRoomNum", new Timestamp(0, 10, 25, 0, 0, 0, 0), new Timestamp(2002, 10, 25, 0, 0, 0, 0));
-        System.out.println(a);
-        Booking b = new Booking("testBNum", "TestRNum", "TestRoomNum", new Timestamp(0, 10, 25, 0, 0, 0, 0), new Timestamp(2002, 10, 25, 0, 0, 0, 0));
-        System.out.println(a.equals(b));
-        System.out.println("\n" + b);
-    } //Timestamp(int year, int month, int date, int hour, int minute, int second, int nano)
-    */
-    
 }

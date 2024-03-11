@@ -863,9 +863,6 @@ public class HotelDB {
         }
     }
 
-
-
-
    /*
     * create Method
     * @author Nithisha Sathishkumar
@@ -1805,6 +1802,77 @@ public class HotelDB {
             }
         }
     }
+
+    /*
+    * GetGuestInfoWithoutGuestNum Method
+    * @author Nithisha Sathishkumar
+    */
+
+    public static void getGuestInfoWithoutGuestNum(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        System.out.println("");
+
+        try {
+            Connection connection = getConnection();
+
+            String sql = "SELECT Guest.GuestNum, Guest.FirstName, Guest.LastName, Phone.PhoneNumber, Guest.Email, Guest.address1, Guest.city, State.Name " +
+                    "FROM Guest " +
+                    "JOIN State ON Guest.StateID = State.ID " +
+                    "JOIN Phone ON Guest.ID = Phone.GuestID " +
+                    "WHERE FirstName ILIKE ? AND LastName ILIKE ? AND Email ILIKE ? ";
+
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, apiParams.get("FirstName"));
+            preparedStatement.setString(2, apiParams.get("LastName"));
+            preparedStatement.setString(3, apiParams.get("Email"));
+            resultSet = preparedStatement.executeQuery();
+
+            boolean gotRecords = false;
+
+            System.out.println("Guest Info By Firstname, Lastname and Email: ");
+    
+            System.out.format("%-10s%-15s%-15s%-15s%-25s%-25s%-15s%-15s%n",
+                    "GuestNum", "First Name", "Last Name", "Phone Number", "Email", " Address", "City", "State Name");
+    
+            System.out.println("-------------------------------------------------------------------------------------------------------------");
+    
+            while (resultSet != null && resultSet.next()) {
+                gotRecords = true;
+    
+                System.out.format("%-10s%-15s%-15s%-15s%-25s%-25s%-15s%-15s%n",
+                        resultSet.getString("GuestNum"),
+                        resultSet.getString("FirstName"),
+                        resultSet.getString("LastName"),
+                        resultSet.getString("PhoneNumber"),
+                        resultSet.getString("Email"),
+                        resultSet.getString("address1"),
+                        resultSet.getString("city"),
+                        resultSet.getString("Name")
+                );
+            }
+
+            if(!gotRecords)
+            {
+                System.out.println("No results found !");
+                System.out.println("");
+            }             
+        } catch (SQLException e) {
+            
+            e.printStackTrace();
+
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }   
+            
+            if (resultSet != null) {
+                resultSet.close();
+            }             
+        }
+    }
+
 }
 
 
