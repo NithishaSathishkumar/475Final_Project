@@ -120,7 +120,11 @@ public class HotelAPI {
                 case Guest.GetGuestByGuestNum:
                     Guest.getGuestByGuestNum(mainCmdArr);
                     break;
-                
+
+                case Guest.GetGuestInfoWithoutGuestNum:
+                    Guest.getGuestInfoWithoutGuestNum(mainCmdArr);
+                    break;
+
                 case Guest.updateGuestAddress:
                     Guest.updateGuestAddress(mainCmdArr);
                     break;
@@ -166,6 +170,8 @@ public class HotelAPI {
 
     private static void Menu() {
         System.out.println("\nMENU: ");
+
+        System.out.println("\nStaff Command: \n");
         Staff.getStaffList(null);
         Staff.getStaffListByPosition(null);
         Staff.getStaffInfoByStaffNum(null);
@@ -177,6 +183,8 @@ public class HotelAPI {
         Staff.updateStaffLastName(null);
         Staff.updateStaffPosition(null);
         Staff.createStaff(null);
+
+        System.out.println("\nBooking & Room Command: \n");
         Booking.getAvailableRooms(null);
         Booking.getBookingsOnRoom(null);
         Booking.listAllBookings(null);
@@ -184,11 +192,16 @@ public class HotelAPI {
         Booking.updateCheckoutTime(null);
         Booking.getRoomInfo(null);
         Booking.getBookingInfo(null);
+
+        System.out.println("\nReservation Command: \n");
         ReservationAPI.Create_Reservation(null);
+
+        System.out.println("\nGuest Command: \n");
         Guest.getPaymentList(null);
         Guest.getGuestByGuestNum(null);
         Guest.updateGuestAddress(null);
         Guest.updateGuestEmail(null);
         Guest.updateGuestPhoneNumber(null);
+        Guest.getGuestInfoWithoutGuestNum(null);
     }
 }
