@@ -139,6 +139,10 @@ public class HotelAPI {
                 case Guest.updateGuestPhoneNumber:
                     Guest.updateGuestPhoneNumber(mainCmdArr);
                     break;
+
+                case Staff.ReservationStaffInfo:
+                    Staff.getReservationStaffInfo(mainCmdArr);
+                    break;
                 
                 case "clear":
                 case "Clear":
@@ -198,6 +202,7 @@ public class HotelAPI {
         System.out.println("\nReservation Command: \n");
         ReservationAPI.Create_Reservation(null);
         Reservation.getReservationList(null);
+        Staff.getReservationStaffInfo(null);
 
         System.out.println("\nGuest Command: \n");
         Guest.getPaymentList(null);
@@ -206,5 +211,6 @@ public class HotelAPI {
         Guest.updateGuestEmail(null);
         Guest.updateGuestPhoneNumber(null);
         Guest.getGuestInfoWithoutGuestNum(null);
+
     }
 }

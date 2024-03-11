@@ -28,6 +28,7 @@ public class Staff {
     public static final String UpdateStaffLastName = "updateStaffLastName";
     public static final String UpdateStaffPosition = "updateStaffPosition";
     public static final String CreateStaff = "createStaff";  
+    public static final String ReservationStaffInfo = "getReservationStaffInfo";
 
 
     //////////////////////////////////////////////////////////////
@@ -361,6 +362,35 @@ public class Staff {
         }
         return false;
     }
+
+    /*
+    * getReservationStaffInfomethod
+    * Method to retrieve staff information based on the who created the reservation.
+    * 
+    * @param params ReservationNum for retrieving staff information.
+    * @author Nithisha Sathishkumar
+    */
+    public static void getReservationStaffInfo(String[] params){
+        System.out.println("");
+
+        if(params == null || params.length == 0)
+        {
+            System.out.println("ReservationStaffInfo - Return list of staff filtered by staff Number");
+            System.out.println("COMMAND: getReservationStaffInfo COMMAND: ReservationNum");
+        }
+        else
+        {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"ReservationNum"});
+            if(apiParams != null)
+            {
+                try {
+                    HotelDB.getReservationStaffInfo(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    } 
 
 
 }
