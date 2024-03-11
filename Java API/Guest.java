@@ -106,6 +106,7 @@ public class Guest {
         }
     }
 
+
     /*
     * updateGuestPhoneNumber method
     * Method to update a guest's phone number.
@@ -119,7 +120,7 @@ public class Guest {
             System.out.println("updateGuestPhoneNumber - Updates Guest's phone number");
             System.out.println("COMMAND: updateGuestPhoneNumber COMMAND: GuestNum COMMAND: PhoneNumber");
         } else {
-            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "New PhoneNumber"});
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "PhoneNumber"});
             if(apiParams != null) {
                 try {
                     HotelDB.updateGuestPhoneNumber(apiParams);
@@ -129,7 +130,7 @@ public class Guest {
             }
         }
     }
-
+    
     /*
     * updateGuestEmail method
     * Method to update a guest's email address.
@@ -154,21 +155,22 @@ public class Guest {
         }
     }
 
+
     /*
-    * updateGuestAdress method
-    * Method to update a guest's address.
-    * 
-    * @param params GuestNum, Address1, and Address2 to be updated.
-    * @author Andy Hoang
-    */
+     * updateGuestAdress method
+     * @author Andy Hoang    
+     * @params params GuestNum, Address1 Address2
+     */ 
+   
     public static void updateGuestAddress(String[] params){
         System.out.println("");
         if(params == null || params.length == 0) {
             System.out.println("updateGuestAddress - Updates Guest's address");
-            System.out.println("COMMAND: updateGuestAddress COMMAND: GuestNum COMMAND: Address1 COMMAND: Address2");
+            System.out.println("COMMAND: updateGuestAddress COMMAND: GuestNum COMMAND: Address1 COMMAND: Address2 " +
+                "COMMAND: City COMMAND: Zipcode COMMAND: State");
         } else {
             HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"GuestNum", "NewAddress1", 
-                "NewAddress2 (nullable)", "City", "ZipCode (nullable)", "State (XX)"});
+                "NewAddress2 (nullable)", "City", "Zipcode (nullable)", "State (XX)"});
             if(apiParams != null) {
                 try {
                     HotelDB.updateGuestAddress(apiParams);

@@ -19,7 +19,6 @@ public class HotelDB {
     private static final String PASSWORD = "Gayathri@27"; 
     private static Connection connection = null;
 
-
     public static Connection getConnection() throws SQLException{
         if(connection != null && !connection.isValid(0000)) {
             connection = null;
@@ -1738,7 +1737,7 @@ public class HotelDB {
             preparedStatement.setString(4, apiParams.get("Zipcode (nullable)"));
             preparedStatement.setString(5, apiParams.get("State (XX)"));
             preparedStatement.setString(6, apiParams.get("GuestNum"));
-            
+
             int rows = preparedStatement.executeUpdate();
             preparedStatement.close();  // Close the update statement
 
@@ -1747,16 +1746,16 @@ public class HotelDB {
                 System.out.println("");
     
                 System.out.println("Updated Guest Information: ");
-    
+                
                 // Create a prepared statement and set the parameter
                 preparedStatement = connection.prepareStatement(selectQuery);
                 preparedStatement.setString(1, apiParams.get("GuestNum"));
-                System.out.println(preparedStatement);
                 resultSet = preparedStatement.executeQuery();
+                System.out.println(resultSet);
 
                 // Print header for the table
                 System.out.format("%-10s%-15s%-15s%-15s%-15s%-15s%-10s%-5s%n",
-                        "GuestNum", "FirstName", "LastName", "Address1", "Address2", "City", "ZipCode", "State");
+                        "GuestNum", "FirstName", "LastName", "Address1", "Address2", "City", "Zipcode", "State");
                 System.out.println("----------------------------------------------------------------------------------------------");
                 
                 boolean gotRecords = false;
