@@ -80,6 +80,10 @@ public class HotelAPI {
                     Reservation.getReservationList(mainCmdArr);
                     break;
 
+                case Reservation.getReservationInfo:
+                    Reservation.getReservationInfo(mainCmdArr);
+                    break;
+
                 case Reservation.updatePayment:
                     Reservation.updatePayment(mainCmdArr);
                     break;
@@ -114,6 +118,10 @@ public class HotelAPI {
 
                 case Guest.getPaymentList:
                     Guest.getPaymentList(mainCmdArr);
+                    break;
+
+                case Guest.createGuest:
+                    Guest.createGuest(mainCmdArr);
                     break;
 
                 case Guest.getGuestList:
@@ -202,6 +210,7 @@ public class HotelAPI {
         System.out.println("\nReservation Command: \n");
         ReservationAPI.Create_Reservation(null);
         Reservation.getReservationList(null);
+        Reservation.getReservationInfo(null);
         Staff.getReservationStaffInfo(null);
 
         System.out.println("\nGuest Command: \n");

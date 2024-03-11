@@ -10,6 +10,7 @@ public class Guest {
     //                      GLOBAL VARIABLES                    //
     //////////////////////////////////////////////////////////////
     public static final String getPaymentList = "getPaymentList";
+    public static final String createGuest = "createGuest";
     public static final String getGuestList = "getGuestList";
     public static final String updateGuestPhoneNumber = "updateGuestPhoneNumber";
     public static final String updateGuestEmail = "updateGuestEmail";
@@ -238,4 +239,34 @@ public class Guest {
             }            
         }
     } 
+
+    /*
+     * createGuest Method
+     * @author Andy Hoang
+     * 
+     * Creates a new guest.
+     * 
+     * @params params FirstName, LastName, GuestNum, Email, Address1, Address2, City, Zipcode, StateID
+     * @return boolean Indicates if the creation was successful
+     */
+    public static boolean createGuest(String[] params) {
+        if(params == null || params.length == 0){
+            System.out.println("createGuest - Create Guest");
+            System.out.println("COMMAND: createGuest COMMAND: FirstName COMMAND: LastName COMMAND: GuestNum"
+            + "\nCOMMAND: Email COMMAND: Address1 COMMAND: Address2 COMMAND: City \nCOMMAND: Zipcode COMMAND: StateID");
+        } else {
+
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] { "GuestNum", "FirstName (nullable)", 
+            "LastName", "PhoneNumber", "PhoneType (X)", "Email", "Address1", "Address2 (nullable)", "City", "Zipcode (nullable)", "State (XX)"});
+
+            if(apiParams != null){
+                try {
+                    return HotelDB.createGuest(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
 }

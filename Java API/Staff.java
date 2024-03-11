@@ -350,7 +350,7 @@ public class Staff {
 
         }else{
 
-            HashMap<String, String> apiParams = input.ParseInputParams(new String[] { "FirstName", "LastName", "Email", "PhoneNumber", "PositionName" });
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"FirstName", "LastName", "Email", "PhoneNumber", "PositionName" });
 
             if(apiParams != null){
                 try {

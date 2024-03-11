@@ -11,6 +11,7 @@ public class Reservation {
 
     // public static final String CreateReservation = "CreateReservation";
     public static final String getReservationList = "getReservationList";
+    public static final String getReservationInfo = "getReservationInfo";
     public static final String updatePayment = "updatePayment";
 
     private String reservationNum;
@@ -75,6 +76,30 @@ public class Reservation {
             if(apiParams != null) {
                 try {
                     HotelDB.updatePayment(apiParams);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*
+    * getReservationInfo method
+    * Method to retrieve the list of guests within the hotel.
+    * 
+    * @param params The input parameters guestNum.
+    * @author Andy Hoang
+    */
+    public static void getReservationInfo(String[] params) {
+        System.out.println("");
+        if(params == null || params.length == 0) {
+            System.out.println("getReservationInfo - Return list of all reservations related to the guestNum");
+            System.out.println("COMMAND: getReservationInfo COMMAND: GuestNum");
+        } else {
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"guestNum"});
+            if(apiParams != null) {
+                try {
+                    HotelDB.getReservationInfo(apiParams);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
