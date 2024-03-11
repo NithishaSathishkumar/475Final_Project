@@ -201,7 +201,7 @@ values('A1001',2,150),
 	('A1013',6,500),
 	('A1014',2,1200);
 
-insert into paymenttype values('CC','credit card'), ('cs','cash');
+insert into paymenttype values('CC','credit card'), ('CS','cash');
 
 INSERT INTO Payment(PaymentTypeID,PaymentDate)
 VALUES('CC','2022-02-17'),('CC','2022-04-19'),('CC','2022-08-04');

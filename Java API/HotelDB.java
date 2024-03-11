@@ -16,7 +16,7 @@ public class HotelDB {
     //////////////////////////////////////////////////////////////
     private static final String URL = "jdbc:postgresql://localhost/hotel";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "Gayathri@27"; 
+    private static final String PASSWORD = "Hoang2317"; 
     private static Connection connection = null;
 
     public static Connection getConnection() throws SQLException{
@@ -1183,14 +1183,14 @@ public class HotelDB {
     }
 
     /*
-    * listAllBookings Method
+    * getBookingList Method
     * Lists every single booking made in the hotel.
     *
     * @param apiParams HashMap containing API parameters.
     * @throws SQLException if a database access error occurs.
     * @author Andy Hoang
     */
-    public static void listAllBookings(HashMap<String, String> apiParams) throws SQLException {
+    public static void getBookingList(HashMap<String, String> apiParams) throws SQLException {
         Statement statement = null;
         ResultSet resultSet = null;
 
@@ -2014,18 +2014,17 @@ public class HotelDB {
                     "FROM Guest " +
                     "JOIN State ON Guest.StateID = State.ID " +
                     "JOIN Phone ON Guest.ID = Phone.GuestID " +
-                    "WHERE FirstName ILIKE ? AND LastName ILIKE ? AND Email ILIKE ? ";
+                    "WHERE LastName ILIKE ? AND Email ILIKE ? ";
 
             // Create a prepared statement and set the parameter        
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, apiParams.get("FirstName"));
-            preparedStatement.setString(2, apiParams.get("LastName"));
-            preparedStatement.setString(3, apiParams.get("Email"));
+            preparedStatement.setString(1, apiParams.get("LastName"));
+            preparedStatement.setString(2, apiParams.get("Email"));
             resultSet = preparedStatement.executeQuery();
 
             boolean gotRecords = false;
 
-            System.out.println("Guest Info By Firstname, Lastname and Email: ");
+            System.out.println("Guest Info By Lastname and Email: ");
     
             // Print header for the table
             System.out.format("%-10s%-15s%-15s%-15s%-25s%-25s%-15s%-15s%n",
@@ -2071,6 +2070,181 @@ public class HotelDB {
         }
     }
 
+    /*
+    * getReservationList Method
+    * Lists every single reservation in the hotel.
+    *
+    * @param apiParams HashMap containing API parameters.
+    * @throws SQLException if a database access error occurs.
+    * @author Andy Hoang
+    */
+    public static void getReservationList(HashMap<String, String> apiParams) throws SQLException {
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = getConnection();
+            String query = "SELECT ReservationNum, GuestNum, RoomNumber, NumberOfGuest, " +
+                                "PaymentTypeID, Amount, StaffNum " +
+                                "FROM Guest G " +
+                                "JOIN Reservation Re ON (G.ID = Re.guestID) " +
+                                "JOIN Booking B ON (Re.ID = B.reservationID) " +
+                                "JOIN Room R ON (B.roomID = R.ID) " +
+                                "LEFT JOIN Payment P ON (Re.paymentID = P.ID) " +
+                                "LEFT JOIN Staff S ON (Re.staffID = S.ID) " +
+                                "ORDER BY reservationNum";
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            
+            System.out.println("List of Reservations:");
+            System.out.format("%-20s%-15s%-15s%-20s%-15s%-15s%-15s%n", "ReservationNum", "GuestNum", "RoomNumber", "NumberOfGuests", 
+                "PaymentType", "Amount", "StaffNum");
+            System.out.println("-----------------------------------------------------------------------------------------------------------------");
+            
+            boolean gotRecords = false;
+            while (resultSet != null && resultSet.next()) {
+                gotRecords = true;
+
+                System.out.format("%-20s%-15s%-15s%-20d%-15s%-15.2f%-15s%n",
+                    resultSet.getString("ReservationNum"),
+                    resultSet.getString("GuestNum"),
+                    resultSet.getString("RoomNumber"),
+                    resultSet.getInt("NumberOfGuest"),
+                    resultSet.getString("PaymentTypeID"),
+                    resultSet.getDouble("Amount"),
+                    resultSet.getString("StaffNum"));
+            }
+
+            // Display a message if no records are found
+            if(!gotRecords) {
+                System.out.println("No Result Found!");
+                System.out.println("");
+            }
+    
+        } catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                statement.close();
+            }
+
+            if(resultSet != null) {
+                resultSet.close();
+            }
+        }
+    }
+
+    /*
+    * updatePayment Method
+    * Updates the payment for a reservation.
+    *
+    * @param apiParams HashMap containing API parameters.
+    * @return true if the update is successful, false otherwise.
+    * @throws SQLException if a database access error occurs.
+    * @authors Andy Hoang
+    */
+    public static boolean updatePayment(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+    
+        try {
+            // Get DB connection
+            Connection connection = getConnection();
+
+            // SQL PreparedStatement
+            String insertQuery = "INSERT INTO Payment (paymentTypeID, paymentDate) " +
+                                    "VALUES(?, ?::timestamp)";
+
+            String updateQuery = "UPDATE Reservation SET paymentID = " +
+                                    "(SELECT ID FROM Payment ORDER BY ID DESC LIMIT 1) " +
+                                    "WHERE reservationNum = ? AND createTime = ?::timestamp";
+
+            String selectQuery = "SELECT reservationNum, numberOfGuest, paymentTypeID, createTime " +
+                                "FROM Reservation R " + 
+                                "LEFT JOIN Payment P ON (R.paymentID = P.ID) " +
+                                "WHERE reservationNum = ? AND createTime = ?::timestamp AND paymentTypeID = ?";
+    
+            // Create a prepared statement for the Insert and set the parameter    
+            preparedStatement = connection.prepareStatement(insertQuery);
+            preparedStatement.setString(1, apiParams.get("PaymentType (XX)"));
+            preparedStatement.setString(2, apiParams.get("PaymentDate"));
+
+            int rows = preparedStatement.executeUpdate();
+            preparedStatement.close();  // Close the update statement
+
+            // Create a prepared statement for the Update and set the parameter    
+            preparedStatement = connection.prepareStatement(updateQuery);
+            preparedStatement.setString(1, apiParams.get("ReservationNum"));
+            preparedStatement.setString(2, apiParams.get("OriginalCreationDate"));
+
+            rows += preparedStatement.executeUpdate();
+            preparedStatement.close();  // Close the update statement
+
+            if (rows > 0) {
+                System.out.println("Payment updated successfully!");
+                System.out.println("");
+    
+                System.out.println("Updated Payment with Reservation Information: ");
+    
+                // Create a prepared statement for the select and set the parameter
+                preparedStatement = connection.prepareStatement(selectQuery);
+                preparedStatement.setString(1, apiParams.get("ReservationNum"));
+                preparedStatement.setString(2, apiParams.get("OriginalCreationDate"));
+                preparedStatement.setString(3, apiParams.get("PaymentType (XX)"));
+
+                resultSet = preparedStatement.executeQuery();
+    
+                // Print header for the table
+                System.out.format("%-20s%-15s%-15s%-20s%n",
+                        "ReservationNum", "NumberOfGuests", "paymentMethod", "CreateTime");
+                System.out.println("----------------------------------------------------------------------------------------------");
+                
+                boolean gotRecords = false;
+                while (resultSet.next()) {
+                    gotRecords = true;
+    
+                    System.out.format("%-20s%-15d%-15s%-20s%n",
+                            resultSet.getString("ReservationNum"),
+                            resultSet.getInt("numberOfGuest"),
+                            resultSet.getString("paymentTypeID"),
+                            resultSet.getString("createTime")
+                    );
+                }
+                if (!gotRecords) {
+                    System.out.println("No results found for the updated Payment!");
+                    System.out.println("");
+                }
+    
+                return true;
+            } else {
+                System.out.println("Payment update failed! ReservationNum/CreationTime not found.");
+                System.out.println("");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+    
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            
+            // Close the prepared statement and result set in the finally block
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
 
 

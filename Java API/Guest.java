@@ -14,9 +14,9 @@ public class Guest {
     public static final String updateGuestPhoneNumber = "updateGuestPhoneNumber";
     public static final String updateGuestEmail = "updateGuestEmail";
     public static final String updateGuestAddress = "updateGuestAddress";
-    public static final String GuestInfoByGuestNum = "getGuestInfoByGuestNum";
-    public static final String GetGuestByGuestNum = "getGuestByGuestNum";
-    public static final String GetGuestInfoWithoutGuestNum = "getGuestInfoWithoutGuestNum";
+    public static final String getGuestInfoByGuestNum = "getGuestInfoByGuestNum";
+    public static final String getGuestByGuestNum = "getGuestByGuestNum";
+    public static final String getGuestInfoWithoutGuestNum = "getGuestInfoWithoutGuestNum";
 
     private String guestNum;
     private String firstName;
@@ -223,11 +223,11 @@ public class Guest {
         if(params == null || params.length == 0)
         {
             System.out.println("GetGuestInfoWithoutGuestNum - Return list of Guest filtered by Email ");
-            System.out.println("COMMAND: getGuestInfoWithoutGuestNum Command:FirstName Command:LastName Command:Email");
+            System.out.println("COMMAND: getGuestInfoWithoutGuestNum Command:LastName Command:Email");
         }
         else
         {
-            HashMap<String, String> apiParams = input.ParseInputParams(new String[] { "FirstName", "LastName", "Email" });
+            HashMap<String, String> apiParams = input.ParseInputParams(new String[] {"LastName", "Email" });
 
             if(apiParams != null){
                 try {
@@ -238,5 +238,4 @@ public class Guest {
             }            
         }
     } 
-
 }

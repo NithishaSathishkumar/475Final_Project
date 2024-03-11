@@ -76,6 +76,14 @@ public class HotelAPI {
                     ReservationAPI.Create_Reservation(mainCmdArr);
                     break;
 
+                case Reservation.getReservationList:
+                    Reservation.getReservationList(mainCmdArr);
+                    break;
+
+                case Reservation.updatePayment:
+                    Reservation.updatePayment(mainCmdArr);
+                    break;
+                    
                 case Staff.CreateStaff:
                     Staff.createStaff(mainCmdArr);
                     break;
@@ -92,12 +100,8 @@ public class HotelAPI {
                     Booking.getBookingInfo(mainCmdArr);
                     break;
 
-                case Booking.listAllBookings:
-                    Booking.listAllBookings(mainCmdArr);
-                    break;
-
-                case Booking.updateCheckoutTime: //not done
-                    Booking.updateCheckoutTime(mainCmdArr);
+                case Booking.getBookingList:
+                    Booking.getBookingList(mainCmdArr);
                     break;
 
                 case Booking.getRoomList:
@@ -116,11 +120,11 @@ public class HotelAPI {
                     Guest.getGuestList(mainCmdArr);
                     break;
 
-                case Guest.GetGuestByGuestNum:
+                case Guest.getGuestByGuestNum:
                     Guest.getGuestByGuestNum(mainCmdArr);
                     break;
 
-                case Guest.GetGuestInfoWithoutGuestNum:
+                case Guest.getGuestInfoWithoutGuestNum:
                     Guest.getGuestInfoWithoutGuestNum(mainCmdArr);
                     break;
 
@@ -185,7 +189,7 @@ public class HotelAPI {
         System.out.println("\nBooking & Room Command: \n");
         Booking.getAvailableRooms(null);
         Booking.getBookingsOnRoom(null);
-        Booking.listAllBookings(null);
+        Booking.getBookingList(null);
         Booking.getRoomList(null);
         Booking.updateCheckoutTime(null);
         Booking.getRoomInfo(null);
@@ -193,6 +197,7 @@ public class HotelAPI {
 
         System.out.println("\nReservation Command: \n");
         ReservationAPI.Create_Reservation(null);
+        Reservation.getReservationList(null);
 
         System.out.println("\nGuest Command: \n");
         Guest.getPaymentList(null);

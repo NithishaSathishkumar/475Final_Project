@@ -209,7 +209,6 @@ public class Staff {
         return false;
     }
 
-
     /*
      * updateStaffEmail Method
      * @author Nithisha Sathishkumar
