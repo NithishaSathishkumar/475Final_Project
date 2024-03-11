@@ -2069,7 +2069,88 @@ public class HotelDB {
                 resultSet.close();
             }             
         }
+    }  
+
+    /*
+    * getReservationStaffInfomethod
+    * Method to retrieve staff information based on the who created the reservation.
+    * 
+    * @param params ReservationNum for retrieving staff information.
+    * @author Nithisha Sathishkumar
+    */
+    public static void getReservationStaffInfo(HashMap<String, String> apiParams) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+    
+        System.out.println("");
+    
+        try {
+            Connection connection = getConnection();
+    
+            String query = "SELECT Staff.StaffNum, Staff.FirstName, Staff.LastName, Staff.PhoneNumber, Staff.Email, Position.Name " +
+                            "FROM Reservation " +
+                            "JOIN Staff ON Reservation.staffId = Staff.id " +
+                            "JOIN Position ON Position.ID = Staff.PositionID " +
+                            "WHERE Reservation.reservationNum = ?";
+
+    
+            // Create a prepared statement and set the parameter        
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, apiParams.get("ReservationNum").toUpperCase()); 
+            resultSet = preparedStatement.executeQuery();
+    
+            boolean gotRecords = false;
+    
+            System.out.println("Staff Info who created Reservation: ");
+            
+            if(!resultSet.next()){
+                gotRecords = true;
+                System.out.println("The Reservation was done online!");
+
+            }else{
+                // Print header for the table
+                System.out.format("%-10s%-15s%-15s%-15s%-25s%-25s%n",
+                    "StaffNum", "First Name", "Last Name", "Phone Number", "Email", "Position Name");
+    
+                System.out.println("-------------------------------------------------------------------------------------------------------------");
+    
+                do {
+                    gotRecords = true;
+                    System.out.format("%-10s%-15s%-15s%-15s%-25s%-25s%n",
+                            resultSet.getString("StaffNum"),
+                            resultSet.getString("FirstName"),
+                            resultSet.getString("LastName"),
+                            resultSet.getString("PhoneNumber"),
+                            resultSet.getString("Email"),
+                            resultSet.getString("Name")
+                    );
+                } while (resultSet.next());
+            }
+            
+            // Display a message if no records are found
+            if (!gotRecords) {
+                System.out.println("No results found !");
+                System.out.println("");
+            }
+    
+        } catch (SQLException e) {
+    
+            e.printStackTrace();
+    
+        } finally {
+
+            // Close the prepared statement and result set in the finally block
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+    
+            if (resultSet != null) {
+                resultSet.close();
+            }
+        }
     }
+    
+    
 
 }
 
