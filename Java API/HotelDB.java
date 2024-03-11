@@ -1578,11 +1578,10 @@ public class HotelDB {
                 preparedStatement = connection.prepareStatement(selectQuery);
                 preparedStatement.setString(1, apiParams.get("GuestNum"));
                 resultSet = preparedStatement.executeQuery();
-                System.out.println(resultSet);
 
                 System.out.format("%-10s%-15s%-15s%-15s%-15s%-15s%-10s%-5s%n",
                         "GuestNum", "FirstName", "LastName", "Address1", "Address2", "City", "Zipcode", "State");
-                System.out.println("----------------------------------------------------------------------------------------------");
+                System.out.println("--------------------------------------------------------------------------------------------------------");
                 
                 boolean gotRecords = false;
                 while (resultSet.next()) {
